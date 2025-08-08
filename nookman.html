@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nookman - Pac-Man Clone</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000;
+            font-family: 'Courier New', monospace;
+            color: #ffff00;
+        }
+        
+        .game-container {
+            text-align: center;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #0066ff;
+            background-color: #000;
+        }
+        
+        .score {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        
+        .game-over {
+            font-size: 32px;
+            color: #ff0000;
+            margin: 20px 0;
+        }
+        
+        .instructions {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="score">Lives: <span id="lives">3</span></div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="gameOver" class="game-over" style="display: none;">GAME OVER</div>
+        <div class="instructions">
+            Use WASD or Arrow Keys to move Nookman<br>
+            Eat all dots to win! Avoid the ghosts!
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+        const gameOverElement = document.getElementById('gameOver');
+
+        const TILE_SIZE = 20;
+        const MAZE_WIDTH = Math.floor(canvas.width / TILE_SIZE);
+        const MAZE_HEIGHT = Math.floor(canvas.height / TILE_SIZE);
+
+        const maze = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,3,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,1,2,1,1,2,1,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,3,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,2,1,1,1,1,2,1],
+            [1,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,1],
+            [1,1,1,1,1,1,2,1,1,1,1,1,0,1,1,2,2,2,2,1,1,2,2,2,2,1,1,0,1,1,1,1,1,2,1,1,1,1,1,1],
+            [0,0,0,0,0,1,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,1,0,0,0,0,0],
+            [1,1,1,1,1,1,2,1,1,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,1,1,2,1,1,1,1,1,1],
+            [2,2,2,2,2,2,2,2,2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,2,2,2,2,2,2,2],
+            [1,1,1,1,1,1,2,1,1,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,1,2,1,1,1,1,1,1],
+            [0,0,0,0,0,1,2,1,1,2,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,1,1,2,1,0,0,0,0,0],
+            [1,1,1,1,1,1,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,1,1,1,1,1,1],
+            [1,2,2,2,2,2,2,1,1,1,1,1,0,1,1,2,2,2,2,1,1,2,2,2,2,1,1,0,1,1,1,1,1,2,2,2,2,2,2,1],
+            [1,2,1,1,1,1,2,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,2,1,1,1,1,2,1],
+            [1,2,2,2,2,2,2,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,2,2,2,2,2,2,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,3,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,1,2,1,1,2,1,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,3,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+
+        let gameState = {
+            score: 0,
+            lives: 3,
+            gameOver: false,
+            powerMode: false,
+            powerModeTimer: 0
+        };
+
+        let player = {
+            x: 20,
+            y: 15,
+            direction: { x: 0, y: 0 },
+            nextDirection: { x: 0, y: 0 }
+        };
+
+        let ghosts = [
+            { x: 19, y: 9, direction: { x: -1, y: 0 }, color: '#ff0000', vulnerable: false },
+            { x: 20, y: 9, direction: { x: 1, y: 0 }, color: '#ffb8ff', vulnerable: false },
+            { x: 19, y: 10, direction: { x: 0, y: -1 }, color: '#00ffff', vulnerable: false },
+            { x: 20, y: 10, direction: { x: 0, y: 1 }, color: '#ffb852', vulnerable: false }
+        ];
+
+        let keys = {};
+        let lastTime = 0;
+        let gameSpeed = 150;
+
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                case 'arrowup':
+                    player.nextDirection = { x: 0, y: -1 };
+                    break;
+                case 's':
+                case 'arrowdown':
+                    player.nextDirection = { x: 0, y: 1 };
+                    break;
+                case 'a':
+                case 'arrowleft':
+                    player.nextDirection = { x: -1, y: 0 };
+                    break;
+                case 'd':
+                case 'arrowright':
+                    player.nextDirection = { x: 1, y: 0 };
+                    break;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        function isValidMove(x, y) {
+            if (x < 0 || x >= MAZE_WIDTH || y < 0 || y >= MAZE_HEIGHT) {
+                return false;
+            }
+            return maze[y][x] !== 1;
+        }
+
+        function updatePlayer() {
+            if (isValidMove(player.x + player.nextDirection.x, player.y + player.nextDirection.y)) {
+                player.direction = { ...player.nextDirection };
+            }
+            
+            let newX = player.x + player.direction.x;
+            let newY = player.y + player.direction.y;
+            
+            if (newX < 0) newX = MAZE_WIDTH - 1;
+            if (newX >= MAZE_WIDTH) newX = 0;
+            
+            if (isValidMove(newX, newY)) {
+                player.x = newX;
+                player.y = newY;
+                
+                if (maze[player.y][player.x] === 2) {
+                    maze[player.y][player.x] = 0;
+                    gameState.score += 10;
+                } else if (maze[player.y][player.x] === 3) {
+                    maze[player.y][player.x] = 0;
+                    gameState.score += 50;
+                    gameState.powerMode = true;
+                    gameState.powerModeTimer = 300;
+                    ghosts.forEach(ghost => ghost.vulnerable = true);
+                }
+            }
+        }
+
+        function updateGhosts() {
+            ghosts.forEach(ghost => {
+                let possibleMoves = [];
+                
+                [
+                    { x: 0, y: -1 },
+                    { x: 0, y: 1 },
+                    { x: -1, y: 0 },
+                    { x: 1, y: 0 }
+                ].forEach(dir => {
+                    let newX = ghost.x + dir.x;
+                    let newY = ghost.y + dir.y;
+                    
+                    if (newX < 0) newX = MAZE_WIDTH - 1;
+                    if (newX >= MAZE_WIDTH) newX = 0;
+                    
+                    if (isValidMove(newX, newY)) {
+                        possibleMoves.push(dir);
+                    }
+                });
+                
+                if (possibleMoves.length > 0) {
+                    if (ghost.vulnerable) {
+                        ghost.direction = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                    } else {
+                        let targetDir = null;
+                        let minDistance = Infinity;
+                        
+                        possibleMoves.forEach(dir => {
+                            let newX = ghost.x + dir.x;
+                            let newY = ghost.y + dir.y;
+                            let distance = Math.abs(newX - player.x) + Math.abs(newY - player.y);
+                            
+                            if (distance < minDistance) {
+                                minDistance = distance;
+                                targetDir = dir;
+                            }
+                        });
+                        
+                        if (targetDir) {
+                            ghost.direction = targetDir;
+                        }
+                    }
+                }
+                
+                let newX = ghost.x + ghost.direction.x;
+                let newY = ghost.y + ghost.direction.y;
+                
+                if (newX < 0) newX = MAZE_WIDTH - 1;
+                if (newX >= MAZE_WIDTH) newX = 0;
+                
+                if (isValidMove(newX, newY)) {
+                    ghost.x = newX;
+                    ghost.y = newY;
+                }
+                
+                if (ghost.x === player.x && ghost.y === player.y) {
+                    if (ghost.vulnerable) {
+                        ghost.x = 19 + Math.floor(Math.random() * 2);
+                        ghost.y = 9 + Math.floor(Math.random() * 2);
+                        ghost.vulnerable = false;
+                        gameState.score += 200;
+                    } else {
+                        gameState.lives--;
+                        if (gameState.lives <= 0) {
+                            gameState.gameOver = true;
+                        } else {
+                            player.x = 20;
+                            player.y = 15;
+                            player.direction = { x: 0, y: 0 };
+                        }
+                    }
+                }
+            });
+            
+            if (gameState.powerMode) {
+                gameState.powerModeTimer--;
+                if (gameState.powerModeTimer <= 0) {
+                    gameState.powerMode = false;
+                    ghosts.forEach(ghost => ghost.vulnerable = false);
+                }
+            }
+        }
+
+        function checkWinCondition() {
+            let dotsLeft = 0;
+            for (let y = 0; y < MAZE_HEIGHT; y++) {
+                for (let x = 0; x < MAZE_WIDTH; x++) {
+                    if (maze[y][x] === 2 || maze[y][x] === 3) {
+                        dotsLeft++;
+                    }
+                }
+            }
+            return dotsLeft === 0;
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let y = 0; y < MAZE_HEIGHT; y++) {
+                for (let x = 0; x < MAZE_WIDTH; x++) {
+                    switch (maze[y][x]) {
+                        case 1:
+                            ctx.fillStyle = '#0066ff';
+                            ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            break;
+                        case 2:
+                            ctx.fillStyle = '#ffff00';
+                            ctx.beginPath();
+                            ctx.arc(x * TILE_SIZE + TILE_SIZE/2, y * TILE_SIZE + TILE_SIZE/2, 2, 0, Math.PI * 2);
+                            ctx.fill();
+                            break;
+                        case 3:
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.arc(x * TILE_SIZE + TILE_SIZE/2, y * TILE_SIZE + TILE_SIZE/2, 6, 0, Math.PI * 2);
+                            ctx.fill();
+                            break;
+                    }
+                }
+            }
+            
+            ctx.fillStyle = gameState.powerMode && gameState.powerModeTimer % 20 < 10 ? '#00ff00' : '#ffff00';
+            ctx.beginPath();
+            ctx.arc(player.x * TILE_SIZE + TILE_SIZE/2, player.y * TILE_SIZE + TILE_SIZE/2, TILE_SIZE/2 - 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            if (player.direction.x !== 0 || player.direction.y !== 0) {
+                ctx.fillStyle = '#000';
+                let mouthAngle = Math.atan2(player.direction.y, player.direction.x);
+                ctx.beginPath();
+                ctx.moveTo(player.x * TILE_SIZE + TILE_SIZE/2, player.y * TILE_SIZE + TILE_SIZE/2);
+                ctx.arc(player.x * TILE_SIZE + TILE_SIZE/2, player.y * TILE_SIZE + TILE_SIZE/2, TILE_SIZE/2 - 2, 
+                       mouthAngle - 0.5, mouthAngle + 0.5);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            ghosts.forEach(ghost => {
+                ctx.fillStyle = ghost.vulnerable ? '#0066ff' : ghost.color;
+                ctx.beginPath();
+                ctx.arc(ghost.x * TILE_SIZE + TILE_SIZE/2, ghost.y * TILE_SIZE + TILE_SIZE/2, TILE_SIZE/2 - 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(ghost.x * TILE_SIZE + 6, ghost.y * TILE_SIZE + 6, 3, 3);
+                ctx.fillRect(ghost.x * TILE_SIZE + 11, ghost.y * TILE_SIZE + 6, 3, 3);
+            });
+            
+            scoreElement.textContent = gameState.score;
+            livesElement.textContent = gameState.lives;
+            
+            if (gameState.gameOver) {
+                gameOverElement.style.display = 'block';
+            }
+            
+            if (checkWinCondition()) {
+                ctx.fillStyle = '#00ff00';
+                ctx.font = '48px Courier New';
+                ctx.textAlign = 'center';
+                ctx.fillText('YOU WIN!', canvas.width/2, canvas.height/2);
+            }
+        }
+
+        function gameLoop(currentTime) {
+            if (currentTime - lastTime >= gameSpeed && !gameState.gameOver) {
+                updatePlayer();
+                updateGhosts();
+                lastTime = currentTime;
+            }
+            
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>

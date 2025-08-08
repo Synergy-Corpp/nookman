@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultra Advanced Nookman - The Ultimate Crypto Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
+            font-family: 'Courier New', monospace;
+            color: #fff;
+            overflow: hidden;
+            user-select: none;
+            height: 100vh;
+        }
+        
+        .game-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .game-container {
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(0,50,100,0.3), rgba(0,0,0,0.9));
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 
+                0 0 100px rgba(0, 255, 255, 0.3),
+                inset 0 0 50px rgba(0, 100, 200, 0.1);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, rgba(0,0,0,0.5), rgba(0,50,100,0.3), rgba(0,0,0,0.5));
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+        
+        .score-display, .lives-display, .level-display {
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px currentColor;
+            padding: 5px 15px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.5);
+        }
+        
+        .score-display {
+            background: linear-gradient(45deg, #ffd700, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border: 1px solid #ffd700;
+        }
+        
+        .lives-display {
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+        }
+        
+        .level-display {
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+        
+        #gameCanvas {
+            border: 4px solid #00ffff;
+            border-radius: 15px;
+            background: radial-gradient(circle at center, #000033, #000000);
+            box-shadow: 
+                inset 0 0 100px rgba(0, 100, 255, 0.1),
+                0 0 50px rgba(0, 255, 255, 0.5),
+                0 0 100px rgba(0, 255, 255, 0.2);
+        }
+        
+        .intro-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0,0,0,0.95), rgba(10,10,50,0.95));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            border-radius: 15px;
+        }
+        
+        .intro-content {
+            text-align: center;
+            max-width: 80%;
+        }
+        
+        .game-title {
+            font-size: 54px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffd700, #ff6b6b, #00ffff, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            margin-bottom: 20px;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            from { 
+                text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+                transform: scale(1);
+            }
+            to { 
+                text-shadow: 
+                    0 0 40px rgba(255, 215, 0, 1),
+                    0 0 60px rgba(255, 107, 107, 0.8),
+                    0 0 80px rgba(0, 255, 255, 0.6);
+                transform: scale(1.05);
+            }
+        }
+        
+        .story-text {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #00ffff;
+            margin: 20px 0;
+            text-shadow: 0 0 10px #00ffff;
+            animation: typewriter 4s steps(100) 1s both;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid #00ffff;
+            width: 100%;
+        }
+        
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        .nook-mascot {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffd700, #ffaa00);
+            border: 4px solid #ff8c00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            animation: bounce 2s ease-in-out infinite;
+            box-shadow: 
+                0 0 50px rgba(255, 215, 0, 0.8),
+                inset 0 0 30px rgba(255, 170, 0, 0.5);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        .play-button {
+            background: linear-gradient(45deg, #ff6b6b, #ffd700, #00ffff);
+            border: none;
+            padding: 25px 50px;
+            font-size: 28px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            color: #000;
+            text-shadow: none;
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+            transition: all 0.4s ease;
+            margin: 30px 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .play-button:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(255, 107, 107, 0.7);
+        }
+        
+        .play-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+        
+        .play-button:hover::before {
+            animation: shine 0.6s ease-out;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+        
+        .game-screen {
+            display: none;
+        }
+        
+        .game-over-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(50,0,0,0.95), rgba(100,0,50,0.95));
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            border-radius: 15px;
+        }
+        
+        .game-over-title {
+            font-size: 48px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px #ff6b6b;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .controls-help {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #ccc;
+            text-align: center;
+            line-height: 1.8;
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+        
+        .hidden { display: none !important; }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-wrapper">
+        <div class="game-container">
+            <!-- Intro Screen -->
+            <div id="introScreen" class="intro-screen">
+                <div class="intro-content">
+                    <div class="game-title">🪙 ULTRA NOOKMAN 🪙</div>
+                    
+                    <div class="nook-mascot" id="nookMascot">
+                        🦝
+                    </div>
+                    
+                    <div class="story-text" id="storyText">
+                        In the depths of the Bellschain blockchain, the legendary Nook has awakened...
+                    </div>
+                    
+                    <div class="controls-help" id="instructions" style="display: none;">
+                        🎮 <strong>CONTROLS</strong> 🎮<br>
+                        🔸 Use WASD or Arrow Keys to navigate<br>
+                        🔸 Collect all Bellschain coins to advance<br>
+                        🔸 Eat power crystals to hunt the crypto ghosts<br>
+                        🔸 Score: Small coins = 10pts, Power crystals = 50pts<br>
+                        🔸 Vulnerable ghosts = 200pts (doubles each ghost eaten)<br><br>
+                        
+                        <strong>🏆 AUTHENTIC PAC-MAN RULES 🏆</strong><br>
+                        ⚡ Ghosts have SCATTER and CHASE modes<br>
+                        ⚡ Power pellet timer decreases with level<br>
+                        ⚡ Bonus fruits appear for extra points<br>
+                        ⚡ Speed increases every level
+                    </div>
+                    
+                    <button class="play-button" id="startGameBtn" style="display: none;">
+                        🚀 BEGIN ADVENTURE
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Game Screen -->
+            <div id="gameScreen" class="game-screen">
+                <div class="game-header">
+                    <div class="score-display">💰 <span id="score">0</span></div>
+                    <div class="level-display">🏆 Level <span id="level">1</span></div>
+                    <div class="lives-display">🦝 <span id="lives">3</span></div>
+                </div>
+                
+                <canvas id="gameCanvas" width="950" height="650"></canvas>
+                
+                <div class="controls-help">
+                    🎯 Collect all coins to advance | 💎 Power crystals make ghosts vulnerable | 🍓 Bonus fruits for extra points
+                </div>
+            </div>
+            
+            <!-- Game Over Screen -->
+            <div id="gameOverScreen" class="game-over-screen">
+                <div class="game-over-title">💀 BLOCKCHAIN CORRUPTED 💀</div>
+                <div style="font-size: 32px; margin: 15px 0; color: #ffd700;">
+                    Final Score: <span id="finalScore">0</span>
+                </div>
+                <div style="font-size: 24px; margin: 10px 0; color: #00ffff;">
+                    Highest Level: <span id="finalLevel">1</span>
+                </div>
+                <div style="font-size: 20px; margin: 10px 0; color: #ff69b4;">
+                    High Score: <span id="displayHighScore">0</span>
+                </div>
+                <button class="play-button" id="restartBtn">🔄 RESTORE BLOCKCHAIN</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // DOM Elements
+        const introScreen = document.getElementById('introScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const nookMascot = document.getElementById('nookMascot');
+        const storyText = document.getElementById('storyText');
+        const instructions = document.getElementById('instructions');
+        const startGameBtn = document.getElementById('startGameBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        
+        // Game state elements
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+        const levelElement = document.getElementById('level');
+        const finalScore = document.getElementById('finalScore');
+        const finalLevel = document.getElementById('finalLevel');
+        const displayHighScore = document.getElementById('displayHighScore');
+
+        // Game constants
+        const TILE_SIZE = 25;
+        const MAZE_WIDTH = Math.floor(canvas.width / TILE_SIZE);
+        const MAZE_HEIGHT = Math.floor(canvas.height / TILE_SIZE);
+        
+        // Authentic Pac-Man maze layout
+        const originalMaze = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,3,1],
+            [1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1,2,1,1,1,1,2,1],
+            [1,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,1],
+            [1,1,1,1,1,1,2,1,1,1,1,1,0,1,1,2,2,2,2,2,2,2,2,1,1,0,1,1,1,1,1,2,1,1,1,1,1,1],
+            [1,1,1,1,1,1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1,1,1,1,1,1],
+            [1,1,1,1,1,1,2,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,1,2,1,1,1,1,1,1],
+            [0,0,0,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,2,0,0,0,0,0,0],
+            [1,1,1,1,1,1,2,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,2,1,1,1,1,1,1],
+            [1,1,1,1,1,1,2,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,1,2,1,1,1,1,1,1],
+            [1,1,1,1,1,1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1,1,1,1,1,1],
+            [1,1,1,1,1,1,2,1,1,1,1,1,0,1,1,2,2,2,2,2,2,2,2,1,1,0,1,1,1,1,1,2,1,1,1,1,1,1],
+            [1,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,1],
+            [1,2,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,2,1],
+            [1,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1,2,1,1,1,1,2,1],
+            [1,3,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,3,1],
+            [1,1,1,2,1,1,2,1,1,2,1,1,1,1,1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,1,1,2,1,1,2,1,1,1],
+            [1,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,1],
+            [1,2,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,2,2,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,2,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,3,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+
+        let maze = [];
+        let particles = [];
+        let bonusFruit = null;
+        let ghostModeTimer = 0;
+        let scatterMode = true;
+        let animationTime = 0;
+
+        // Game state with authentic Pac-Man rules
+        let gameState = {
+            currentState: 'intro',
+            score: 0,
+            lives: 3,
+            level: 1,
+            powerMode: false,
+            powerModeTimer: 0,
+            highScore: parseInt(localStorage.getItem('nookmanHighScore')) || 0,
+            ghostsEaten: 0,
+            pelletsEaten: 0,
+            totalPellets: 0,
+            baseSpeed: 100,
+            currentSpeed: 100
+        };
+
+        // Player with authentic Nook mascot representation
+        let player = {
+            x: 19,
+            y: 20,
+            direction: { x: 0, y: 0 },
+            nextDirection: { x: 0, y: 0 },
+            animationFrame: 0,
+            invulnerable: 0,
+            mouthOpen: true
+        };
+
+        // Ghosts with authentic Pac-Man AI (Blinky, Pinky, Inky, Sue)
+        let ghosts = [
+            { 
+                x: 19, y: 10, 
+                direction: { x: -1, y: 0 }, 
+                color: '#ff0000', 
+                vulnerable: false, 
+                originalColor: '#ff0000',
+                name: 'Crypto Blinky',
+                targetMode: 'aggressive',
+                scatterTarget: { x: 35, y: 0 },
+                homeCorner: { x: 35, y: 0 }
+            },
+            { 
+                x: 19, y: 11, 
+                direction: { x: 0, y: -1 }, 
+                color: '#ffb8ff', 
+                vulnerable: false, 
+                originalColor: '#ffb8ff',
+                name: 'Block Pinky',
+                targetMode: 'ambush',
+                scatterTarget: { x: 2, y: 0 },
+                homeCorner: { x: 2, y: 0 }
+            },
+            { 
+                x: 18, y: 11, 
+                direction: { x: 0, y: -1 }, 
+                color: '#00ffff', 
+                vulnerable: false, 
+                originalColor: '#00ffff',
+                name: 'Chain Inky',
+                targetMode: 'patrol',
+                scatterTarget: { x: 35, y: 25 },
+                homeCorner: { x: 35, y: 25 }
+            },
+            { 
+                x: 20, y: 11, 
+                direction: { x: 0, y: -1 }, 
+                color: '#ffb852', 
+                vulnerable: false, 
+                originalColor: '#ffb852',
+                name: 'DeFi Sue',
+                targetMode: 'mixed',
+                scatterTarget: { x: 2, y: 25 },
+                homeCorner: { x: 2, y: 25 }
+            }
+        ];
+
+        let keys = {};
+        let lastTime = 0;
+        
+        // Intro sequence
+        setTimeout(() => {
+            storyText.style.display = 'none';
+            const newText = document.createElement('div');
+            newText.className = 'story-text';
+            newText.textContent = 'The ancient Nook mascot must collect all Bellschain tokens to restore balance!';
+            storyText.parentNode.insertBefore(newText, storyText.nextSibling);
+            
+            setTimeout(() => {
+                instructions.style.display = 'block';
+                instructions.classList.add('fade-in');
+                
+                setTimeout(() => {
+                    startGameBtn.style.display = 'inline-block';
+                    startGameBtn.classList.add('fade-in');
+                }, 1000);
+            }, 2000);
+        }, 5000);
+
+        // Event listeners
+        startGameBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', restartGame);
+
+        function startGame() {
+            gameState.currentState = 'playing';
+            introScreen.classList.add('hidden');
+            gameScreen.style.display = 'block';
+            gameScreen.classList.add('fade-in');
+            initializeGame();
+        }
+
+        function restartGame() {
+            gameState.currentState = 'playing';
+            gameOverScreen.style.display = 'none';
+            initializeGame();
+        }
+
+        function initializeGame() {
+            // Reset maze
+            maze = originalMaze.map(row => [...row]);
+            
+            // Count total pellets
+            gameState.totalPellets = 0;
+            for (let y = 0; y < MAZE_HEIGHT; y++) {
+                for (let x = 0; x < MAZE_WIDTH; x++) {
+                    if (maze[y] && (maze[y][x] === 2 || maze[y][x] === 3)) {
+                        gameState.totalPellets++;
+                    }
+                }
+            }
+            
+            // Reset game state
+            gameState.score = gameState.currentState === 'playing' ? gameState.score : 0;
+            gameState.lives = gameState.currentState === 'playing' ? gameState.lives : 3;
+            gameState.level = gameState.currentState === 'playing' ? gameState.level : 1;
+            gameState.powerMode = false;
+            gameState.powerModeTimer = 0;
+            gameState.ghostsEaten = 0;
+            gameState.pelletsEaten = 0;
+            gameState.currentSpeed = Math.max(60, gameState.baseSpeed - (gameState.level - 1) * 5);
+            
+            // Reset player
+            player.x = 19;
+            player.y = 20;
+            player.direction = { x: 0, y: 0 };
+            player.nextDirection = { x: 0, y: 0 };
+            player.invulnerable = 0;
+            
+            // Reset ghosts to starting positions
+            ghosts[0].x = 19; ghosts[0].y = 10;
+            ghosts[1].x = 19; ghosts[1].y = 11;
+            ghosts[2].x = 18; ghosts[2].y = 11;
+            ghosts[3].x = 20; ghosts[3].y = 11;
+            
+            ghosts.forEach(ghost => {
+                ghost.vulnerable = false;
+                ghost.color = ghost.originalColor;
+            });
+            
+            particles = [];
+            bonusFruit = null;
+            ghostModeTimer = 0;
+            scatterMode = true;
+            
+            displayHighScore.textContent = gameState.highScore.toLocaleString();
+        }
+
+        // Input handling
+        document.addEventListener('keydown', (e) => {
+            if (gameState.currentState !== 'playing') return;
+            
+            keys[e.key.toLowerCase()] = true;
+            
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                case 'arrowup':
+                    player.nextDirection = { x: 0, y: -1 };
+                    break;
+                case 's':
+                case 'arrowdown':
+                    player.nextDirection = { x: 0, y: 1 };
+                    break;
+                case 'a':
+                case 'arrowleft':
+                    player.nextDirection = { x: -1, y: 0 };
+                    break;
+                case 'd':
+                case 'arrowright':
+                    player.nextDirection = { x: 1, y: 0 };
+                    break;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        function isValidMove(x, y) {
+            if (x < 0 || x >= MAZE_WIDTH || y < 0 || y >= MAZE_HEIGHT) return false;
+            return maze[y] && maze[y][x] !== 1;
+        }
+
+        function createParticle(x, y, color, type = 'coin', count = 1) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x * TILE_SIZE + TILE_SIZE/2,
+                    y: y * TILE_SIZE + TILE_SIZE/2,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    life: 1,
+                    decay: 0.02,
+                    color: color,
+                    size: type === 'coin' ? 4 : 8,
+                    type: type
+                });
+            }
+        }
+
+        function updatePlayer() {
+            if (player.invulnerable > 0) player.invulnerable--;
+            
+            // Check if next direction is valid
+            if (isValidMove(player.x + player.nextDirection.x, player.y + player.nextDirection.y)) {
+                player.direction = { ...player.nextDirection };
+            }
+            
+            let newX = player.x + player.direction.x;
+            let newY = player.y + player.direction.y;
+            
+            // Handle tunnel wraparound
+            if (newX < 0) newX = MAZE_WIDTH - 1;
+            if (newX >= MAZE_WIDTH) newX = 0;
+            
+            if (isValidMove(newX, newY)) {
+                player.x = newX;
+                player.y = newY;
+                player.animationFrame++;
+                player.mouthOpen = Math.floor(player.animationFrame / 4) % 2 === 0;
+                
+                // Collect pellets
+                if (maze[player.y][player.x] === 2) {
+                    maze[player.y][player.x] = 0;
+                    gameState.score += 10;
+                    gameState.pelletsEaten++;
+                    createParticle(player.x, player.y, '#ffd700', 'coin', 3);
+                    
+                    // Spawn bonus fruit
+                    if (gameState.pelletsEaten === 70 || gameState.pelletsEaten === 170) {
+                        spawnBonusFruit();
+                    }
+                } 
+                // Collect power pellets
+                else if (maze[player.y][player.x] === 3) {
+                    maze[player.y][player.x] = 0;
+                    gameState.score += 50;
+                    gameState.pelletsEaten++;
+                    gameState.powerMode = true;
+                    // Power pellet duration decreases with level
+                    gameState.powerModeTimer = Math.max(240, 400 - (gameState.level - 1) * 20);
+                    gameState.ghostsEaten = 0;
+                    
+                    ghosts.forEach(ghost => {
+                        if (!ghost.vulnerable) {
+                            ghost.vulnerable = true;
+                            ghost.color = '#4169e1';
+                            // Reverse direction when becoming vulnerable
+                            ghost.direction.x *= -1;
+                            ghost.direction.y *= -1;
+                        }
+                    });
+                    
+                    createParticle(player.x, player.y, '#ffffff', 'power', 8);
+                }
+                // Collect bonus fruit
+                else if (bonusFruit && player.x === bonusFruit.x && player.y === bonusFruit.y) {
+                    gameState.score += bonusFruit.points;
+                    createParticle(player.x, player.y, bonusFruit.color, 'power', 12);
+                    bonusFruit = null;
+                }
+            }
+        }
+
+        function spawnBonusFruit() {
+            const fruitTypes = [
+                { symbol: '🍒', points: 100, color: '#ff6b6b' },
+                { symbol: '🍓', points: 300, color: '#ff1493' },
+                { symbol: '🍑', points: 500, color: '#ff4500' },
+                { symbol: '🍊', points: 700, color: '#ffa500' },
+                { symbol: '🍎', points: 1000, color: '#ff0000' },
+                { symbol: '🍇', points: 2000, color: '#9370db' },
+                { symbol: '🔔', points: 3000, color: '#ffd700' },
+                { symbol: '🔑', points: 5000, color: '#00ffff' }
+            ];
+            
+            const fruitIndex = Math.min(gameState.level - 1, fruitTypes.length - 1);
+            const fruit = fruitTypes[fruitIndex];
+            
+            bonusFruit = {
+                x: 19,
+                y: 15,
+                symbol: fruit.symbol,
+                points: fruit.points,
+                color: fruit.color,
+                timer: 600 // 10 seconds at 60fps
+            };
+        }
+
+        function updateGhosts() {
+            // Ghost mode switching (authentic Pac-Man timing)
+            ghostModeTimer++;
+            
+            const modeTimes = [420, 1200, 420, 1200, 300, 1200, 300]; // Authentic timings
+            let currentModeTime = modeTimes[Math.min(Math.floor(ghostModeTimer / 1200), modeTimes.length - 1)];
+            
+            if (ghostModeTimer % currentModeTime === 0) {
+                scatterMode = !scatterMode;
+                if (!gameState.powerMode) {
+                    // Reverse direction when switching modes
+                    ghosts.forEach(ghost => {
+                        ghost.direction.x *= -1;
+                        ghost.direction.y *= -1;
+                    });
+                }
+            }
+
+            ghosts.forEach((ghost, index) => {
+                let possibleMoves = [
+                    { x: 0, y: -1 },
+                    { x: 0, y: 1 },
+                    { x: -1, y: 0 },
+                    { x: 1, y: 0 }
+                ].filter(dir => {
+                    let newX = ghost.x + dir.x;
+                    let newY = ghost.y + dir.y;
+                    
+                    if (newX < 0) newX = MAZE_WIDTH - 1;
+                    if (newX >= MAZE_WIDTH) newX = 0;
+                    
+                    // Ghosts can't reverse direction unless mode switches
+                    if (dir.x === -ghost.direction.x && dir.y === -ghost.direction.y) {
+                        return false;
+                    }
+                    
+                    return isValidMove(newX, newY);
+                });
+                
+                if (possibleMoves.length > 0) {
+                    let targetDir = null;
+                    let targetX, targetY;
+                    
+                    if (ghost.vulnerable) {
+                        // Run away from player
+                        targetX = ghost.x + (ghost.x - player.x) * 2;
+                        targetY = ghost.y + (ghost.y - player.y) * 2;
+                    } else if (scatterMode) {
+                        // Go to scatter target (corners)
+                        targetX = ghost.scatterTarget.x;
+                        targetY = ghost.scatterTarget.y;
+                    } else {
+                        // Chase mode - each ghost has unique behavior
+                        switch (ghost.targetMode) {
+                            case 'aggressive': // Blinky - direct chase
+                                targetX = player.x;
+                                targetY = player.y;
+                                break;
+                                
+                            case 'ambush': // Pinky - 4 tiles ahead of player
+                                targetX = player.x + player.direction.x * 4;
+                                targetY = player.y + player.direction.y * 4;
+                                break;
+                                
+                            case 'patrol': // Inky - complex targeting
+                                const blinky = ghosts[0];
+                                const midX = player.x + player.direction.x * 2;
+                                const midY = player.y + player.direction.y * 2;
+                                targetX = midX + (midX - blinky.x);
+                                targetY = midY + (midY - blinky.y);
+                                break;
+                                
+                            case 'mixed': // Sue - chase if far, scatter if close
+                                const distanceToPlayer = Math.abs(ghost.x - player.x) + Math.abs(ghost.y - player.y);
+                                if (distanceToPlayer > 8) {
+                                    targetX = player.x;
+                                    targetY = player.y;
+                                } else {
+                                    targetX = ghost.scatterTarget.x;
+                                    targetY = ghost.scatterTarget.y;
+                                }
+                                break;
+                        }
+                    }
+                    
+                    // Find best direction to target
+                    let minDistance = Infinity;
+                    possibleMoves.forEach(dir => {
+                        let newX = ghost.x + dir.x;
+                        let newY = ghost.y + dir.y;
+                        
+                        if (newX < 0) newX = MAZE_WIDTH - 1;
+                        if (newX >= MAZE_WIDTH) newX = 0;
+                        
+                        let distance = Math.abs(newX - targetX) + Math.abs(newY - targetY);
+                        
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            targetDir = dir;
+                        }
+                    });
+                    
+                    if (targetDir) {
+                        ghost.direction = targetDir;
+                    }
+                }
+                
+                // Move ghost
+                let newX = ghost.x + ghost.direction.x;
+                let newY = ghost.y + ghost.direction.y;
+                
+                if (newX < 0) newX = MAZE_WIDTH - 1;
+                if (newX >= MAZE_WIDTH) newX = 0;
+                
+                if (isValidMove(newX, newY)) {
+                    ghost.x = newX;
+                    ghost.y = newY;
+                }
+                
+                // Check collision with player
+                if (ghost.x === player.x && ghost.y === player.y && player.invulnerable === 0) {
+                    if (ghost.vulnerable) {
+                        // Eat ghost - authentic scoring
+                        const points = 200 * Math.pow(2, gameState.ghostsEaten);
+                        gameState.score += points;
+                        gameState.ghostsEaten++;
+                        
+                        // Reset ghost to home
+                        ghost.x = 19;
+                        ghost.y = 10;
+                        ghost.vulnerable = false;
+                        ghost.color = ghost.originalColor;
+                        
+                        createParticle(ghost.x, ghost.y, '#00ff00', 'power', 15);
+                        
+                        // Show score popup would go here
+                    } else {
+                        // Player dies
+                        gameState.lives--;
+                        player.invulnerable = 120; // 2 seconds
+                        
+                        if (gameState.lives <= 0) {
+                            // Game Over
+                            if (gameState.score > gameState.highScore) {
+                                gameState.highScore = gameState.score;
+                                localStorage.setItem('nookmanHighScore', gameState.highScore);
+                            }
+                            
+                            finalScore.textContent = gameState.score.toLocaleString();
+                            finalLevel.textContent = gameState.level;
+                            displayHighScore.textContent = gameState.highScore.toLocaleString();
+                            
+                            gameState.currentState = 'gameOver';
+                            gameOverScreen.style.display = 'flex';
+                        } else {
+                            // Reset positions
+                            player.x = 19;
+                            player.y = 20;
+                            player.direction = { x: 0, y: 0 };
+                            
+                            ghosts[0].x = 19; ghosts[0].y = 10;
+                            ghosts[1].x = 19; ghosts[1].y = 11;
+                            ghosts[2].x = 18; ghosts[2].y = 11;
+                            ghosts[3].x = 20; ghosts[3].y = 11;
+                        }
+                    }
+                }
+            });
+            
+            // Update power mode
+            if (gameState.powerMode) {
+                gameState.powerModeTimer--;
+                if (gameState.powerModeTimer <= 0) {
+                    gameState.powerMode = false;
+                    ghosts.forEach(ghost => {
+                        ghost.vulnerable = false;
+                        ghost.color = ghost.originalColor;
+                    });
+                }
+            }
+        }
+
+        function updateBonusFruit() {
+            if (bonusFruit) {
+                bonusFruit.timer--;
+                if (bonusFruit.timer <= 0) {
+                    bonusFruit = null;
+                }
+            }
+        }
+
+        function updateParticles() {
+            particles = particles.filter(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.vx *= 0.98;
+                particle.vy *= 0.98;
+                particle.life -= particle.decay;
+                particle.size *= 0.99;
+                
+                return particle.life > 0 && particle.size > 0.1;
+            });
+        }
+
+        function checkWinCondition() {
+            if (gameState.pelletsEaten >= gameState.totalPellets) {
+                // Level complete
+                gameState.level++;
+                gameState.pelletsEaten = 0;
+                
+                // Bonus points for completing level
+                gameState.score += gameState.level * 100;
+                
+                // Create celebration particles
+                for (let i = 0; i < 30; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: (Math.random() - 0.5) * 10,
+                        vy: (Math.random() - 0.5) * 10,
+                        life: 1,
+                        decay: 0.01,
+                        color: ['#ffd700', '#00ffff', '#ff6b6b', '#00ff00'][Math.floor(Math.random() * 4)],
+                        size: 12,
+                        type: 'celebration'
+                    });
+                }
+                
+                // Reset for next level
+                setTimeout(() => {
+                    initializeGame();
+                }, 2000);
+            }
+        }
+
+        // Advanced Nook mascot rendering
+        function drawNookCharacter(x, y) {
+            const centerX = x * TILE_SIZE + TILE_SIZE/2;
+            const centerY = y * TILE_SIZE + TILE_SIZE/2;
+            const radius = TILE_SIZE/2 - 1;
+            
+            ctx.save();
+            
+            // Invulnerability flashing
+            if (player.invulnerable > 0 && Math.floor(animationTime * 0.3) % 2) {
+                ctx.globalAlpha = 0.5;
+            }
+            
+            // Power mode glow
+            if (gameState.powerMode) {
+                ctx.shadowColor = '#00ffff';
+                ctx.shadowBlur = 20 + Math.sin(animationTime * 0.2) * 10;
+            }
+            
+            // Nook body - raccoon-like colors
+            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+            gradient.addColorStop(0, gameState.powerMode ? '#00ffff' : '#8B4513');
+            gradient.addColorStop(0.6, gameState.powerMode ? '#4169e1' : '#654321');
+            gradient.addColorStop(1, gameState.powerMode ? '#000080' : '#4A2C17');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Nook stripes (raccoon pattern)
+            ctx.fillStyle = gameState.powerMode ? '#000080' : '#2F1B14';
+            for (let i = 0; i < 3; i++) {
+                const stripeRadius = radius * (0.8 - i * 0.15);
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - 2, stripeRadius, -0.3, 0.3);
+                ctx.stroke();
+            }
+            
+            // Eyes
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(centerX - 5, centerY - 4, 3, 0, Math.PI * 2);
+            ctx.arc(centerX + 5, centerY - 4, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Eye gleam
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(centerX - 6, centerY - 5, 1, 0, Math.PI * 2);
+            ctx.arc(centerX + 4, centerY - 5, 1, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Mouth/movement
+            if (player.direction.x !== 0 || player.direction.y !== 0) {
+                ctx.fillStyle = '#000';
+                let mouthAngle = Math.atan2(player.direction.y, player.direction.x);
+                let mouthSize = player.mouthOpen ? 0.6 : 0.2;
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius - 2, 
+                       mouthAngle - mouthSize, mouthAngle + mouthSize);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            // Nose
+            ctx.fillStyle = gameState.powerMode ? '#fff' : '#000';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY + 1, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+        }
+
+        function render() {
+            animationTime++;
+            
+            // Clear with gradient background
+            const bgGradient = ctx.createRadialGradient(
+                canvas.width/2, canvas.height/2, 0,
+                canvas.width/2, canvas.height/2, canvas.width/2
+            );
+            bgGradient.addColorStop(0, '#001122');
+            bgGradient.addColorStop(1, '#000000');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Render maze
+            for (let y = 0; y < MAZE_HEIGHT; y++) {
+                for (let x = 0; x < MAZE_WIDTH; x++) {
+                    if (!maze[y]) continue;
+                    
+                    switch (maze[y][x]) {
+                        case 1: // Walls
+                            const wallGradient = ctx.createLinearGradient(
+                                x * TILE_SIZE, y * TILE_SIZE,
+                                x * TILE_SIZE + TILE_SIZE, y * TILE_SIZE + TILE_SIZE
+                            );
+                            wallGradient.addColorStop(0, '#0066ff');
+                            wallGradient.addColorStop(0.5, '#004499');
+                            wallGradient.addColorStop(1, '#002266');
+                            
+                            ctx.fillStyle = wallGradient;
+                            ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            
+                            // Wall border
+                            ctx.strokeStyle = '#00aaff';
+                            ctx.lineWidth = 1;
+                            ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            break;
+                            
+                        case 2: // Bellschain coins
+                            const coinCenterX = x * TILE_SIZE + TILE_SIZE/2;
+                            const coinCenterY = y * TILE_SIZE + TILE_SIZE/2;
+                            const pulse = Math.sin(animationTime * 0.1 + x + y) * 0.3 + 0.7;
+                            
+                            ctx.save();
+                            ctx.shadowColor = '#ffd700';
+                            ctx.shadowBlur = 8 * pulse;
+                            
+                            const coinGradient = ctx.createRadialGradient(
+                                coinCenterX, coinCenterY, 0,
+                                coinCenterX, coinCenterY, 4
+                            );
+                            coinGradient.addColorStop(0, '#ffff00');
+                            coinGradient.addColorStop(0.7, '#ffd700');
+                            coinGradient.addColorStop(1, '#ffaa00');
+                            
+                            ctx.fillStyle = coinGradient;
+                            ctx.beginPath();
+                            ctx.arc(coinCenterX, coinCenterY, 3 * pulse, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            // Bellschain "B" logo
+                            ctx.shadowBlur = 0;
+                            ctx.fillStyle = '#cc8800';
+                            ctx.font = 'bold 6px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('B', coinCenterX, coinCenterY + 2);
+                            
+                            ctx.restore();
+                            break;
+                            
+                        case 3: // Power crystals
+                            const crystalCenterX = x * TILE_SIZE + TILE_SIZE/2;
+                            const crystalCenterY = y * TILE_SIZE + TILE_SIZE/2;
+                            const rotation = animationTime * 0.05;
+                            const powerPulse = Math.sin(animationTime * 0.15) * 0.4 + 0.6;
+                            
+                            ctx.save();
+                            ctx.translate(crystalCenterX, crystalCenterY);
+                            ctx.rotate(rotation);
+                            
+                            ctx.shadowColor = '#00ffff';
+                            ctx.shadowBlur = 20 * powerPulse;
+                            
+                            const crystalGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 10);
+                            crystalGradient.addColorStop(0, '#ffffff');
+                            crystalGradient.addColorStop(0.3, '#00ffff');
+                            crystalGradient.addColorStop(0.7, '#0080ff');
+                            crystalGradient.addColorStop(1, '#004080');
+                            
+                            ctx.fillStyle = crystalGradient;
+                            ctx.beginPath();
+                            for (let i = 0; i < 8; i++) {
+                                const angle = (i * Math.PI) / 4;
+                                const radius = i % 2 === 0 ? 9 * powerPulse : 6 * powerPulse;
+                                const px = Math.cos(angle) * radius;
+                                const py = Math.sin(angle) * radius;
+                                
+                                if (i === 0) ctx.moveTo(px, py);
+                                else ctx.lineTo(px, py);
+                            }
+                            ctx.closePath();
+                            ctx.fill();
+                            
+                            ctx.restore();
+                            break;
+                    }
+                }
+            }
+            
+            // Render bonus fruit
+            if (bonusFruit) {
+                const fruitCenterX = bonusFruit.x * TILE_SIZE + TILE_SIZE/2;
+                const fruitCenterY = bonusFruit.y * TILE_SIZE + TILE_SIZE/2;
+                const fruitBounce = Math.sin(animationTime * 0.2) * 3;
+                
+                ctx.save();
+                ctx.shadowColor = bonusFruit.color;
+                ctx.shadowBlur = 15;
+                
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(bonusFruit.symbol, fruitCenterX, fruitCenterY - fruitBounce + 6);
+                
+                ctx.restore();
+            }
+            
+            // Render Nook character
+            drawNookCharacter(player.x, player.y);
+            
+            // Render ghosts
+            ghosts.forEach(ghost => {
+                const ghostCenterX = ghost.x * TILE_SIZE + TILE_SIZE/2;
+                const ghostCenterY = ghost.y * TILE_SIZE + TILE_SIZE/2;
+                const ghostRadius = TILE_SIZE/2 - 1;
+                
+                ctx.save();
+                
+                // Ghost vulnerability effects
+                if (ghost.vulnerable) {
+                    const flashRate = gameState.powerModeTimer < 120 ? 0.2 : 0.1;
+                    const flash = Math.sin(animationTime * flashRate) > 0;
+                    ctx.fillStyle = flash && gameState.powerModeTimer < 120 ? '#ffffff' : '#4169e1';
+                    ctx.shadowColor = '#4169e1';
+                    ctx.shadowBlur = 15;
+                } else {
+                    ctx.fillStyle = ghost.color;
+                    ctx.shadowColor = ghost.color;
+                    ctx.shadowBlur = 10;
+                }
+                
+                // Ghost body
+                ctx.beginPath();
+                ctx.arc(ghostCenterX, ghostCenterY - 2, ghostRadius, Math.PI, 0, false);
+                ctx.lineTo(ghostCenterX + ghostRadius, ghostCenterY + ghostRadius - 2);
+                
+                // Ghost bottom wave pattern
+                const waveCount = 4;
+                for (let i = 0; i <= waveCount; i++) {
+                    const waveX = ghostCenterX + ghostRadius - (i * (ghostRadius * 2)) / waveCount;
+                    const waveY = ghostCenterY + ghostRadius - 2 + 
+                        Math.sin(animationTime * 0.3 + i) * 3;
+                    ctx.lineTo(waveX, waveY);
+                }
+                
+                ctx.lineTo(ghostCenterX - ghostRadius, ghostCenterY + ghostRadius - 2);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.shadowBlur = 0;
+                
+                // Ghost eyes
+                if (!ghost.vulnerable) {
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX - 4, ghostCenterY - 4, 3, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 4, ghostCenterY - 4, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Eye pupils
+                    ctx.fillStyle = '#000';
+                    const eyeOffsetX = ghost.direction.x * 1.5;
+                    const eyeOffsetY = ghost.direction.y * 1.5;
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX - 4 + eyeOffsetX, ghostCenterY - 4 + eyeOffsetY, 1.5, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 4 + eyeOffsetX, ghostCenterY - 4 + eyeOffsetY, 1.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                ctx.restore();
+            });
+            
+            // Render particles
+            particles.forEach(particle => {
+                ctx.save();
+                ctx.globalAlpha = particle.life;
+                ctx.fillStyle = particle.color;
+                ctx.shadowColor = particle.color;
+                ctx.shadowBlur = particle.size * 2;
+                
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+            
+            // Update UI
+            scoreElement.textContent = gameState.score.toLocaleString();
+            livesElement.textContent = gameState.lives;
+            levelElement.textContent = gameState.level;
+        }
+
+        function gameLoop(currentTime) {
+            if (gameState.currentState === 'playing') {
+                if (currentTime - lastTime >= gameState.currentSpeed) {
+                    updatePlayer();
+                    updateGhosts();
+                    updateBonusFruit();
+                    checkWinCondition();
+                    lastTime = currentTime;
+                }
+            }
+            
+            updateParticles();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game loop
+        initializeGame();
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>

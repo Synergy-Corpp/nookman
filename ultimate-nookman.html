@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🦝 ULTIMATE NOOKMAN - 5 Level Adventure 🔔</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, 
+                #0a0a0a 0%, 
+                #1a1a2e 25%, 
+                #16213e 50%, 
+                #0f3460 75%, 
+                #533483 100%);
+            font-family: 'Orbitron', 'Arial Black', Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+            min-height: 100vh;
+            animation: backgroundPulse 10s ease-in-out infinite alternate;
+        }
+        
+        @keyframes backgroundPulse {
+            0% { filter: brightness(1) hue-rotate(0deg); }
+            100% { filter: brightness(1.2) hue-rotate(10deg); }
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .floating-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #00ffff;
+            border-radius: 50%;
+            animation: float 8s linear infinite;
+            box-shadow: 0 0 10px #00ffff;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .header {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, 
+                rgba(0, 50, 100, 0.8), 
+                rgba(50, 0, 100, 0.6),
+                rgba(0, 100, 150, 0.4));
+            border-radius: 20px;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            animation: headerGlow 3s ease-in-out infinite alternate;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+            border-radius: 20px;
+            z-index: -1;
+            animation: borderRainbow 4s linear infinite;
+        }
+        
+        @keyframes headerGlow {
+            0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+            100% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.8), 0 0 60px rgba(255, 0, 255, 0.4); }
+        }
+        
+        @keyframes borderRainbow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .score, .lives, .level {
+            font-size: 20px;
+            font-weight: 700;
+            text-shadow: 0 0 15px currentColor;
+            padding: 10px 15px;
+            border-radius: 15px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .score {
+            color: #ffd700;
+            animation: scoreFlicker 2s ease-in-out infinite alternate;
+        }
+        
+        .lives {
+            color: #ff6b6b;
+            animation: livesFlicker 1.5s ease-in-out infinite alternate;
+        }
+        
+        .level {
+            color: #00ff00;
+            animation: levelFlicker 2.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes scoreFlicker {
+            0% { text-shadow: 0 0 15px #ffd700; }
+            100% { text-shadow: 0 0 25px #ffd700, 0 0 35px #ffd700; }
+        }
+        
+        @keyframes livesFlicker {
+            0% { text-shadow: 0 0 15px #ff6b6b; }
+            100% { text-shadow: 0 0 25px #ff6b6b, 0 0 35px #ff6b6b; }
+        }
+        
+        @keyframes levelFlicker {
+            0% { text-shadow: 0 0 15px #00ff00; }
+            100% { text-shadow: 0 0 25px #00ff00, 0 0 35px #00ff00; }
+        }
+        
+        .title {
+            font-size: 36px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #00ffff, #ff69b4, #00ff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            animation: titlePulse 2s ease-in-out infinite alternate;
+            text-align: center;
+        }
+        
+        @keyframes titlePulse {
+            0% { 
+                transform: scale(1);
+                text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            }
+            100% { 
+                transform: scale(1.05);
+                text-shadow: 
+                    0 0 40px rgba(255, 215, 0, 1),
+                    0 0 60px rgba(0, 255, 255, 0.8),
+                    0 0 80px rgba(255, 105, 180, 0.6);
+            }
+        }
+        
+        canvas {
+            border: 5px solid transparent;
+            border-radius: 20px;
+            background: radial-gradient(circle at center, #000066, #000000);
+            box-shadow: 
+                0 0 50px rgba(0, 255, 255, 0.6),
+                inset 0 0 100px rgba(0, 100, 200, 0.2),
+                0 0 100px rgba(255, 0, 255, 0.3);
+            position: relative;
+            animation: canvasGlow 4s ease-in-out infinite alternate;
+        }
+        
+        canvas::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ff00);
+            border-radius: 20px;
+            z-index: -1;
+            animation: canvasBorder 3s linear infinite;
+        }
+        
+        @keyframes canvasGlow {
+            0% { 
+                box-shadow: 
+                    0 0 30px rgba(0, 255, 255, 0.4),
+                    inset 0 0 50px rgba(0, 100, 200, 0.1);
+            }
+            100% { 
+                box-shadow: 
+                    0 0 60px rgba(0, 255, 255, 0.8),
+                    inset 0 0 100px rgba(0, 100, 200, 0.3),
+                    0 0 80px rgba(255, 0, 255, 0.5);
+            }
+        }
+        
+        .controls {
+            margin-top: 15px;
+            color: #ccc;
+            font-size: 16px;
+            text-align: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            animation: controlsFloat 6s ease-in-out infinite alternate;
+        }
+        
+        @keyframes controlsFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-5px); }
+        }
+        
+        .power-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,0,0.1), transparent);
+            pointer-events: none;
+            z-index: 10;
+            animation: powerPulse 0.5s ease-in-out infinite alternate;
+            opacity: 0;
+        }
+        
+        .power-mode.active {
+            opacity: 1;
+        }
+        
+        @keyframes powerPulse {
+            0% { background: radial-gradient(circle, rgba(255,255,0,0.1), transparent); }
+            100% { background: radial-gradient(circle, rgba(255,255,0,0.3), transparent); }
+        }
+        
+        .level-complete {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, rgba(0,255,0,0.9), rgba(0,255,255,0.9));
+            padding: 30px;
+            border-radius: 20px;
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 20px #000;
+            z-index: 100;
+            animation: levelCompleteAnim 2s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .level-complete.show {
+            opacity: 1;
+        }
+        
+        @keyframes levelCompleteAnim {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles Background -->
+    <div class="floating-particles" id="particles"></div>
+    
+    <!-- Power Mode Overlay -->
+    <div class="power-mode" id="powerMode"></div>
+    
+    <!-- Level Complete Notification -->
+    <div class="level-complete" id="levelComplete">
+        🎉 LEVEL COMPLETE! 🎉<br>
+        <span style="font-size: 20px;">Get ready for the next challenge!</span>
+    </div>
+    
+    <div class="game-container">
+        <div class="header">
+            <div class="score">
+                🔔 BELLS<br>
+                <span id="score" style="font-size: 24px;">0</span>
+            </div>
+            <div class="title">
+                🦝 ULTIMATE NOOKMAN 🦝<br>
+                <div style="font-size: 16px; margin-top: 5px;">
+                    Level <span id="currentLevel">1</span> of 5
+                </div>
+            </div>
+            <div class="lives">
+                ❤️ LIVES<br>
+                <span id="lives" style="font-size: 24px;">3</span>
+            </div>
+        </div>
+        
+        <canvas id="game" width="900" height="650"></canvas>
+        
+        <div class="controls">
+            🎮 Use WASD or Arrow Keys to navigate the maze<br>
+            🔔 Collect all bells to advance levels | 💰 Big bells give power mode!<br>
+            👻 Avoid ghosts or hunt them during power mode! | 🏆 Reach Level 5 to WIN!
+        </div>
+    </div>
+
+    <script>
+        console.log("🦝 Ultimate Nookman - 5 Level Adventure Starting! 🔔");
+        
+        // Audio context for sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let gameStarted = false;
+        
+        // Sound Effects Functions
+        function playSound(frequency, duration, type = 'sine') {
+            if (!gameStarted) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playCoinSound() {
+            playSound(800, 0.1, 'square');
+            setTimeout(() => playSound(1000, 0.1, 'square'), 50);
+        }
+        
+        function playPowerSound() {
+            playSound(400, 0.3, 'sawtooth');
+            setTimeout(() => playSound(600, 0.3, 'sawtooth'), 100);
+            setTimeout(() => playSound(800, 0.3, 'sawtooth'), 200);
+        }
+        
+        function playGhostEatenSound() {
+            playSound(200, 0.5, 'triangle');
+        }
+        
+        function playDeathSound() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => playSound(300 - i * 20, 0.1, 'sawtooth'), i * 50);
+            }
+        }
+        
+        function playLevelCompleteSound() {
+            const notes = [523, 587, 659, 698, 784, 880, 988];
+            notes.forEach((note, i) => {
+                setTimeout(() => playSound(note, 0.2, 'sine'), i * 100);
+            });
+        }
+        
+        // Game Elements
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+        const currentLevelElement = document.getElementById('currentLevel');
+        const powerModeElement = document.getElementById('powerMode');
+        const levelCompleteElement = document.getElementById('levelComplete');
+        
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        // Game constants
+        const TILE_SIZE = 25;
+        const MAZE_WIDTH = Math.floor(canvas.width / TILE_SIZE);
+        const MAZE_HEIGHT = Math.floor(canvas.height / TILE_SIZE);
+        
+        // Level designs (5 progressive levels)
+        const levelMazes = [
+            // Level 1 - Easy
+            [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,3,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,2,1,1,1,1],
+                [1,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,1,1,1,1,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2],
+                [1,1,1,1,1,1,2,1,1,1,1,1,0,1,1,2,2,1,1,1,1,2,2,1,1,0,1,1,1,1,1,2,1,1,1,1],
+                [0,0,0,0,0,1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1,0,0,0],
+                [1,1,1,1,1,1,2,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,1,2,1,1,1,1],
+                [2,2,2,2,2,2,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2,2,2,2,2],
+                [1,1,1,1,1,1,2,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,2,1,1,1,1],
+                [0,0,0,0,0,1,2,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,2,1,0,0,0],
+                [1,1,1,1,1,1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1,1,1,1],
+                [1,2,2,2,2,2,2,1,1,1,1,1,0,1,1,2,2,1,1,1,1,2,2,1,1,0,1,1,1,1,1,2,2,2,2,2],
+                [1,2,1,1,1,1,2,2,2,2,2,2,2,1,1,2,2,1,1,1,1,2,2,1,1,2,2,2,2,2,2,2,1,1,1,1],
+                [1,2,2,2,2,2,2,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,2,2,2,2,2],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+                [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,3,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ],
+            // Level 2 - More complex
+            [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,3,1],
+                [1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,2,1,1,1,1],
+                [1,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,1,1,1,1,2,2,1,1,2,2,2,2,1,1,2,2,2,2,1],
+                [1,1,1,1,1,1,2,1,1,1,1,1,0,1,1,2,2,1,1,1,1,2,2,1,1,0,1,1,1,1,1,2,1,1,1,1],
+                [0,0,0,0,0,1,2,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,1,2,1,0,0,0],
+                [1,1,1,1,1,1,2,1,1,0,1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,1,1,1,1,0,1,2,1,1,1,1],
+                [2,2,2,2,2,2,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2,2,2,2,2],
+                [1,1,1,1,1,1,2,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,2,1,1,1,1],
+                [0,0,0,0,0,1,2,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,2,1,0,0,0],
+                [1,1,1,1,1,1,2,1,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,2,1,1,1,1],
+                [1,2,2,2,2,2,2,1,1,1,1,1,0,1,1,2,2,1,1,1,1,2,2,1,1,0,1,1,1,1,1,2,2,2,2,1],
+                [1,2,1,1,1,1,2,2,2,2,2,2,2,1,1,2,2,1,1,1,1,2,2,1,1,2,2,2,2,2,2,2,1,1,1,1],
+                [1,2,2,2,2,2,2,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,2,2,2,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,3,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ],
+            // Level 3 - Harder
+            [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,1,1,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,1],
+                [1,3,1,1,2,1,1,1,2,1,1,2,1,1,1,1,2,1,1,2,1,1,1,1,2,1,1,2,1,1,1,2,1,1,3,1],
+                [1,2,1,1,2,1,1,1,2,2,2,2,1,1,1,1,2,2,2,2,1,1,1,1,2,2,2,2,1,1,1,2,1,1,2,1],
+                [1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,1,1,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,1,1,1,2,1,1,2,1,1,1,1,2,1,1,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,1,1,2,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1],
+                [0,0,0,1,2,1,0,0,0,0,0,0,0,0,0,1,2,1,1,2,1,0,0,0,0,0,0,0,0,0,1,2,1,0,0,0],
+                [1,1,1,1,2,1,0,1,1,1,1,1,0,0,0,1,2,2,2,2,1,0,0,0,1,1,1,1,1,0,1,2,1,1,1,1],
+                [2,2,2,2,2,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,2,2,2,2,2],
+                [1,1,1,1,2,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,2,1,1,1,1],
+                [0,0,0,1,2,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,2,1,0,0,0],
+                [1,1,1,1,2,1,0,0,0,0,0,0,0,0,0,1,2,1,1,2,1,0,0,0,0,0,0,0,0,0,1,2,1,1,1,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,2,1,1,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,1,1,1,2,1,1,2,1,1,1,1,2,2,2,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,2,1],
+                [1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,1,1,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,2,1,1,1,2,2,2,2,1,1,1,1,2,2,2,2,1,1,1,1,2,2,2,2,1,1,1,2,1,1,2,1],
+                [1,3,1,1,2,1,1,1,2,1,1,2,1,1,1,1,2,1,1,2,1,1,1,1,2,1,1,2,1,1,1,2,1,1,3,1],
+                [1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,1,1,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ],
+            // Level 4 - Very Hard
+            [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,2,2,1,2,2,2,1,2,2,2,1,2,2,2,2,2,1,1,2,2,2,2,2,1,2,2,2,1,2,2,2,1,2,2,1],
+                [1,3,2,1,2,1,2,1,2,1,2,1,2,1,1,1,2,1,1,2,1,1,1,2,1,2,1,2,1,2,1,2,1,2,3,1],
+                [1,2,2,1,2,1,2,1,2,1,2,1,2,1,1,1,2,2,2,2,1,1,1,2,1,2,1,2,1,2,1,2,1,2,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,2,1,1,2,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1],
+                [1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,2,2,2,2,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,1,1,2,1,1,1,2,1,1,1,2,1,1,1,1,2,1,1,2,1,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1],
+                [0,0,2,2,2,0,0,2,0,0,0,2,0,0,0,1,2,2,2,2,1,0,0,0,2,0,0,0,2,0,0,2,2,2,0,0],
+                [1,1,1,2,1,0,1,2,1,0,1,2,1,0,0,1,0,0,0,0,1,0,0,1,2,1,0,1,2,1,0,1,2,1,1,1],
+                [2,2,2,2,2,0,2,2,2,0,2,2,2,0,0,0,0,0,0,0,0,0,0,2,2,2,0,2,2,2,0,2,2,2,2,2],
+                [1,1,1,2,1,0,1,2,1,0,1,2,1,0,0,0,0,0,0,0,0,0,0,1,2,1,0,1,2,1,0,1,2,1,1,1],
+                [0,0,2,2,2,0,0,2,0,0,0,2,0,0,0,1,2,2,2,2,1,0,0,0,2,0,0,0,2,0,0,2,2,2,0,0],
+                [1,1,1,2,1,1,1,2,1,1,1,2,1,1,1,1,2,1,1,2,1,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,2,2,2,2,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1],
+                [1,2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,2,1,1,2,1,1,2,1,1,1,2,1,1,1,2,1,1,1,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,3,2,1,2,1,2,1,2,1,2,1,2,1,1,1,2,1,1,2,1,1,1,2,1,2,1,2,1,2,1,2,1,2,3,1],
+                [1,2,2,1,2,2,2,1,2,2,2,1,2,2,2,2,2,1,1,2,2,2,2,2,1,2,2,2,1,2,2,2,1,2,2,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ],
+            // Level 5 - ULTIMATE
+            [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,1],
+                [1,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,1],
+                [1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,2,2,2,2,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,2,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,2,1,2,1],
+                [1,2,2,2,1,1,1,1,1,2,1,1,1,1,2,2,2,2,2,2,2,2,1,1,1,1,2,1,1,1,1,1,2,2,2,1],
+                [1,2,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,2,1],
+                [1,2,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,2,1],
+                [0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,0,0,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,0,0,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0],
+                [1,2,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,2,1],
+                [1,2,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,2,1],
+                [1,2,2,2,1,1,1,1,1,2,1,1,1,1,2,2,2,2,2,2,2,2,1,1,1,1,2,1,1,1,1,1,2,2,2,1],
+                [1,2,1,2,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,2,1,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,2,2,2,2,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1],
+                [1,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,1],
+                [1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ]
+        ];
+        
+        let currentMaze = [];
+        
+        // Game state
+        let gameState = {
+            score: 0,
+            lives: 3,
+            level: 1,
+            bellsCollected: 0,
+            totalBells: 0,
+            powerMode: false,
+            powerModeTimer: 0,
+            gameComplete: false,
+            particles: []
+        };
+        
+        // Nook character
+        let nook = {
+            x: 18,
+            y: 18,
+            size: 12,
+            direction: { x: 0, y: 0 },
+            nextDirection: { x: 0, y: 0 },
+            mouthOpen: true,
+            animationFrame: 0
+        };
+        
+        // 4 Different Ghosts with unique AI
+        let ghosts = [
+            { 
+                x: 16, y: 9, 
+                direction: { x: -1, y: 0 }, 
+                color: '#ff3030', 
+                vulnerable: false,
+                name: 'Blinky',
+                type: 'aggressive',
+                speed: 1
+            },
+            { 
+                x: 18, y: 9, 
+                direction: { x: 1, y: 0 }, 
+                color: '#ffb8ff', 
+                vulnerable: false,
+                name: 'Pinky',
+                type: 'ambush',
+                speed: 1
+            },
+            { 
+                x: 17, y: 10, 
+                direction: { x: 0, y: -1 }, 
+                color: '#00ffff', 
+                vulnerable: false,
+                name: 'Inky',
+                type: 'patrol',
+                speed: 1
+            },
+            { 
+                x: 19, y: 10, 
+                direction: { x: 0, y: 1 }, 
+                color: '#ffb852', 
+                vulnerable: false,
+                name: 'Clyde',
+                type: 'random',
+                speed: 1
+            }
+        ];
+        
+        let keys = {};
+        let animationTime = 0;
+        
+        // Initialize level
+        function initLevel(level) {
+            currentMaze = levelMazes[level - 1].map(row => [...row]);
+            gameState.level = level;
+            gameState.bellsCollected = 0;
+            gameState.powerMode = false;
+            gameState.powerModeTimer = 0;
+            
+            // Count total bells
+            gameState.totalBells = 0;
+            for (let y = 0; y < currentMaze.length; y++) {
+                for (let x = 0; x < currentMaze[y].length; x++) {
+                    if (currentMaze[y][x] === 2 || currentMaze[y][x] === 3) {
+                        gameState.totalBells++;
+                    }
+                }
+            }
+            
+            // Reset positions
+            nook.x = 18;
+            nook.y = 18;
+            nook.direction = { x: 0, y: 0 };
+            nook.nextDirection = { x: 0, y: 0 };
+            
+            // Reset ghosts with level-based speed increase
+            const speedBoost = Math.min(level * 0.2, 1);
+            ghosts.forEach((ghost, i) => {
+                ghost.x = 16 + i;
+                ghost.y = 9 + (i > 1 ? 1 : 0);
+                ghost.vulnerable = false;
+                ghost.speed = 1 + speedBoost;
+                ghost.color = ['#ff3030', '#ffb8ff', '#00ffff', '#ffb852'][i];
+            });
+            
+            currentLevelElement.textContent = level;
+            console.log(`Level ${level} initialized with ${gameState.totalBells} bells`);
+        }
+        
+        // Input handling
+        document.addEventListener('keydown', (e) => {
+            if (!gameStarted) {
+                gameStarted = true;
+                console.log("🎮 Game Started!");
+            }
+            
+            keys[e.key.toLowerCase()] = true;
+            
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                case 'arrowup':
+                    nook.nextDirection = { x: 0, y: -1 };
+                    break;
+                case 's':
+                case 'arrowdown':
+                    nook.nextDirection = { x: 0, y: 1 };
+                    break;
+                case 'a':
+                case 'arrowleft':
+                    nook.nextDirection = { x: -1, y: 0 };
+                    break;
+                case 'd':
+                case 'arrowright':
+                    nook.nextDirection = { x: 1, y: 0 };
+                    break;
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+        
+        function isValidMove(x, y) {
+            if (x < 0 || x >= MAZE_WIDTH || y < 0 || y >= MAZE_HEIGHT) return false;
+            return currentMaze[y] && currentMaze[y][x] !== 1;
+        }
+        
+        // Create visual particles
+        function createParticle(x, y, color, count = 5) {
+            for (let i = 0; i < count; i++) {
+                gameState.particles.push({
+                    x: x * TILE_SIZE + TILE_SIZE/2,
+                    y: y * TILE_SIZE + TILE_SIZE/2,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    life: 1,
+                    decay: 0.02,
+                    color: color,
+                    size: Math.random() * 4 + 2
+                });
+            }
+        }
+        
+        // Draw bells using scanned design
+        function drawBell(x, y, isPowerBell = false) {
+            const centerX = x * TILE_SIZE + TILE_SIZE/2;
+            const centerY = y * TILE_SIZE + TILE_SIZE/2;
+            const size = isPowerBell ? 10 : 6;
+            const pulse = Math.sin(animationTime * 0.1 + x + y) * 0.3 + 0.7;
+            
+            ctx.save();
+            
+            // Bell glow effect
+            ctx.shadowColor = isPowerBell ? '#FFD700' : '#FFA500';
+            ctx.shadowBlur = isPowerBell ? 20 * pulse : 10 * pulse;
+            
+            // Main bell body - golden/orange
+            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size);
+            gradient.addColorStop(0, '#FFD700');
+            gradient.addColorStop(0.7, '#FFA500');
+            gradient.addColorStop(1, '#CD853F');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * pulse, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark outline
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = isPowerBell ? 3 : 2;
+            ctx.stroke();
+            
+            // Red tie at top
+            ctx.fillStyle = '#DC143C';
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY - size + 3, 4, 3, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark star symbol
+            ctx.fillStyle = '#654321';
+            ctx.font = `bold ${isPowerBell ? 12 : 8}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.fillText('★', centerX, centerY + (isPowerBell ? 3 : 2));
+            
+            ctx.restore();
+        }
+        
+        // Update game logic
+        function update() {
+            animationTime++;
+            
+            // Grid-based movement like Pac-Man
+            if (isValidMove(nook.x + nook.nextDirection.x, nook.y + nook.nextDirection.y)) {
+                nook.direction = { ...nook.nextDirection };
+            }
+            
+            let newX = nook.x + nook.direction.x;
+            let newY = nook.y + nook.direction.y;
+            
+            // Tunnel wraparound
+            if (newX < 0) newX = MAZE_WIDTH - 1;
+            if (newX >= MAZE_WIDTH) newX = 0;
+            
+            if (isValidMove(newX, newY)) {
+                nook.x = newX;
+                nook.y = newY;
+                nook.animationFrame++;
+                nook.mouthOpen = Math.floor(nook.animationFrame / 4) % 2 === 0;
+                
+                // Collect bells
+                if (currentMaze[nook.y] && currentMaze[nook.y][nook.x] === 2) {
+                    currentMaze[nook.y][nook.x] = 0;
+                    gameState.score += 10 * gameState.level;
+                    gameState.bellsCollected++;
+                    playCoinSound();
+                    createParticle(nook.x, nook.y, '#FFD700', 3);
+                } else if (currentMaze[nook.y] && currentMaze[nook.y][nook.x] === 3) {
+                    currentMaze[nook.y][nook.x] = 0;
+                    gameState.score += 50 * gameState.level;
+                    gameState.bellsCollected++;
+                    gameState.powerMode = true;
+                    gameState.powerModeTimer = 300 - (gameState.level * 30);
+                    
+                    playPowerSound();
+                    createParticle(nook.x, nook.y, '#FFFFFF', 8);
+                    
+                    ghosts.forEach(ghost => {
+                        ghost.vulnerable = true;
+                        ghost.color = '#4169E1';
+                    });
+                    
+                    powerModeElement.classList.add('active');
+                }
+            }
+            
+            // Update ghosts
+            updateGhosts();
+            
+            // Update power mode
+            if (gameState.powerMode) {
+                gameState.powerModeTimer--;
+                if (gameState.powerModeTimer <= 0) {
+                    gameState.powerMode = false;
+                    powerModeElement.classList.remove('active');
+                    ghosts.forEach((ghost, i) => {
+                        ghost.vulnerable = false;
+                        ghost.color = ['#ff3030', '#ffb8ff', '#00ffff', '#ffb852'][i];
+                    });
+                }
+            }
+            
+            // Update particles
+            gameState.particles = gameState.particles.filter(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.vx *= 0.98;
+                particle.vy *= 0.98;
+                particle.life -= particle.decay;
+                particle.size *= 0.99;
+                
+                return particle.life > 0 && particle.size > 0.1;
+            });
+            
+            // Check level complete
+            if (gameState.bellsCollected >= gameState.totalBells) {
+                if (gameState.level < 5) {
+                    nextLevel();
+                } else {
+                    gameComplete();
+                }
+            }
+            
+            // Update UI
+            scoreElement.textContent = gameState.score.toLocaleString();
+            livesElement.textContent = gameState.lives;
+        }
+        
+        // Ghost AI
+        function updateGhosts() {
+            ghosts.forEach((ghost, index) => {
+                let possibleMoves = [
+                    { x: 0, y: -1 },
+                    { x: 0, y: 1 },
+                    { x: -1, y: 0 },
+                    { x: 1, y: 0 }
+                ].filter(dir => {
+                    let newX = ghost.x + dir.x;
+                    let newY = ghost.y + dir.y;
+                    
+                    if (newX < 0) newX = MAZE_WIDTH - 1;
+                    if (newX >= MAZE_WIDTH) newX = 0;
+                    
+                    return isValidMove(newX, newY);
+                });
+                
+                if (possibleMoves.length > 0) {
+                    let targetDir = null;
+                    
+                    if (ghost.vulnerable) {
+                        // Run away from Nook
+                        targetDir = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                    } else {
+                        // Different AI behaviors
+                        switch (ghost.type) {
+                            case 'aggressive': // Direct chase
+                                let minDistance = Infinity;
+                                possibleMoves.forEach(dir => {
+                                    let newX = ghost.x + dir.x;
+                                    let newY = ghost.y + dir.y;
+                                    let distance = Math.abs(newX - nook.x) + Math.abs(newY - nook.y);
+                                    
+                                    if (distance < minDistance) {
+                                        minDistance = distance;
+                                        targetDir = dir;
+                                    }
+                                });
+                                break;
+                                
+                            case 'ambush': // Try to get ahead of Nook
+                                let futureX = nook.x + nook.direction.x * 4;
+                                let futureY = nook.y + nook.direction.y * 4;
+                                let minAmbushDistance = Infinity;
+                                possibleMoves.forEach(dir => {
+                                    let newX = ghost.x + dir.x;
+                                    let newY = ghost.y + dir.y;
+                                    let distance = Math.abs(newX - futureX) + Math.abs(newY - futureY);
+                                    
+                                    if (distance < minAmbushDistance) {
+                                        minAmbushDistance = distance;
+                                        targetDir = dir;
+                                    }
+                                });
+                                break;
+                                
+                            case 'patrol': // Patrol pattern
+                                targetDir = possibleMoves.find(dir => 
+                                    dir.x === ghost.direction.x && dir.y === ghost.direction.y
+                                ) || possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                                break;
+                                
+                            case 'random': // Semi-random movement
+                                if (Math.random() < 0.7) {
+                                    targetDir = possibleMoves.find(dir => 
+                                        dir.x === ghost.direction.x && dir.y === ghost.direction.y
+                                    ) || possibleMoves[0];
+                                } else {
+                                    targetDir = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                                }
+                                break;
+                        }
+                    }
+                    
+                    if (targetDir) {
+                        ghost.direction = targetDir;
+                    }
+                }
+                
+                // Move ghost
+                let newX = ghost.x + ghost.direction.x;
+                let newY = ghost.y + ghost.direction.y;
+                
+                if (newX < 0) newX = MAZE_WIDTH - 1;
+                if (newX >= MAZE_WIDTH) newX = 0;
+                
+                if (isValidMove(newX, newY)) {
+                    ghost.x = newX;
+                    ghost.y = newY;
+                }
+                
+                // Check collision with Nook
+                if (ghost.x === nook.x && ghost.y === nook.y) {
+                    if (ghost.vulnerable) {
+                        // Eat ghost
+                        gameState.score += 200 * gameState.level;
+                        ghost.x = 16 + index;
+                        ghost.y = 9 + (index > 1 ? 1 : 0);
+                        ghost.vulnerable = false;
+                        ghost.color = ['#ff3030', '#ffb8ff', '#00ffff', '#ffb852'][index];
+                        
+                        playGhostEatenSound();
+                        createParticle(ghost.x, ghost.y, '#00FF00', 10);
+                    } else {
+                        // Nook dies
+                        gameState.lives--;
+                        playDeathSound();
+                        
+                        if (gameState.lives <= 0) {
+                            // Game Over
+                            alert(`Game Over! Final Score: ${gameState.score.toLocaleString()}`);
+                            initLevel(1);
+                            gameState.score = 0;
+                            gameState.lives = 3;
+                        } else {
+                            // Reset positions
+                            nook.x = 18;
+                            nook.y = 18;
+                            nook.direction = { x: 0, y: 0 };
+                            
+                            ghosts.forEach((g, i) => {
+                                g.x = 16 + i;
+                                g.y = 9 + (i > 1 ? 1 : 0);
+                                g.vulnerable = false;
+                                g.color = ['#ff3030', '#ffb8ff', '#00ffff', '#ffb852'][i];
+                            });
+                        }
+                    }
+                }
+            });
+        }
+        
+        function nextLevel() {
+            playLevelCompleteSound();
+            
+            levelCompleteElement.classList.add('show');
+            levelCompleteElement.innerHTML = `
+                🎉 LEVEL ${gameState.level} COMPLETE! 🎉<br>
+                <span style="font-size: 20px;">Bells Collected: ${gameState.bellsCollected}</span><br>
+                <span style="font-size: 16px;">Bonus: ${gameState.level * 1000} points!</span>
+            `;
+            
+            gameState.score += gameState.level * 1000;
+            
+            setTimeout(() => {
+                levelCompleteElement.classList.remove('show');
+                if (gameState.level < 5) {
+                    initLevel(gameState.level + 1);
+                }
+            }, 3000);
+        }
+        
+        function gameComplete() {
+            playLevelCompleteSound();
+            setTimeout(() => playLevelCompleteSound(), 500);
+            
+            levelCompleteElement.classList.add('show');
+            levelCompleteElement.innerHTML = `
+                🏆 ULTIMATE VICTORY! 🏆<br>
+                <span style="font-size: 24px;">ALL 5 LEVELS COMPLETE!</span><br>
+                <span style="font-size: 20px;">Final Score: ${gameState.score.toLocaleString()}</span><br>
+                <span style="font-size: 16px;">🦝 NOOKMAN CHAMPION! 🔔</span>
+            `;
+            
+            gameState.gameComplete = true;
+            
+            setTimeout(() => {
+                if (confirm(`🏆 CONGRATULATIONS! 🏆\nYou've completed all 5 levels!\nFinal Score: ${gameState.score.toLocaleString()}\n\nPlay again?`)) {
+                    gameState.gameComplete = false;
+                    levelCompleteElement.classList.remove('show');
+                    initLevel(1);
+                    gameState.score = 0;
+                    gameState.lives = 3;
+                }
+            }, 5000);
+        }
+        
+        // Draw function
+        function draw() {
+            // Clear with animated gradient background
+            const bgGradient = ctx.createRadialGradient(
+                canvas.width/2, canvas.height/2, 0,
+                canvas.width/2, canvas.height/2, canvas.width/2
+            );
+            const colorShift = Math.sin(animationTime * 0.01) * 0.2;
+            bgGradient.addColorStop(0, `hsl(${220 + colorShift * 60}, 70%, 10%)`);
+            bgGradient.addColorStop(1, '#000000');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw maze with enhanced effects
+            for (let y = 0; y < currentMaze.length; y++) {
+                for (let x = 0; x < currentMaze[y].length; x++) {
+                    switch (currentMaze[y][x]) {
+                        case 1: // Walls
+                            const wallGradient = ctx.createLinearGradient(
+                                x * TILE_SIZE, y * TILE_SIZE,
+                                x * TILE_SIZE + TILE_SIZE, y * TILE_SIZE + TILE_SIZE
+                            );
+                            const wallHue = 220 + Math.sin(animationTime * 0.01 + x + y) * 30;
+                            wallGradient.addColorStop(0, `hsl(${wallHue}, 80%, 40%)`);
+                            wallGradient.addColorStop(0.5, `hsl(${wallHue}, 70%, 25%)`);
+                            wallGradient.addColorStop(1, `hsl(${wallHue}, 60%, 15%)`);
+                            
+                            ctx.fillStyle = wallGradient;
+                            ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            
+                            // Enhanced wall border
+                            ctx.strokeStyle = `hsl(${wallHue + 20}, 90%, 60%)`;
+                            ctx.lineWidth = 1;
+                            ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            break;
+                            
+                        case 2: // Regular bells
+                            drawBell(x, y, false);
+                            break;
+                            
+                        case 3: // Power bells
+                            drawBell(x, y, true);
+                            break;
+                    }
+                }
+            }
+            
+            // Draw particles
+            gameState.particles.forEach(particle => {
+                ctx.save();
+                ctx.globalAlpha = particle.life;
+                ctx.fillStyle = particle.color;
+                ctx.shadowColor = particle.color;
+                ctx.shadowBlur = particle.size * 3;
+                
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+            
+            // Draw Nook at grid position with enhanced effects
+            const nookCenterX = nook.x * TILE_SIZE + TILE_SIZE/2;
+            const nookCenterY = nook.y * TILE_SIZE + TILE_SIZE/2;
+            
+            ctx.save();
+            
+            // Power mode glow
+            if (gameState.powerMode) {
+                ctx.shadowColor = '#00ffff';
+                ctx.shadowBlur = 25 + Math.sin(animationTime * 0.3) * 10;
+            }
+            
+            // Main face - orange/brown
+            ctx.fillStyle = gameState.powerMode ? '#00FFFF' : '#CD853F';
+            ctx.beginPath();
+            ctx.arc(nookCenterX, nookCenterY, nook.size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark ears
+            ctx.fillStyle = gameState.powerMode ? '#0080FF' : '#2F2F2F';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 10, nookCenterY - 12, 6, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 10, nookCenterY - 12, 6, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Pink inner ears
+            ctx.fillStyle = gameState.powerMode ? '#FF00FF' : '#FF69B4';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 10, nookCenterY - 12, 3, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 10, nookCenterY - 12, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark mask around eyes
+            ctx.fillStyle = gameState.powerMode ? '#004080' : '#8B4513';
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX - 6, nookCenterY - 2, 6, 4, 0, 0, Math.PI * 2);
+            ctx.ellipse(nookCenterX + 6, nookCenterY - 2, 6, 4, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // SLEEPY EYES - Nook's signature feature!
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX - 6, nookCenterY - 2, 5, 2, 0, 0, Math.PI);
+            ctx.ellipse(nookCenterX + 6, nookCenterY - 2, 5, 2, 0, 0, Math.PI);
+            ctx.fill();
+            
+            // Blue pupils
+            ctx.fillStyle = gameState.powerMode ? '#FFFF00' : '#4169E1';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 6, nookCenterY - 1, 1.5, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 6, nookCenterY - 1, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Sleepy eyelid lines
+            ctx.strokeStyle = gameState.powerMode ? '#0040FF' : '#654321';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 6, nookCenterY - 2, 5, 0, Math.PI);
+            ctx.arc(nookCenterX + 6, nookCenterY - 2, 5, 0, Math.PI);
+            ctx.stroke();
+            
+            // Animated mouth for movement
+            if (nook.direction.x !== 0 || nook.direction.y !== 0) {
+                ctx.fillStyle = '#000';
+                let mouthAngle = Math.atan2(nook.direction.y, nook.direction.x);
+                let mouthSize = nook.mouthOpen ? 0.6 : 0.2;
+                
+                ctx.beginPath();
+                ctx.moveTo(nookCenterX, nookCenterY + 2);
+                ctx.arc(nookCenterX, nookCenterY + 2, nook.size - 3, 
+                       mouthAngle - mouthSize, mouthAngle + mouthSize);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            // Small nose
+            ctx.fillStyle = gameState.powerMode ? '#0060FF' : '#654321';
+            ctx.beginPath();
+            ctx.arc(nookCenterX, nookCenterY + 4, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+            
+            // Draw enhanced ghosts
+            ghosts.forEach((ghost, index) => {
+                const ghostCenterX = ghost.x * TILE_SIZE + TILE_SIZE/2;
+                const ghostCenterY = ghost.y * TILE_SIZE + TILE_SIZE/2;
+                const ghostRadius = 11;
+                
+                ctx.save();
+                
+                // Ghost glow effects
+                if (ghost.vulnerable) {
+                    const flashRate = gameState.powerModeTimer < 60 ? 0.2 : 0.1;
+                    const flash = Math.sin(animationTime * flashRate) > 0;
+                    ctx.fillStyle = flash && gameState.powerModeTimer < 60 ? '#ffffff' : '#4169e1';
+                    ctx.shadowColor = '#4169e1';
+                    ctx.shadowBlur = 20;
+                } else {
+                    ctx.fillStyle = ghost.color;
+                    ctx.shadowColor = ghost.color;
+                    ctx.shadowBlur = 15;
+                }
+                
+                // Ghost body with wave effect
+                ctx.beginPath();
+                ctx.arc(ghostCenterX, ghostCenterY - 3, ghostRadius, Math.PI, 0, false);
+                ctx.lineTo(ghostCenterX + ghostRadius, ghostCenterY + ghostRadius - 3);
+                
+                // Animated bottom wave
+                const waveCount = 5;
+                for (let i = 0; i <= waveCount; i++) {
+                    const waveX = ghostCenterX + ghostRadius - (i * (ghostRadius * 2)) / waveCount;
+                    const waveY = ghostCenterY + ghostRadius - 3 + 
+                        Math.sin(animationTime * 0.3 + i + index) * 4;
+                    ctx.lineTo(waveX, waveY);
+                }
+                
+                ctx.lineTo(ghostCenterX - ghostRadius, ghostCenterY + ghostRadius - 3);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.shadowBlur = 0;
+                
+                // Enhanced ghost eyes
+                if (!ghost.vulnerable) {
+                    // White eye background
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX - 4, ghostCenterY - 4, 4, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 4, ghostCenterY - 4, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Animated pupils that follow direction
+                    ctx.fillStyle = '#000';
+                    const eyeOffsetX = ghost.direction.x * 2;
+                    const eyeOffsetY = ghost.direction.y * 2;
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX - 4 + eyeOffsetX, ghostCenterY - 4 + eyeOffsetY, 2, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 4 + eyeOffsetX, ghostCenterY - 4 + eyeOffsetY, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Eye shine
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX - 5 + eyeOffsetX, ghostCenterY - 5 + eyeOffsetY, 1, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 3 + eyeOffsetX, ghostCenterY - 5 + eyeOffsetY, 1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                ctx.restore();
+            });
+        }
+        
+        // Game loop with variable speed
+        let lastTime = 0;
+        function getGameSpeed() {
+            return Math.max(80, 150 - (gameState.level * 10));
+        }
+        
+        function gameLoop(currentTime) {
+            if (!gameState.gameComplete && currentTime - lastTime >= getGameSpeed()) {
+                update();
+                lastTime = currentTime;
+            }
+            
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Initialize game
+        initLevel(1);
+        console.log("🚀 Ultimate Nookman initialized! Use WASD or Arrow keys to play!");
+        requestAnimationFrame(gameLoop);
+        
+    </script>
+</body>
+</html>

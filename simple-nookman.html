@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Nookman Test</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #001122, #003366);
+            font-family: 'Arial Black', Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 50, 100, 0.3);
+            border-radius: 15px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .score, .lives {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .score {
+            color: #ffd700;
+        }
+        
+        .lives {
+            color: #ff6b6b;
+        }
+        
+        .title {
+            font-size: 32px;
+            background: linear-gradient(45deg, #ffd700, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        canvas {
+            border: 4px solid #00ffff;
+            border-radius: 15px;
+            background: radial-gradient(circle at center, #000033, #000000);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.5),
+                inset 0 0 50px rgba(0, 100, 200, 0.1);
+        }
+        
+        .controls {
+            margin-top: 15px;
+            color: #ccc;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="header">
+            <div class="score">🔔 Bells: <span id="score">0</span></div>
+            <div class="title">🦝 NOOKMAN 🦝</div>
+            <div class="lives">❤️ Lives: <span id="lives">3</span></div>
+        </div>
+        
+        <canvas id="game" width="800" height="600"></canvas>
+        
+        <div class="controls">
+            Use WASD or Arrow Keys to collect bells and avoid ghosts!
+        </div>
+    </div>
+
+    <script>
+        console.log("Modernized Nookman starting...");
+        
+        const canvas = document.getElementById('game');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+        
+        // Game constants
+        const TILE_SIZE = 25;
+        const MAZE_WIDTH = Math.floor(canvas.width / TILE_SIZE);
+        const MAZE_HEIGHT = Math.floor(canvas.height / TILE_SIZE);
+        
+        // Modern maze layout (1=wall, 0=empty, 2=bell, 3=power bell)
+        const maze = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,3,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,2,1,1,1,1,2,1],
+            [1,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,1],
+            [1,1,1,1,1,1,2,1,1,1,1,1,0,1,1,2,2,1,1,0,1,1,1,1,1,2,1,1,1,1,1,1],
+            [0,0,0,0,0,1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1,0,0,0,0,0],
+            [1,1,1,1,1,1,2,1,1,0,1,1,1,1,0,0,0,0,1,1,1,1,0,1,1,2,1,1,1,1,1,1],
+            [2,2,2,2,2,2,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2,2,2,2,2,2,2],
+            [1,1,1,1,1,1,2,1,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,2,1,1,1,1,1,1],
+            [0,0,0,0,0,1,2,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,2,1,0,0,0,0,0],
+            [1,1,1,1,1,1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1,1,1,1,1,1],
+            [1,2,2,2,2,2,2,1,1,1,1,1,0,1,1,2,2,1,1,0,1,1,1,1,1,2,2,2,2,2,2,1],
+            [1,2,1,1,1,1,2,2,2,2,2,2,2,1,1,2,2,1,1,2,2,2,2,2,2,2,1,1,1,1,2,1],
+            [1,2,2,2,2,2,2,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,2,2,2,2,2,2,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,3,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+        
+        // Game state
+        let gameState = {
+            score: 0,
+            lives: 3,
+            bellsCollected: 0
+        };
+        
+        // Nook character
+        let nook = {
+            x: 16,
+            y: 15,
+            size: 12,
+            direction: { x: 0, y: 0 },
+            nextDirection: { x: 0, y: 0 }
+        };
+        
+        // Input handling
+        let keys = {};
+        let animationTime = 0;
+        
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            
+            // Set next direction for grid-based movement
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                case 'arrowup':
+                    nook.nextDirection = { x: 0, y: -1 };
+                    break;
+                case 's':
+                case 'arrowdown':
+                    nook.nextDirection = { x: 0, y: 1 };
+                    break;
+                case 'a':
+                case 'arrowleft':
+                    nook.nextDirection = { x: -1, y: 0 };
+                    break;
+                case 'd':
+                case 'arrowright':
+                    nook.nextDirection = { x: 1, y: 0 };
+                    break;
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+        
+        function isValidMove(x, y) {
+            if (x < 0 || x >= MAZE_WIDTH || y < 0 || y >= MAZE_HEIGHT) return false;
+            return maze[y] && maze[y][x] !== 1;
+        }
+        
+        // Draw bells using scanned design
+        function drawBell(x, y, isPowerBell = false) {
+            const centerX = x * TILE_SIZE + TILE_SIZE/2;
+            const centerY = y * TILE_SIZE + TILE_SIZE/2;
+            const size = isPowerBell ? 8 : 5;
+            
+            ctx.save();
+            
+            // Bell glow effect
+            ctx.shadowColor = isPowerBell ? '#FFD700' : '#FFA500';
+            ctx.shadowBlur = isPowerBell ? 15 : 8;
+            
+            // Main bell body - golden/orange
+            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size);
+            gradient.addColorStop(0, '#FFD700');
+            gradient.addColorStop(0.7, '#FFA500');
+            gradient.addColorStop(1, '#CD853F');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark outline
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Red tie at top
+            ctx.fillStyle = '#DC143C';
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY - size + 2, 3, 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark star symbol
+            if (isPowerBell) {
+                ctx.fillStyle = '#654321';
+                ctx.font = 'bold 8px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('★', centerX, centerY + 2);
+            } else {
+                ctx.fillStyle = '#654321';
+                ctx.font = 'bold 6px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('★', centerX, centerY + 1);
+            }
+            
+            ctx.restore();
+        }
+        
+        // Game loop
+        function update() {
+            animationTime++;
+            
+            // Grid-based movement like Pac-Man
+            if (isValidMove(nook.x + nook.nextDirection.x, nook.y + nook.nextDirection.y)) {
+                nook.direction = { ...nook.nextDirection };
+            }
+            
+            let newX = nook.x + nook.direction.x;
+            let newY = nook.y + nook.direction.y;
+            
+            // Tunnel wraparound
+            if (newX < 0) newX = MAZE_WIDTH - 1;
+            if (newX >= MAZE_WIDTH) newX = 0;
+            
+            if (isValidMove(newX, newY)) {
+                nook.x = newX;
+                nook.y = newY;
+                
+                // Collect bells
+                if (maze[nook.y] && maze[nook.y][nook.x] === 2) {
+                    maze[nook.y][nook.x] = 0;
+                    gameState.score += 10;
+                    gameState.bellsCollected++;
+                } else if (maze[nook.y] && maze[nook.y][nook.x] === 3) {
+                    maze[nook.y][nook.x] = 0;
+                    gameState.score += 50;
+                    gameState.bellsCollected++;
+                }
+            }
+            
+            // Update UI
+            scoreElement.textContent = gameState.score;
+            livesElement.textContent = gameState.lives;
+        }
+        
+        function draw() {
+            // Clear with gradient background
+            const bgGradient = ctx.createRadialGradient(
+                canvas.width/2, canvas.height/2, 0,
+                canvas.width/2, canvas.height/2, canvas.width/2
+            );
+            bgGradient.addColorStop(0, '#000033');
+            bgGradient.addColorStop(1, '#000000');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw maze
+            for (let y = 0; y < MAZE_HEIGHT; y++) {
+                for (let x = 0; x < MAZE_WIDTH; x++) {
+                    if (!maze[y]) continue;
+                    
+                    switch (maze[y][x]) {
+                        case 1: // Walls
+                            const wallGradient = ctx.createLinearGradient(
+                                x * TILE_SIZE, y * TILE_SIZE,
+                                x * TILE_SIZE + TILE_SIZE, y * TILE_SIZE + TILE_SIZE
+                            );
+                            wallGradient.addColorStop(0, '#0066ff');
+                            wallGradient.addColorStop(0.5, '#004499');
+                            wallGradient.addColorStop(1, '#002266');
+                            
+                            ctx.fillStyle = wallGradient;
+                            ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            
+                            // Wall border glow
+                            ctx.strokeStyle = '#00aaff';
+                            ctx.lineWidth = 1;
+                            ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            break;
+                            
+                        case 2: // Regular bells
+                            drawBell(x, y, false);
+                            break;
+                            
+                        case 3: // Power bells
+                            drawBell(x, y, true);
+                            break;
+                    }
+                }
+            }
+            
+            // Draw Nook at grid position
+            const nookCenterX = nook.x * TILE_SIZE + TILE_SIZE/2;
+            const nookCenterY = nook.y * TILE_SIZE + TILE_SIZE/2;
+            
+            ctx.save();
+            
+            // Main face - orange/brown
+            ctx.fillStyle = '#CD853F';
+            ctx.beginPath();
+            ctx.arc(nookCenterX, nookCenterY, nook.size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark ears
+            ctx.fillStyle = '#2F2F2F';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 10, nookCenterY - 12, 6, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 10, nookCenterY - 12, 6, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Pink inner ears
+            ctx.fillStyle = '#FF69B4';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 10, nookCenterY - 12, 3, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 10, nookCenterY - 12, 3, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark mask around eyes
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX - 6, nookCenterY - 2, 6, 4, 0, 0, Math.PI * 2);
+            ctx.ellipse(nookCenterX + 6, nookCenterY - 2, 6, 4, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // SLEEPY EYES - Nook's signature feature!
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX - 6, nookCenterY - 2, 5, 2, 0, 0, Math.PI);
+            ctx.ellipse(nookCenterX + 6, nookCenterY - 2, 5, 2, 0, 0, Math.PI);
+            ctx.fill();
+            
+            // Blue pupils
+            ctx.fillStyle = '#4169E1';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 6, nookCenterY - 1, 1.5, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 6, nookCenterY - 1, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Sleepy eyelid lines
+            ctx.strokeStyle = '#654321';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 6, nookCenterY - 2, 5, 0, Math.PI);
+            ctx.arc(nookCenterX + 6, nookCenterY - 2, 5, 0, Math.PI);
+            ctx.stroke();
+            
+            // Small nose
+            ctx.fillStyle = '#654321';
+            ctx.beginPath();
+            ctx.arc(nookCenterX, nookCenterY + 4, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+        }
+        
+        let lastTime = 0;
+        const gameSpeed = 150; // Milliseconds between moves
+        
+        function gameLoop(currentTime) {
+            if (currentTime - lastTime >= gameSpeed) {
+                update();
+                lastTime = currentTime;
+            }
+            
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        console.log("Starting modernized Nookman game loop...");
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
