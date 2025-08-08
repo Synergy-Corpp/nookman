@@ -217,36 +217,38 @@
         /* MOBILE TOUCH CONTROLS */
         .mobile-controls {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr;
-            gap: 15px;
-            width: 200px;
-            height: 200px;
+            gap: 25px;
+            width: 280px;
+            height: 280px;
             z-index: 1000;
         }
         
         .control-btn {
-            background: linear-gradient(145deg, rgba(0, 255, 255, 0.3), rgba(0, 100, 200, 0.5));
-            border: 3px solid #00ffff;
-            border-radius: 15px;
+            background: linear-gradient(145deg, rgba(0, 255, 255, 0.4), rgba(0, 100, 200, 0.6));
+            border: 4px solid #00ffff;
+            border-radius: 20px;
             color: #00ffff;
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
             box-shadow: 
-                0 5px 15px rgba(0, 255, 255, 0.3),
-                inset 0 2px 5px rgba(255, 255, 255, 0.2);
+                0 8px 25px rgba(0, 255, 255, 0.4),
+                inset 0 4px 8px rgba(255, 255, 255, 0.3),
+                0 0 20px rgba(0, 255, 255, 0.2);
             user-select: none;
             -webkit-user-select: none;
+            text-shadow: 0 0 10px #00ffff;
         }
         
         .control-btn:active, .control-btn.active {
@@ -485,7 +487,7 @@
             </div>
         </div>
         
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <canvas id="gameCanvas" width="1000" height="750"></canvas>
         
         <div class="instructions">
             🎮 WASD/Arrows on Desktop | Touch controls below on Mobile<br>
@@ -613,9 +615,9 @@
         createParticles();
         
         // Game constants
-        const TILE_SIZE = 20;
-        const MAZE_WIDTH = Math.floor(800 / TILE_SIZE);
-        const MAZE_HEIGHT = Math.floor(600 / TILE_SIZE);
+        const TILE_SIZE = 25;
+        const MAZE_WIDTH = Math.floor(1000 / TILE_SIZE);
+        const MAZE_HEIGHT = Math.floor(750 / TILE_SIZE);
         
         // Level designs (5 progressive levels) - Same as before but optimized
         const levelMazes = [
@@ -679,15 +681,17 @@
             particles: []
         };
         
-        // Nook character
+        // Nook character - BIGGER and more detailed
         let nook = {
             x: 20,
             y: 15,
-            size: 10,
+            size: 15,
             direction: { x: 0, y: 0 },
             nextDirection: { x: 0, y: 0 },
             mouthOpen: true,
-            animationFrame: 0
+            animationFrame: 0,
+            blinkTimer: 0,
+            isBlinking: false
         };
         
         // 4 Different Ghosts with unique AI
