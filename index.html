@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🦝 ULTIMATE NOOKMAN - Mobile Ready! 🔔</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, 
+                #0a0a0a 0%, 
+                #1a1a2e 25%, 
+                #16213e 50%, 
+                #0f3460 75%, 
+                #533483 100%);
+            font-family: 'Orbitron', 'Arial Black', Arial, sans-serif;
+            color: white;
+            overflow: hidden;
+            min-height: 100vh;
+            animation: backgroundPulse 10s ease-in-out infinite alternate;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+        
+        @keyframes backgroundPulse {
+            0% { filter: brightness(1) hue-rotate(0deg); }
+            100% { filter: brightness(1.2) hue-rotate(10deg); }
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+            position: relative;
+        }
+        
+        .floating-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ffff;
+            border-radius: 50%;
+            animation: float 8s linear infinite;
+            box-shadow: 0 0 10px #00ffff;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .header {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 10px;
+            padding: 15px 10px;
+            background: linear-gradient(135deg, 
+                rgba(0, 50, 100, 0.8), 
+                rgba(50, 0, 100, 0.6),
+                rgba(0, 100, 150, 0.4));
+            border-radius: 15px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            animation: headerGlow 3s ease-in-out infinite alternate;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+            border-radius: 15px;
+            z-index: -1;
+            animation: borderRainbow 4s linear infinite;
+        }
+        
+        @keyframes headerGlow {
+            0% { box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); }
+            100% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8), 0 0 40px rgba(255, 0, 255, 0.4); }
+        }
+        
+        @keyframes borderRainbow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .score, .lives, .level {
+            font-size: 14px;
+            font-weight: 700;
+            text-shadow: 0 0 10px currentColor;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+        
+        .score {
+            color: #ffd700;
+            animation: scoreFlicker 2s ease-in-out infinite alternate;
+        }
+        
+        .lives {
+            color: #ff6b6b;
+            animation: livesFlicker 1.5s ease-in-out infinite alternate;
+        }
+        
+        .level {
+            color: #00ff00;
+            animation: levelFlicker 2.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes scoreFlicker {
+            0% { text-shadow: 0 0 10px #ffd700; }
+            100% { text-shadow: 0 0 20px #ffd700, 0 0 25px #ffd700; }
+        }
+        
+        @keyframes livesFlicker {
+            0% { text-shadow: 0 0 10px #ff6b6b; }
+            100% { text-shadow: 0 0 20px #ff6b6b, 0 0 25px #ff6b6b; }
+        }
+        
+        @keyframes levelFlicker {
+            0% { text-shadow: 0 0 10px #00ff00; }
+            100% { text-shadow: 0 0 20px #00ff00, 0 0 25px #00ff00; }
+        }
+        
+        .title {
+            font-size: 20px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffd700, #00ffff, #ff69b4, #00ff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            animation: titlePulse 2s ease-in-out infinite alternate;
+            text-align: center;
+        }
+        
+        @keyframes titlePulse {
+            0% { 
+                transform: scale(1);
+                text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            }
+            100% { 
+                transform: scale(1.05);
+                text-shadow: 
+                    0 0 30px rgba(255, 215, 0, 1),
+                    0 0 40px rgba(0, 255, 255, 0.8),
+                    0 0 50px rgba(255, 105, 180, 0.6);
+            }
+        }
+        
+        #gameCanvas {
+            border: 3px solid transparent;
+            border-radius: 15px;
+            background: radial-gradient(circle at center, #000066, #000000);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.6),
+                inset 0 0 50px rgba(0, 100, 200, 0.2),
+                0 0 60px rgba(255, 0, 255, 0.3);
+            position: relative;
+            animation: canvasGlow 4s ease-in-out infinite alternate;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        @keyframes canvasGlow {
+            0% { 
+                box-shadow: 
+                    0 0 20px rgba(0, 255, 255, 0.4),
+                    inset 0 0 30px rgba(0, 100, 200, 0.1);
+            }
+            100% { 
+                box-shadow: 
+                    0 0 40px rgba(0, 255, 255, 0.8),
+                    inset 0 0 60px rgba(0, 100, 200, 0.3),
+                    0 0 50px rgba(255, 0, 255, 0.5);
+            }
+        }
+        
+        /* MOBILE TOUCH CONTROLS */
+        .mobile-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 15px;
+            width: 200px;
+            height: 200px;
+            z-index: 1000;
+        }
+        
+        .control-btn {
+            background: linear-gradient(145deg, rgba(0, 255, 255, 0.3), rgba(0, 100, 200, 0.5));
+            border: 3px solid #00ffff;
+            border-radius: 15px;
+            color: #00ffff;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 5px 15px rgba(0, 255, 255, 0.3),
+                inset 0 2px 5px rgba(255, 255, 255, 0.2);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .control-btn:active, .control-btn.active {
+            background: linear-gradient(145deg, rgba(0, 255, 255, 0.8), rgba(0, 150, 255, 0.9));
+            transform: scale(0.95);
+            box-shadow: 
+                0 2px 8px rgba(0, 255, 255, 0.6),
+                inset 0 2px 10px rgba(255, 255, 255, 0.4);
+            text-shadow: 0 0 15px #ffffff;
+        }
+        
+        .control-btn.up { grid-column: 2; grid-row: 1; }
+        .control-btn.left { grid-column: 1; grid-row: 2; }
+        .control-btn.down { grid-column: 2; grid-row: 2; }
+        .control-btn.right { grid-column: 3; grid-row: 2; }
+        .control-btn.center { 
+            grid-column: 2; 
+            grid-row: 3; 
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.3), rgba(255, 100, 0, 0.5));
+            border-color: #ffd700;
+            color: #ffd700;
+            font-size: 16px;
+        }
+        
+        .power-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,0,0.1), transparent);
+            pointer-events: none;
+            z-index: 10;
+            animation: powerPulse 0.5s ease-in-out infinite alternate;
+            opacity: 0;
+        }
+        
+        .power-mode.active {
+            opacity: 1;
+        }
+        
+        @keyframes powerPulse {
+            0% { background: radial-gradient(circle, rgba(255,255,0,0.1), transparent); }
+            100% { background: radial-gradient(circle, rgba(255,255,0,0.3), transparent); }
+        }
+        
+        .level-complete {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, rgba(0,255,0,0.9), rgba(0,255,255,0.9));
+            padding: 20px;
+            border-radius: 20px;
+            font-size: 24px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 0 15px #000;
+            z-index: 100;
+            animation: levelCompleteAnim 2s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+            text-align: center;
+        }
+        
+        .level-complete.show {
+            opacity: 1;
+        }
+        
+        @keyframes levelCompleteAnim {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        
+        .instructions {
+            margin-top: 10px;
+            color: #ccc;
+            font-size: 12px;
+            text-align: center;
+            padding: 8px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            animation: controlsFloat 6s ease-in-out infinite alternate;
+            max-width: 100%;
+        }
+        
+        @keyframes controlsFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-3px); }
+        }
+        
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 5px;
+            }
+            
+            .header {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 5px;
+                padding: 10px;
+            }
+            
+            .title {
+                font-size: 18px;
+                order: -1;
+            }
+            
+            .score, .lives, .level {
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+            
+            #gameCanvas {
+                width: calc(100vw - 20px);
+                max-width: 400px;
+                height: auto;
+            }
+            
+            .mobile-controls {
+                bottom: 10px;
+                width: 160px;
+                height: 160px;
+                gap: 10px;
+            }
+            
+            .control-btn {
+                font-size: 18px;
+                border-radius: 12px;
+            }
+            
+            .instructions {
+                font-size: 10px;
+                padding: 6px;
+                margin-top: 5px;
+                line-height: 1.3;
+            }
+            
+            .level-complete {
+                font-size: 18px;
+                padding: 15px;
+                max-width: 90%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: 16px;
+            }
+            
+            .mobile-controls {
+                width: 140px;
+                height: 140px;
+                gap: 8px;
+            }
+            
+            .control-btn {
+                font-size: 16px;
+                border-width: 2px;
+            }
+            
+            #gameCanvas {
+                width: calc(100vw - 10px);
+                max-width: 350px;
+            }
+        }
+        
+        /* LANDSCAPE ORIENTATION */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .game-container {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            
+            .header {
+                writing-mode: vertical-rl;
+                max-width: 120px;
+                margin-bottom: 0;
+                margin-right: 10px;
+            }
+            
+            .mobile-controls {
+                right: 20px;
+                left: auto;
+                transform: none;
+                bottom: 50%;
+                transform: translateY(50%);
+            }
+        }
+        
+        /* HIDE DESKTOP INSTRUCTIONS ON MOBILE */
+        @media (max-width: 768px) {
+            .instructions {
+                display: block;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles Background -->
+    <div class="floating-particles" id="particles"></div>
+    
+    <!-- Power Mode Overlay -->
+    <div class="power-mode" id="powerMode"></div>
+    
+    <!-- Level Complete Notification -->
+    <div class="level-complete" id="levelComplete">
+        🎉 LEVEL COMPLETE! 🎉<br>
+        <span style="font-size: 16px;">Get ready for the next challenge!</span>
+    </div>
+    
+    <div class="game-container">
+        <div class="header">
+            <div class="score">
+                🔔 BELLS<br>
+                <span id="score" style="font-size: 18px;">0</span>
+            </div>
+            <div class="title">
+                🦝 ULTIMATE NOOKMAN 🦝<br>
+                <div style="font-size: 12px; margin-top: 5px;">
+                    Level <span id="currentLevel">1</span> of 5
+                </div>
+            </div>
+            <div class="lives">
+                ❤️ LIVES<br>
+                <span id="lives" style="font-size: 18px;">3</span>
+            </div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div class="instructions">
+            🎮 WASD/Arrows on Desktop | Touch controls below on Mobile<br>
+            🔔 Collect bells | 💰 Power bells make ghosts blue! | 🏆 Beat all 5 levels!
+        </div>
+    </div>
+    
+    <!-- MOBILE TOUCH CONTROLS -->
+    <div class="mobile-controls">
+        <button class="control-btn up" data-direction="up">↑</button>
+        <button class="control-btn left" data-direction="left">←</button>
+        <button class="control-btn down" data-direction="down">↓</button>
+        <button class="control-btn right" data-direction="right">→</button>
+        <button class="control-btn center" id="pauseBtn">PAUSE</button>
+    </div>
+
+    <script>
+        console.log("🦝 Ultimate Nookman - Mobile Ready! 🔔");
+        
+        // Mobile Detection
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isTouch = 'ontouchstart' in window;
+        
+        // Audio context for sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let gameStarted = false;
+        let gamePaused = false;
+        
+        // Sound Effects Functions
+        function playSound(frequency, duration, type = 'sine') {
+            if (!gameStarted) return;
+            
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = frequency;
+                oscillator.type = type;
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (e) {
+                // Fallback for browsers that don't support Web Audio API
+                console.log("Audio not supported");
+            }
+        }
+        
+        function playCoinSound() {
+            playSound(800, 0.1, 'square');
+            setTimeout(() => playSound(1000, 0.1, 'square'), 50);
+        }
+        
+        function playPowerSound() {
+            playSound(400, 0.3, 'sawtooth');
+            setTimeout(() => playSound(600, 0.3, 'sawtooth'), 100);
+            setTimeout(() => playSound(800, 0.3, 'sawtooth'), 200);
+        }
+        
+        function playGhostEatenSound() {
+            playSound(200, 0.5, 'triangle');
+        }
+        
+        function playDeathSound() {
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => playSound(300 - i * 20, 0.1, 'sawtooth'), i * 50);
+            }
+        }
+        
+        function playLevelCompleteSound() {
+            const notes = [523, 587, 659, 698, 784, 880, 988];
+            notes.forEach((note, i) => {
+                setTimeout(() => playSound(note, 0.2, 'sine'), i * 100);
+            });
+        }
+        
+        // Game Elements
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+        const currentLevelElement = document.getElementById('currentLevel');
+        const powerModeElement = document.getElementById('powerMode');
+        const levelCompleteElement = document.getElementById('levelComplete');
+        const pauseBtn = document.getElementById('pauseBtn');
+        
+        // Responsive canvas sizing
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            const containerWidth = container.clientWidth - 20;
+            const containerHeight = window.innerHeight * 0.6;
+            
+            const aspectRatio = 800 / 600;
+            let newWidth = Math.min(containerWidth, 800);
+            let newHeight = newWidth / aspectRatio;
+            
+            if (newHeight > containerHeight) {
+                newHeight = containerHeight;
+                newWidth = newHeight * aspectRatio;
+            }
+            
+            canvas.style.width = newWidth + 'px';
+            canvas.style.height = newHeight + 'px';
+        }
+        
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = isMobile ? 25 : 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        // Game constants
+        const TILE_SIZE = 20;
+        const MAZE_WIDTH = Math.floor(800 / TILE_SIZE);
+        const MAZE_HEIGHT = Math.floor(600 / TILE_SIZE);
+        
+        // Level designs (5 progressive levels) - Same as before but optimized
+        const levelMazes = [
+            // Level 1 - Easy
+            [
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,3,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,1,2,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,2,1,1,1,1,2,1,2,1],
+                [1,2,2,2,2,2,2,1,1,2,2,2,2,1,1,2,2,1,1,1,1,2,2,1,1,2,2,2,2,1,1,2,2,2,2,2,2,2,2,1],
+                [1,1,1,1,1,1,2,1,1,1,1,1,0,1,1,2,2,1,1,1,1,2,2,1,1,0,1,1,1,1,1,2,1,1,1,1,1,1,1,1],
+                [0,0,0,0,0,1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1,0,0,0,0,0,0,0],
+                [1,1,1,1,1,1,2,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,1,2,1,1,1,1,1,1,1,1],
+                [2,2,2,2,2,2,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2,2,2,2,2,2,2,2,2],
+                [1,1,1,1,1,1,2,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,2,1,1,1,1,1,1,1,1],
+                [0,0,0,0,0,1,2,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,2,1,0,0,0,0,0,0,0],
+                [1,1,1,1,1,1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1,1,1,1,1,1,1,1],
+                [1,2,2,2,2,2,2,1,1,1,1,1,0,1,1,2,2,1,1,1,1,2,2,1,1,0,1,1,1,1,1,2,2,2,2,2,2,2,2,1],
+                [1,2,1,1,1,1,2,2,2,2,2,2,2,1,1,2,2,1,1,1,1,2,2,1,1,2,2,2,2,2,2,2,1,1,1,1,2,1,2,1],
+                [1,2,2,2,2,2,2,1,1,2,1,1,1,1,1,1,2,1,1,1,1,2,1,1,1,1,1,1,2,1,1,2,2,2,2,2,2,2,2,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,3,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1,3,1],
+                [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            ],
+            // Additional levels would be here - keeping the same structure for brevity
+        ];
+        
+        // For now, we'll use the first level design for all levels with minor variations
+        function generateLevel(levelNum) {
+            let baseMaze = JSON.parse(JSON.stringify(levelMazes[0])); // Deep copy
+            
+            // Make each level progressively more challenging
+            if (levelNum > 1) {
+                // Add more walls for higher levels
+                for (let y = 5; y < baseMaze.length - 5; y++) {
+                    for (let x = 5; x < baseMaze[y].length - 5; x++) {
+                        if (baseMaze[y][x] === 2 && Math.random() < 0.1 * (levelNum - 1)) {
+                            baseMaze[y][x] = 1;
+                        }
+                    }
+                }
+            }
+            
+            return baseMaze;
+        }
+        
+        let currentMaze = [];
+        
+        // Game state
+        let gameState = {
+            score: 0,
+            lives: 3,
+            level: 1,
+            bellsCollected: 0,
+            totalBells: 0,
+            powerMode: false,
+            powerModeTimer: 0,
+            gameComplete: false,
+            particles: []
+        };
+        
+        // Nook character
+        let nook = {
+            x: 20,
+            y: 15,
+            size: 10,
+            direction: { x: 0, y: 0 },
+            nextDirection: { x: 0, y: 0 },
+            mouthOpen: true,
+            animationFrame: 0
+        };
+        
+        // 4 Different Ghosts with unique AI
+        let ghosts = [
+            { 
+                x: 18, y: 9, 
+                direction: { x: -1, y: 0 }, 
+                color: '#ff3030', 
+                vulnerable: false,
+                name: 'Blinky',
+                type: 'aggressive',
+                speed: 1
+            },
+            { 
+                x: 20, y: 9, 
+                direction: { x: 1, y: 0 }, 
+                color: '#ffb8ff', 
+                vulnerable: false,
+                name: 'Pinky',
+                type: 'ambush',
+                speed: 1
+            },
+            { 
+                x: 19, y: 10, 
+                direction: { x: 0, y: -1 }, 
+                color: '#00ffff', 
+                vulnerable: false,
+                name: 'Inky',
+                type: 'patrol',
+                speed: 1
+            },
+            { 
+                x: 21, y: 10, 
+                direction: { x: 0, y: 1 }, 
+                color: '#ffb852', 
+                vulnerable: false,
+                name: 'Clyde',
+                type: 'random',
+                speed: 1
+            }
+        ];
+        
+        let keys = {};
+        let animationTime = 0;
+        
+        // Initialize level
+        function initLevel(level) {
+            currentMaze = generateLevel(level);
+            gameState.level = level;
+            gameState.bellsCollected = 0;
+            gameState.powerMode = false;
+            gameState.powerModeTimer = 0;
+            
+            // Count total bells
+            gameState.totalBells = 0;
+            for (let y = 0; y < currentMaze.length; y++) {
+                for (let x = 0; x < currentMaze[y].length; x++) {
+                    if (currentMaze[y][x] === 2 || currentMaze[y][x] === 3) {
+                        gameState.totalBells++;
+                    }
+                }
+            }
+            
+            // Reset positions
+            nook.x = 20;
+            nook.y = 15;
+            nook.direction = { x: 0, y: 0 };
+            nook.nextDirection = { x: 0, y: 0 };
+            
+            // Reset ghosts with level-based speed increase
+            const speedBoost = Math.min(level * 0.1, 0.5);
+            ghosts.forEach((ghost, i) => {
+                ghost.x = 18 + i;
+                ghost.y = 9 + (i > 1 ? 1 : 0);
+                ghost.vulnerable = false;
+                ghost.speed = 1 + speedBoost;
+                ghost.color = ['#ff3030', '#ffb8ff', '#00ffff', '#ffb852'][i];
+            });
+            
+            currentLevelElement.textContent = level;
+            console.log(`Level ${level} initialized with ${gameState.totalBells} bells`);
+        }
+        
+        // MOBILE TOUCH CONTROLS
+        const controlBtns = document.querySelectorAll('.control-btn[data-direction]');
+        
+        controlBtns.forEach(btn => {
+            // Touch events for mobile
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (!gameStarted) {
+                    gameStarted = true;
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                }
+                
+                btn.classList.add('active');
+                const direction = btn.dataset.direction;
+                
+                switch(direction) {
+                    case 'up':
+                        nook.nextDirection = { x: 0, y: -1 };
+                        break;
+                    case 'down':
+                        nook.nextDirection = { x: 0, y: 1 };
+                        break;
+                    case 'left':
+                        nook.nextDirection = { x: -1, y: 0 };
+                        break;
+                    case 'right':
+                        nook.nextDirection = { x: 1, y: 0 };
+                        break;
+                }
+            });
+            
+            btn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                btn.classList.remove('active');
+            });
+            
+            // Mouse events for desktop testing
+            btn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                if (!gameStarted) {
+                    gameStarted = true;
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                }
+                
+                btn.classList.add('active');
+                const direction = btn.dataset.direction;
+                
+                switch(direction) {
+                    case 'up':
+                        nook.nextDirection = { x: 0, y: -1 };
+                        break;
+                    case 'down':
+                        nook.nextDirection = { x: 0, y: 1 };
+                        break;
+                    case 'left':
+                        nook.nextDirection = { x: -1, y: 0 };
+                        break;
+                    case 'right':
+                        nook.nextDirection = { x: 1, y: 0 };
+                        break;
+                }
+            });
+            
+            btn.addEventListener('mouseup', () => {
+                btn.classList.remove('active');
+            });
+        });
+        
+        // Pause button
+        pauseBtn.addEventListener('click', () => {
+            gamePaused = !gamePaused;
+            pauseBtn.textContent = gamePaused ? 'PLAY' : 'PAUSE';
+            pauseBtn.style.background = gamePaused ? 
+                'linear-gradient(145deg, rgba(0, 255, 0, 0.3), rgba(0, 200, 0, 0.5))' :
+                'linear-gradient(145deg, rgba(255, 215, 0, 0.3), rgba(255, 100, 0, 0.5))';
+        });
+        
+        // Desktop keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (!gameStarted) {
+                gameStarted = true;
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+            }
+            
+            keys[e.key.toLowerCase()] = true;
+            
+            switch(e.key.toLowerCase()) {
+                case 'w':
+                case 'arrowup':
+                    nook.nextDirection = { x: 0, y: -1 };
+                    break;
+                case 's':
+                case 'arrowdown':
+                    nook.nextDirection = { x: 0, y: 1 };
+                    break;
+                case 'a':
+                case 'arrowleft':
+                    nook.nextDirection = { x: -1, y: 0 };
+                    break;
+                case 'd':
+                case 'arrowright':
+                    nook.nextDirection = { x: 1, y: 0 };
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    gamePaused = !gamePaused;
+                    pauseBtn.textContent = gamePaused ? 'PLAY' : 'PAUSE';
+                    break;
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+        
+        function isValidMove(x, y) {
+            if (x < 0 || x >= MAZE_WIDTH || y < 0 || y >= MAZE_HEIGHT) return false;
+            return currentMaze[y] && currentMaze[y][x] !== 1;
+        }
+        
+        // Create visual particles
+        function createParticle(x, y, color, count = 3) {
+            for (let i = 0; i < count; i++) {
+                gameState.particles.push({
+                    x: x * TILE_SIZE + TILE_SIZE/2,
+                    y: y * TILE_SIZE + TILE_SIZE/2,
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: (Math.random() - 0.5) * 6,
+                    life: 1,
+                    decay: 0.025,
+                    color: color,
+                    size: Math.random() * 3 + 2
+                });
+            }
+        }
+        
+        // Draw bells using scanned design
+        function drawBell(x, y, isPowerBell = false) {
+            const centerX = x * TILE_SIZE + TILE_SIZE/2;
+            const centerY = y * TILE_SIZE + TILE_SIZE/2;
+            const size = isPowerBell ? 8 : 4;
+            const pulse = Math.sin(animationTime * 0.1 + x + y) * 0.3 + 0.7;
+            
+            ctx.save();
+            
+            // Bell glow effect
+            ctx.shadowColor = isPowerBell ? '#FFD700' : '#FFA500';
+            ctx.shadowBlur = isPowerBell ? 15 * pulse : 8 * pulse;
+            
+            // Main bell body - golden/orange
+            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size);
+            gradient.addColorStop(0, '#FFD700');
+            gradient.addColorStop(0.7, '#FFA500');
+            gradient.addColorStop(1, '#CD853F');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * pulse, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark outline
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = isPowerBell ? 2 : 1;
+            ctx.stroke();
+            
+            // Red tie at top
+            ctx.fillStyle = '#DC143C';
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY - size + 2, 2, 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Dark star symbol
+            ctx.fillStyle = '#654321';
+            ctx.font = `bold ${isPowerBell ? 8 : 6}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.fillText('★', centerX, centerY + (isPowerBell ? 2 : 1));
+            
+            ctx.restore();
+        }
+        
+        // Game update logic (simplified for mobile performance)
+        function update() {
+            if (gamePaused) return;
+            
+            animationTime++;
+            
+            // Grid-based movement like Pac-Man
+            if (isValidMove(nook.x + nook.nextDirection.x, nook.y + nook.nextDirection.y)) {
+                nook.direction = { ...nook.nextDirection };
+            }
+            
+            let newX = nook.x + nook.direction.x;
+            let newY = nook.y + nook.direction.y;
+            
+            // Tunnel wraparound
+            if (newX < 0) newX = MAZE_WIDTH - 1;
+            if (newX >= MAZE_WIDTH) newX = 0;
+            
+            if (isValidMove(newX, newY)) {
+                nook.x = newX;
+                nook.y = newY;
+                nook.animationFrame++;
+                nook.mouthOpen = Math.floor(nook.animationFrame / 4) % 2 === 0;
+                
+                // Collect bells
+                if (currentMaze[nook.y] && currentMaze[nook.y][nook.x] === 2) {
+                    currentMaze[nook.y][nook.x] = 0;
+                    gameState.score += 10 * gameState.level;
+                    gameState.bellsCollected++;
+                    playCoinSound();
+                    createParticle(nook.x, nook.y, '#FFD700', 2);
+                } else if (currentMaze[nook.y] && currentMaze[nook.y][nook.x] === 3) {
+                    currentMaze[nook.y][nook.x] = 0;
+                    gameState.score += 50 * gameState.level;
+                    gameState.bellsCollected++;
+                    gameState.powerMode = true;
+                    gameState.powerModeTimer = 200 - (gameState.level * 20);
+                    
+                    playPowerSound();
+                    createParticle(nook.x, nook.y, '#FFFFFF', 5);
+                    
+                    ghosts.forEach(ghost => {
+                        ghost.vulnerable = true;
+                        ghost.color = '#4169E1';
+                    });
+                    
+                    powerModeElement.classList.add('active');
+                }
+            }
+            
+            // Update ghosts (simplified AI for mobile performance)
+            updateGhosts();
+            
+            // Update power mode
+            if (gameState.powerMode) {
+                gameState.powerModeTimer--;
+                if (gameState.powerModeTimer <= 0) {
+                    gameState.powerMode = false;
+                    powerModeElement.classList.remove('active');
+                    ghosts.forEach((ghost, i) => {
+                        ghost.vulnerable = false;
+                        ghost.color = ['#ff3030', '#ffb8ff', '#00ffff', '#ffb852'][i];
+                    });
+                }
+            }
+            
+            // Update particles
+            gameState.particles = gameState.particles.filter(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.vx *= 0.95;
+                particle.vy *= 0.95;
+                particle.life -= particle.decay;
+                particle.size *= 0.98;
+                
+                return particle.life > 0 && particle.size > 0.5;
+            });
+            
+            // Check level complete
+            if (gameState.bellsCollected >= gameState.totalBells) {
+                if (gameState.level < 5) {
+                    nextLevel();
+                } else {
+                    gameComplete();
+                }
+            }
+            
+            // Update UI
+            scoreElement.textContent = gameState.score.toLocaleString();
+            livesElement.textContent = gameState.lives;
+        }
+        
+        // Simplified ghost AI for better mobile performance
+        function updateGhosts() {
+            ghosts.forEach((ghost, index) => {
+                let possibleMoves = [
+                    { x: 0, y: -1 },
+                    { x: 0, y: 1 },
+                    { x: -1, y: 0 },
+                    { x: 1, y: 0 }
+                ].filter(dir => {
+                    let newX = ghost.x + dir.x;
+                    let newY = ghost.y + dir.y;
+                    
+                    if (newX < 0) newX = MAZE_WIDTH - 1;
+                    if (newX >= MAZE_WIDTH) newX = 0;
+                    
+                    return isValidMove(newX, newY);
+                });
+                
+                if (possibleMoves.length > 0) {
+                    let targetDir = null;
+                    
+                    if (ghost.vulnerable) {
+                        // Simple random movement when vulnerable
+                        targetDir = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                    } else {
+                        // Simplified chase logic
+                        let minDistance = Infinity;
+                        possibleMoves.forEach(dir => {
+                            let newX = ghost.x + dir.x;
+                            let newY = ghost.y + dir.y;
+                            let distance = Math.abs(newX - nook.x) + Math.abs(newY - nook.y);
+                            
+                            if (distance < minDistance) {
+                                minDistance = distance;
+                                targetDir = dir;
+                            }
+                        });
+                    }
+                    
+                    if (targetDir) {
+                        ghost.direction = targetDir;
+                    }
+                }
+                
+                // Move ghost
+                let newX = ghost.x + ghost.direction.x;
+                let newY = ghost.y + ghost.direction.y;
+                
+                if (newX < 0) newX = MAZE_WIDTH - 1;
+                if (newX >= MAZE_WIDTH) newX = 0;
+                
+                if (isValidMove(newX, newY)) {
+                    ghost.x = newX;
+                    ghost.y = newY;
+                }
+                
+                // Check collision with Nook
+                if (ghost.x === nook.x && ghost.y === nook.y) {
+                    if (ghost.vulnerable) {
+                        // Eat ghost
+                        gameState.score += 200 * gameState.level;
+                        ghost.x = 18 + index;
+                        ghost.y = 9 + (index > 1 ? 1 : 0);
+                        ghost.vulnerable = false;
+                        ghost.color = ['#ff3030', '#ffb8ff', '#00ffff', '#ffb852'][index];
+                        
+                        playGhostEatenSound();
+                        createParticle(ghost.x, ghost.y, '#00FF00', 6);
+                    } else {
+                        // Nook dies
+                        gameState.lives--;
+                        playDeathSound();
+                        
+                        if (gameState.lives <= 0) {
+                            // Game Over
+                            setTimeout(() => {
+                                alert(`🦝 Game Over! 🦝\nFinal Score: ${gameState.score.toLocaleString()}\nLevel Reached: ${gameState.level}\n\n🎮 Thanks for playing Ultimate Nookman!`);
+                                initLevel(1);
+                                gameState.score = 0;
+                                gameState.lives = 3;
+                            }, 100);
+                        } else {
+                            // Reset positions
+                            nook.x = 20;
+                            nook.y = 15;
+                            nook.direction = { x: 0, y: 0 };
+                            
+                            ghosts.forEach((g, i) => {
+                                g.x = 18 + i;
+                                g.y = 9 + (i > 1 ? 1 : 0);
+                                g.vulnerable = false;
+                                g.color = ['#ff3030', '#ffb8ff', '#00ffff', '#ffb852'][i];
+                            });
+                        }
+                    }
+                }
+            });
+        }
+        
+        function nextLevel() {
+            playLevelCompleteSound();
+            
+            levelCompleteElement.classList.add('show');
+            levelCompleteElement.innerHTML = `
+                🎉 LEVEL ${gameState.level} COMPLETE! 🎉<br>
+                <span style="font-size: 16px;">Bells: ${gameState.bellsCollected} | Bonus: ${gameState.level * 1000}!</span>
+            `;
+            
+            gameState.score += gameState.level * 1000;
+            
+            setTimeout(() => {
+                levelCompleteElement.classList.remove('show');
+                if (gameState.level < 5) {
+                    initLevel(gameState.level + 1);
+                }
+            }, 2500);
+        }
+        
+        function gameComplete() {
+            playLevelCompleteSound();
+            setTimeout(() => playLevelCompleteSound(), 500);
+            
+            levelCompleteElement.classList.add('show');
+            levelCompleteElement.innerHTML = `
+                🏆 ULTIMATE VICTORY! 🏆<br>
+                <span style="font-size: 18px;">ALL 5 LEVELS COMPLETE!</span><br>
+                <span style="font-size: 16px;">Final Score: ${gameState.score.toLocaleString()}</span><br>
+                <span style="font-size: 14px;">🦝 NOOKMAN CHAMPION! 🔔</span>
+            `;
+            
+            gameState.gameComplete = true;
+            
+            setTimeout(() => {
+                if (confirm(`🏆 CONGRATULATIONS! 🏆\nYou are the Ultimate Nookman Champion!\n\nFinal Score: ${gameState.score.toLocaleString()}\nAll 5 levels completed!\n\n🎮 Play again?`)) {
+                    gameState.gameComplete = false;
+                    levelCompleteElement.classList.remove('show');
+                    initLevel(1);
+                    gameState.score = 0;
+                    gameState.lives = 3;
+                }
+            }, 4000);
+        }
+        
+        // Optimized draw function for mobile
+        function draw() {
+            // Clear with simple gradient for better mobile performance
+            const bgGradient = ctx.createRadialGradient(
+                canvas.width/2, canvas.height/2, 0,
+                canvas.width/2, canvas.height/2, canvas.width/2
+            );
+            bgGradient.addColorStop(0, '#000066');
+            bgGradient.addColorStop(1, '#000000');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw maze
+            for (let y = 0; y < currentMaze.length; y++) {
+                for (let x = 0; x < currentMaze[y].length; x++) {
+                    switch (currentMaze[y][x]) {
+                        case 1: // Walls
+                            ctx.fillStyle = '#0066ff';
+                            ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            
+                            ctx.strokeStyle = '#00aaff';
+                            ctx.lineWidth = 1;
+                            ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            break;
+                            
+                        case 2: // Regular bells
+                            drawBell(x, y, false);
+                            break;
+                            
+                        case 3: // Power bells
+                            drawBell(x, y, true);
+                            break;
+                    }
+                }
+            }
+            
+            // Draw particles
+            gameState.particles.forEach(particle => {
+                ctx.save();
+                ctx.globalAlpha = particle.life;
+                ctx.fillStyle = particle.color;
+                
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+            
+            // Draw Nook with mobile-optimized rendering
+            const nookCenterX = nook.x * TILE_SIZE + TILE_SIZE/2;
+            const nookCenterY = nook.y * TILE_SIZE + TILE_SIZE/2;
+            
+            ctx.save();
+            
+            // Power mode glow
+            if (gameState.powerMode) {
+                ctx.shadowColor = '#00ffff';
+                ctx.shadowBlur = 15;
+            }
+            
+            // Main face
+            ctx.fillStyle = gameState.powerMode ? '#00FFFF' : '#CD853F';
+            ctx.beginPath();
+            ctx.arc(nookCenterX, nookCenterY, nook.size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Ears
+            ctx.fillStyle = gameState.powerMode ? '#0080FF' : '#2F2F2F';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 8, nookCenterY - 10, 4, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 8, nookCenterY - 10, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Pink inner ears
+            ctx.fillStyle = gameState.powerMode ? '#FF00FF' : '#FF69B4';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 8, nookCenterY - 10, 2, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 8, nookCenterY - 10, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Eyes mask
+            ctx.fillStyle = gameState.powerMode ? '#004080' : '#8B4513';
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX - 5, nookCenterY - 2, 4, 3, 0, 0, Math.PI * 2);
+            ctx.ellipse(nookCenterX + 5, nookCenterY - 2, 4, 3, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // SLEEPY EYES
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX - 5, nookCenterY - 2, 3, 1.5, 0, 0, Math.PI);
+            ctx.ellipse(nookCenterX + 5, nookCenterY - 2, 3, 1.5, 0, 0, Math.PI);
+            ctx.fill();
+            
+            // Pupils
+            ctx.fillStyle = gameState.powerMode ? '#FFFF00' : '#4169E1';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 5, nookCenterY - 1, 1, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 5, nookCenterY - 1, 1, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Movement mouth
+            if (nook.direction.x !== 0 || nook.direction.y !== 0) {
+                ctx.fillStyle = '#000';
+                let mouthAngle = Math.atan2(nook.direction.y, nook.direction.x);
+                let mouthSize = nook.mouthOpen ? 0.5 : 0.2;
+                
+                ctx.beginPath();
+                ctx.moveTo(nookCenterX, nookCenterY + 2);
+                ctx.arc(nookCenterX, nookCenterY + 2, nook.size - 3, 
+                       mouthAngle - mouthSize, mouthAngle + mouthSize);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            // Small nose
+            ctx.fillStyle = gameState.powerMode ? '#0060FF' : '#654321';
+            ctx.beginPath();
+            ctx.arc(nookCenterX, nookCenterY + 3, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
+            
+            // Draw ghosts (simplified for mobile)
+            ghosts.forEach((ghost, index) => {
+                const ghostCenterX = ghost.x * TILE_SIZE + TILE_SIZE/2;
+                const ghostCenterY = ghost.y * TILE_SIZE + TILE_SIZE/2;
+                const ghostRadius = 9;
+                
+                ctx.save();
+                
+                if (ghost.vulnerable) {
+                    const flash = Math.sin(animationTime * 0.3) > 0;
+                    ctx.fillStyle = flash && gameState.powerModeTimer < 50 ? '#ffffff' : '#4169e1';
+                } else {
+                    ctx.fillStyle = ghost.color;
+                }
+                
+                // Simple ghost body
+                ctx.beginPath();
+                ctx.arc(ghostCenterX, ghostCenterY - 2, ghostRadius, Math.PI, 0, false);
+                ctx.lineTo(ghostCenterX + ghostRadius, ghostCenterY + ghostRadius - 2);
+                
+                // Simple wave bottom
+                for (let i = 0; i <= 4; i++) {
+                    const waveX = ghostCenterX + ghostRadius - (i * (ghostRadius * 2)) / 4;
+                    const waveY = ghostCenterY + ghostRadius - 2 + Math.sin(animationTime * 0.2 + i + index) * 3;
+                    ctx.lineTo(waveX, waveY);
+                }
+                
+                ctx.lineTo(ghostCenterX - ghostRadius, ghostCenterY + ghostRadius - 2);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Simple eyes
+                if (!ghost.vulnerable) {
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX - 3, ghostCenterY - 3, 2, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 3, ghostCenterY - 3, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#000';
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX - 3, ghostCenterY - 3, 1, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 3, ghostCenterY - 3, 1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                ctx.restore();
+            });
+        }
+        
+        // Game loop optimized for mobile
+        let lastTime = 0;
+        function getGameSpeed() {
+            return isMobile ? Math.max(100, 180 - (gameState.level * 8)) : Math.max(80, 150 - (gameState.level * 10));
+        }
+        
+        function gameLoop(currentTime) {
+            if (!gameState.gameComplete && currentTime - lastTime >= getGameSpeed()) {
+                update();
+                lastTime = currentTime;
+            }
+            
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Resize handler
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(resizeCanvas, 100);
+        });
+        
+        // Initialize game
+        resizeCanvas();
+        initLevel(1);
+        console.log(`🚀 Ultimate Nookman Mobile Ready! Device: ${isMobile ? 'Mobile' : 'Desktop'}`);
+        requestAnimationFrame(gameLoop);
+        
+    </script>
+</body>
+</html>
