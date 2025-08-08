@@ -119,70 +119,265 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* ULTRA HD UI ELEMENTS - Premium Quality */
         .score, .lives, .level {
-            font-size: 14px;
-            font-weight: 700;
-            text-shadow: 0 0 10px currentColor;
-            padding: 8px 10px;
-            border-radius: 10px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
+            font-size: 16px;
+            font-weight: 900;
+            text-shadow: 
+                0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 30px currentColor;
+            padding: 12px 18px;
+            border-radius: 15px;
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.8), rgba(20, 20, 40, 0.9));
+            border: 2px solid currentColor;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.5),
+                inset 0 2px 8px rgba(255, 255, 255, 0.1);
         }
         
+        /* Ultra HD Animated Background Glow */
+        .score::before, .lives::before, .level::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, currentColor 0%, transparent 70%);
+            opacity: 0.1;
+            z-index: -1;
+            animation: rotateGlow 8s linear infinite;
+        }
+        
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Premium Score Display */
         .score {
-            color: #ffd700;
-            animation: scoreFlicker 2s ease-in-out infinite alternate;
+            color: #FFD700;
+            background: linear-gradient(145deg, rgba(50, 40, 0, 0.9), rgba(80, 60, 0, 0.95));
+            border: 2px solid #FFD700;
+            animation: scoreFlicker 3s ease-in-out infinite alternate;
+            box-shadow: 
+                0 8px 32px rgba(255, 215, 0, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.2);
         }
         
+        .score::after {
+            content: '✨';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 12px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        /* Premium Lives Display */
         .lives {
-            color: #ff6b6b;
-            animation: livesFlicker 1.5s ease-in-out infinite alternate;
+            color: #FF6B6B;
+            background: linear-gradient(145deg, rgba(50, 0, 0, 0.9), rgba(80, 20, 20, 0.95));
+            border: 2px solid #FF6B6B;
+            animation: livesFlicker 2s ease-in-out infinite alternate;
+            box-shadow: 
+                0 8px 32px rgba(255, 107, 107, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.2);
         }
         
+        .lives::after {
+            content: '💖';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 12px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        
+        /* Level display styling (will be handled in title section) */
         .level {
-            color: #00ff00;
+            color: #00FF00;
+            background: linear-gradient(145deg, rgba(0, 50, 0, 0.9), rgba(20, 80, 20, 0.95));
+            border: 2px solid #00FF00;
             animation: levelFlicker 2.5s ease-in-out infinite alternate;
+            box-shadow: 
+                0 8px 32px rgba(0, 255, 0, 0.4),
+                inset 0 2px 8px rgba(255, 255, 255, 0.2);
         }
         
+        /* Ultra HD Animations */
         @keyframes scoreFlicker {
-            0% { text-shadow: 0 0 10px #ffd700; }
-            100% { text-shadow: 0 0 20px #ffd700, 0 0 25px #ffd700; }
+            0% { 
+                text-shadow: 
+                    0 0 10px #FFD700, 
+                    0 0 20px #FFD700,
+                    0 0 30px #FFD700;
+                box-shadow: 
+                    0 8px 32px rgba(255, 215, 0, 0.4),
+                    inset 0 2px 8px rgba(255, 255, 255, 0.2);
+            }
+            100% { 
+                text-shadow: 
+                    0 0 20px #FFD700, 
+                    0 0 30px #FFD700, 
+                    0 0 40px #FFD700,
+                    0 0 50px #FFD700;
+                box-shadow: 
+                    0 12px 48px rgba(255, 215, 0, 0.6),
+                    inset 0 4px 16px rgba(255, 255, 255, 0.3);
+            }
         }
         
         @keyframes livesFlicker {
-            0% { text-shadow: 0 0 10px #ff6b6b; }
-            100% { text-shadow: 0 0 20px #ff6b6b, 0 0 25px #ff6b6b; }
+            0% { 
+                text-shadow: 
+                    0 0 10px #FF6B6B, 
+                    0 0 20px #FF6B6B,
+                    0 0 30px #FF6B6B;
+                box-shadow: 
+                    0 8px 32px rgba(255, 107, 107, 0.4),
+                    inset 0 2px 8px rgba(255, 255, 255, 0.2);
+            }
+            100% { 
+                text-shadow: 
+                    0 0 20px #FF6B6B, 
+                    0 0 30px #FF6B6B, 
+                    0 0 40px #FF6B6B,
+                    0 0 50px #FF6B6B;
+                box-shadow: 
+                    0 12px 48px rgba(255, 107, 107, 0.6),
+                    inset 0 4px 16px rgba(255, 255, 255, 0.3);
+            }
         }
         
         @keyframes levelFlicker {
-            0% { text-shadow: 0 0 10px #00ff00; }
-            100% { text-shadow: 0 0 20px #00ff00, 0 0 25px #00ff00; }
+            0% { 
+                text-shadow: 
+                    0 0 10px #00FF00, 
+                    0 0 20px #00FF00,
+                    0 0 30px #00FF00;
+                box-shadow: 
+                    0 8px 32px rgba(0, 255, 0, 0.4),
+                    inset 0 2px 8px rgba(255, 255, 255, 0.2);
+            }
+            100% { 
+                text-shadow: 
+                    0 0 20px #00FF00, 
+                    0 0 30px #00FF00, 
+                    0 0 40px #00FF00,
+                    0 0 50px #00FF00;
+                box-shadow: 
+                    0 12px 48px rgba(0, 255, 0, 0.6),
+                    inset 0 4px 16px rgba(255, 255, 255, 0.3);
+            }
         }
         
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+            50% { transform: scale(1.3) rotate(180deg); opacity: 1; }
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        /* ULTRA HD TITLE - Premium Championship Display */
         .title {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 900;
-            background: linear-gradient(45deg, #ffd700, #00ffff, #ff69b4, #00ff00);
+            background: linear-gradient(45deg, #FFD700, #00FFFF, #FF69B4, #00FF00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-            animation: titlePulse 2s ease-in-out infinite alternate;
+            text-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.8),
+                0 0 30px rgba(0, 255, 255, 0.6),
+                0 0 40px rgba(255, 105, 180, 0.4);
+            animation: titlePulse 3s ease-in-out infinite alternate;
             text-align: center;
+            position: relative;
+            padding: 18px 25px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 3px solid transparent;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                linear-gradient(45deg, #FFD700, #00FFFF, #FF69B4, #00FF00);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            box-shadow: 
+                0 15px 60px rgba(0, 255, 255, 0.4),
+                inset 0 5px 20px rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        
+        .title::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: conic-gradient(from 0deg, #FFD700, #00FFFF, #FF69B4, #00FF00, #FFD700);
+            border-radius: 30px;
+            z-index: -1;
+            animation: spinBorder 8s linear infinite;
+        }
+        
+        .title::after {
+            content: '👑';
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            font-size: 20px;
+            animation: crownFloat 4s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px #FFD700);
         }
         
         @keyframes titlePulse {
             0% { 
                 transform: scale(1);
-                text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+                text-shadow: 
+                    0 0 20px rgba(255, 215, 0, 0.8),
+                    0 0 30px rgba(0, 255, 255, 0.6),
+                    0 0 40px rgba(255, 105, 180, 0.4);
+                box-shadow: 
+                    0 15px 60px rgba(0, 255, 255, 0.4),
+                    inset 0 5px 20px rgba(255, 255, 255, 0.2);
             }
             100% { 
-                transform: scale(1.05);
+                transform: scale(1.08);
                 text-shadow: 
-                    0 0 30px rgba(255, 215, 0, 1),
-                    0 0 40px rgba(0, 255, 255, 0.8),
-                    0 0 50px rgba(255, 105, 180, 0.6);
+                    0 0 35px rgba(255, 215, 0, 1),
+                    0 0 45px rgba(0, 255, 255, 0.8),
+                    0 0 55px rgba(255, 105, 180, 0.6),
+                    0 0 65px rgba(0, 255, 0, 0.4);
+                box-shadow: 
+                    0 20px 80px rgba(0, 255, 255, 0.6),
+                    inset 0 8px 32px rgba(255, 255, 255, 0.3);
+            }
+        }
+        
+        @keyframes spinBorder {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes crownFloat {
+            0%, 100% { 
+                transform: translateY(0) rotate(-10deg) scale(1);
+                filter: drop-shadow(0 0 10px #FFD700);
+            }
+            50% { 
+                transform: translateY(-12px) rotate(10deg) scale(1.15);
+                filter: drop-shadow(0 0 20px #FFD700) drop-shadow(0 0 30px #00FFFF);
             }
         }
         
@@ -487,7 +682,7 @@
             </div>
         </div>
         
-        <canvas id="gameCanvas" width="1000" height="750"></canvas>
+        <canvas id="gameCanvas" width="1200" height="900"></canvas>
         
         <div class="instructions">
             🎮 WASD/Arrows on Desktop | Touch controls below on Mobile<br>
@@ -614,10 +809,10 @@
         }
         createParticles();
         
-        // Game constants
-        const TILE_SIZE = 25;
-        const MAZE_WIDTH = Math.floor(1000 / TILE_SIZE);
-        const MAZE_HEIGHT = Math.floor(750 / TILE_SIZE);
+        // Game constants - HD VERSION
+        const TILE_SIZE = 30; // Increased for HD visibility
+        const MAZE_WIDTH = Math.floor(1200 / TILE_SIZE);
+        const MAZE_HEIGHT = Math.floor(900 / TILE_SIZE);
         
         // Level designs (5 progressive levels) - Same as before but optimized
         const levelMazes = [
@@ -681,17 +876,20 @@
             particles: []
         };
         
-        // Nook character - BIGGER and more detailed
+        // ULTRA HD NOOK CHARACTER - Crystal Clear
         let nook = {
             x: 20,
             y: 15,
-            size: 15,
+            size: 20, // Bigger for HD visibility
             direction: { x: 0, y: 0 },
             nextDirection: { x: 0, y: 0 },
             mouthOpen: true,
             animationFrame: 0,
             blinkTimer: 0,
-            isBlinking: false
+            isBlinking: false,
+            eyeBlinkFrame: 0,
+            walkCycle: 0,
+            glowIntensity: 1.0
         };
         
         // 4 Different Ghosts with unique AI
@@ -917,46 +1115,116 @@
             }
         }
         
-        // Draw bells using scanned design
+        // ULTRA HD BELL GRAPHICS - SUPER VISIBLE
         function drawBell(x, y, isPowerBell = false) {
             const centerX = x * TILE_SIZE + TILE_SIZE/2;
             const centerY = y * TILE_SIZE + TILE_SIZE/2;
-            const size = isPowerBell ? 8 : 4;
-            const pulse = Math.sin(animationTime * 0.1 + x + y) * 0.3 + 0.7;
+            const baseSize = isPowerBell ? 12 : 8; // Bigger for HD
+            const pulse = Math.sin(animationTime * 0.15 + x + y) * 0.4 + 0.8;
+            const size = baseSize * pulse;
             
             ctx.save();
             
-            // Bell glow effect
+            // INTENSE GLOW EFFECTS
             ctx.shadowColor = isPowerBell ? '#FFD700' : '#FFA500';
-            ctx.shadowBlur = isPowerBell ? 15 * pulse : 8 * pulse;
+            ctx.shadowBlur = isPowerBell ? 25 * pulse : 18 * pulse;
             
-            // Main bell body - golden/orange
-            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size);
-            gradient.addColorStop(0, '#FFD700');
-            gradient.addColorStop(0.7, '#FFA500');
-            gradient.addColorStop(1, '#CD853F');
+            // Outer glow ring
+            const outerGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size + 8);
+            outerGlow.addColorStop(0, isPowerBell ? 'rgba(255, 215, 0, 0.8)' : 'rgba(255, 165, 0, 0.6)');
+            outerGlow.addColorStop(0.5, isPowerBell ? 'rgba(255, 215, 0, 0.4)' : 'rgba(255, 165, 0, 0.3)');
+            outerGlow.addColorStop(1, 'rgba(255, 215, 0, 0)');
+            
+            ctx.fillStyle = outerGlow;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size + 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Main bell body with HD gradient
+            const gradient = ctx.createRadialGradient(centerX - size/3, centerY - size/3, 0, centerX, centerY, size);
+            gradient.addColorStop(0, '#FFFF99'); // Bright highlight
+            gradient.addColorStop(0.3, '#FFD700'); // Gold
+            gradient.addColorStop(0.7, '#FFA500'); // Orange
+            gradient.addColorStop(0.9, '#CD853F'); // Brown
+            gradient.addColorStop(1, '#8B4513');   // Dark brown
             
             ctx.fillStyle = gradient;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, size * pulse, 0, Math.PI * 2);
+            ctx.arc(centerX, centerY, size, 0, Math.PI * 2);
             ctx.fill();
             
-            // Dark outline
-            ctx.strokeStyle = '#8B4513';
-            ctx.lineWidth = isPowerBell ? 2 : 1;
+            // Metallic shine effect
+            const shine = ctx.createLinearGradient(centerX - size, centerY - size, centerX + size/2, centerY + size/2);
+            shine.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+            shine.addColorStop(0.3, 'rgba(255, 255, 255, 0.4)');
+            shine.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            
+            ctx.fillStyle = shine;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size * 0.8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // HD outline with double border
+            ctx.strokeStyle = '#654321';
+            ctx.lineWidth = isPowerBell ? 3 : 2;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, size, 0, Math.PI * 2);
             ctx.stroke();
             
-            // Red tie at top
-            ctx.fillStyle = '#DC143C';
+            // Inner outline
+            ctx.strokeStyle = '#8B4513';
+            ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.ellipse(centerX, centerY - size + 2, 2, 2, 0, 0, Math.PI * 2);
+            ctx.arc(centerX, centerY, size - 2, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // RED TIE - More visible
+            const tieSize = size * 0.3;
+            ctx.fillStyle = '#DC143C';
+            ctx.shadowColor = '#DC143C';
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY - size + tieSize, tieSize, tieSize * 0.6, 0, 0, Math.PI * 2);
             ctx.fill();
             
-            // Dark star symbol
-            ctx.fillStyle = '#654321';
-            ctx.font = `bold ${isPowerBell ? 8 : 6}px Arial`;
+            // Tie highlight
+            ctx.fillStyle = '#FF6B6B';
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.ellipse(centerX - tieSize/3, centerY - size + tieSize - 1, tieSize/2, tieSize/3, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // ULTRA HD STAR SYMBOL
+            ctx.fillStyle = '#2F1B14';
+            ctx.shadowColor = '#000000';
+            ctx.shadowBlur = 3;
+            const starSize = isPowerBell ? 14 : 10;
+            ctx.font = `bold ${starSize}px Arial`;
             ctx.textAlign = 'center';
-            ctx.fillText('★', centerX, centerY + (isPowerBell ? 2 : 1));
+            ctx.textBaseline = 'middle';
+            ctx.fillText('★', centerX, centerY);
+            
+            // Star highlight
+            ctx.fillStyle = '#FFD700';
+            ctx.shadowBlur = 0;
+            ctx.font = `bold ${starSize * 0.7}px Arial`;
+            ctx.fillText('★', centerX - 1, centerY - 1);
+            
+            // Sparkle effects for power bells
+            if (isPowerBell) {
+                const sparkles = 6;
+                for (let i = 0; i < sparkles; i++) {
+                    const angle = (animationTime * 0.1 + i * (Math.PI * 2 / sparkles));
+                    const sparkleX = centerX + Math.cos(angle) * (size + 10);
+                    const sparkleY = centerY + Math.sin(angle) * (size + 10);
+                    
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.shadowColor = '#FFD700';
+                    ctx.shadowBlur = 15;
+                    ctx.font = 'bold 8px Arial';
+                    ctx.fillText('✦', sparkleX, sparkleY);
+                }
+            }
             
             ctx.restore();
         }
@@ -1212,13 +1480,130 @@
             for (let y = 0; y < currentMaze.length; y++) {
                 for (let x = 0; x < currentMaze[y].length; x++) {
                     switch (currentMaze[y][x]) {
-                        case 1: // Walls
-                            ctx.fillStyle = '#0066ff';
-                            ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                        case 1: // ULTRA HD WALLS - Premium 3D Textured Blocks
+                            const wallX = x * TILE_SIZE;
+                            const wallY = y * TILE_SIZE;
                             
-                            ctx.strokeStyle = '#00aaff';
+                            ctx.save();
+                            
+                            // Ultra HD 3D Wall with multiple gradients
+                            const wallGradient = ctx.createLinearGradient(wallX, wallY, wallX + TILE_SIZE, wallY + TILE_SIZE);
+                            wallGradient.addColorStop(0, '#4A90E2'); // Bright top-left
+                            wallGradient.addColorStop(0.2, '#0066FF'); // Main blue
+                            wallGradient.addColorStop(0.5, '#0052CC'); // Mid blue
+                            wallGradient.addColorStop(0.8, '#003D99'); // Dark blue
+                            wallGradient.addColorStop(1, '#002266');   // Darkest shadow
+                            
+                            ctx.fillStyle = wallGradient;
+                            ctx.fillRect(wallX, wallY, TILE_SIZE, TILE_SIZE);
+                            
+                            // HD Highlight on top edge
+                            const topHighlight = ctx.createLinearGradient(wallX, wallY, wallX, wallY + TILE_SIZE/3);
+                            topHighlight.addColorStop(0, 'rgba(135, 206, 250, 0.8)'); // Light sky blue
+                            topHighlight.addColorStop(0.5, 'rgba(135, 206, 250, 0.4)');
+                            topHighlight.addColorStop(1, 'rgba(135, 206, 250, 0)');
+                            
+                            ctx.fillStyle = topHighlight;
+                            ctx.fillRect(wallX, wallY, TILE_SIZE, TILE_SIZE/3);
+                            
+                            // HD Side highlight (left edge)
+                            const leftHighlight = ctx.createLinearGradient(wallX, wallY, wallX + TILE_SIZE/3, wallY);
+                            leftHighlight.addColorStop(0, 'rgba(100, 149, 237, 0.6)');
+                            leftHighlight.addColorStop(1, 'rgba(100, 149, 237, 0)');
+                            
+                            ctx.fillStyle = leftHighlight;
+                            ctx.fillRect(wallX, wallY, TILE_SIZE/3, TILE_SIZE);
+                            
+                            // Ultra HD texture pattern
+                            for (let tx = 0; tx < 3; tx++) {
+                                for (let ty = 0; ty < 3; ty++) {
+                                    const tileX = wallX + (tx * TILE_SIZE/3);
+                                    const tileY = wallY + (ty * TILE_SIZE/3);
+                                    const tileSize = TILE_SIZE/3;
+                                    
+                                    // Subtle texture squares
+                                    const texGrad = ctx.createRadialGradient(tileX + tileSize/2, tileY + tileSize/2, 0, 
+                                                                            tileX + tileSize/2, tileY + tileSize/2, tileSize/2);
+                                    texGrad.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
+                                    texGrad.addColorStop(0.7, 'rgba(255, 255, 255, 0.05)');
+                                    texGrad.addColorStop(1, 'rgba(0, 0, 0, 0.1)');
+                                    
+                                    ctx.fillStyle = texGrad;
+                                    ctx.fillRect(tileX + 1, tileY + 1, tileSize - 2, tileSize - 2);
+                                }
+                            }
+                            
+                            // HD Circuit pattern overlay
+                            if ((x + y) % 4 === 0) {
+                                ctx.strokeStyle = 'rgba(0, 255, 255, 0.3)';
+                                ctx.lineWidth = 1;
+                                ctx.setLineDash([2, 2]);
+                                
+                                // Horizontal lines
+                                ctx.beginPath();
+                                ctx.moveTo(wallX + 3, wallY + TILE_SIZE/2);
+                                ctx.lineTo(wallX + TILE_SIZE - 3, wallY + TILE_SIZE/2);
+                                ctx.stroke();
+                                
+                                // Vertical lines
+                                ctx.beginPath();
+                                ctx.moveTo(wallX + TILE_SIZE/2, wallY + 3);
+                                ctx.lineTo(wallX + TILE_SIZE/2, wallY + TILE_SIZE - 3);
+                                ctx.stroke();
+                                
+                                ctx.setLineDash([]); // Reset dash
+                                
+                                // Circuit nodes
+                                ctx.fillStyle = 'rgba(0, 255, 255, 0.6)';
+                                ctx.shadowColor = '#00FFFF';
+                                ctx.shadowBlur = 3;
+                                ctx.beginPath();
+                                ctx.arc(wallX + TILE_SIZE/2, wallY + TILE_SIZE/2, 2, 0, Math.PI * 2);
+                                ctx.fill();
+                                ctx.shadowBlur = 0;
+                            }
+                            
+                            // Ultra HD border with multiple layers
+                            // Outer glow border
+                            ctx.strokeStyle = 'rgba(0, 170, 255, 0.8)';
+                            ctx.lineWidth = 3;
+                            ctx.shadowColor = '#00AAFF';
+                            ctx.shadowBlur = 2;
+                            ctx.strokeRect(wallX - 0.5, wallY - 0.5, TILE_SIZE + 1, TILE_SIZE + 1);
+                            
+                            // Main border
+                            ctx.strokeStyle = '#00AAFF';
+                            ctx.lineWidth = 1.5;
+                            ctx.shadowBlur = 0;
+                            ctx.strokeRect(wallX, wallY, TILE_SIZE, TILE_SIZE);
+                            
+                            // Inner border highlight
+                            ctx.strokeStyle = 'rgba(135, 206, 250, 0.6)';
                             ctx.lineWidth = 1;
-                            ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                            ctx.strokeRect(wallX + 1, wallY + 1, TILE_SIZE - 2, TILE_SIZE - 2);
+                            
+                            // Bottom and right shadow edges for 3D effect
+                            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                            ctx.fillRect(wallX + TILE_SIZE - 2, wallY + 2, 2, TILE_SIZE - 2); // Right shadow
+                            ctx.fillRect(wallX + 2, wallY + TILE_SIZE - 2, TILE_SIZE - 2, 2); // Bottom shadow
+                            
+                            // Corner depth effect
+                            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                            ctx.fillRect(wallX + TILE_SIZE - 2, wallY + TILE_SIZE - 2, 2, 2); // Bottom-right corner
+                            
+                            // Animated energy pulse effect (occasional)
+                            if (Math.random() < 0.01) {
+                                const pulseGrad = ctx.createRadialGradient(wallX + TILE_SIZE/2, wallY + TILE_SIZE/2, 0,
+                                                                          wallX + TILE_SIZE/2, wallY + TILE_SIZE/2, TILE_SIZE);
+                                pulseGrad.addColorStop(0, 'rgba(0, 255, 255, 0.4)');
+                                pulseGrad.addColorStop(0.5, 'rgba(0, 255, 255, 0.2)');
+                                pulseGrad.addColorStop(1, 'rgba(0, 255, 255, 0)');
+                                
+                                ctx.fillStyle = pulseGrad;
+                                ctx.fillRect(wallX, wallY, TILE_SIZE, TILE_SIZE);
+                            }
+                            
+                            ctx.restore();
                             break;
                             
                         case 2: // Regular bells
@@ -1232,137 +1617,817 @@
                 }
             }
             
-            // Draw particles
-            gameState.particles.forEach(particle => {
+            // ULTRA HD PARTICLE SYSTEM - Maximum Visual Impact
+            gameState.particles.forEach((particle, index) => {
                 ctx.save();
-                ctx.globalAlpha = particle.life;
-                ctx.fillStyle = particle.color;
                 
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                ctx.fill();
+                // Advanced particle alpha with pulsing
+                const basePulse = Math.sin(animationTime * 0.2 + index * 0.5) * 0.1 + 0.9;
+                ctx.globalAlpha = particle.life * basePulse;
+                
+                // Ultra HD particle effects based on type
+                const particleGrad = ctx.createRadialGradient(particle.x, particle.y, 0, 
+                                                            particle.x, particle.y, particle.size * 2.5);
+                
+                // Determine particle type by color and enhance accordingly
+                if (particle.color === '#ffd700') {
+                    // Gold coin particles - Premium sparkle effect
+                    particleGrad.addColorStop(0, '#FFFFFF');
+                    particleGrad.addColorStop(0.2, '#FFFF99');
+                    particleGrad.addColorStop(0.4, '#FFD700');
+                    particleGrad.addColorStop(0.7, '#FFA500');
+                    particleGrad.addColorStop(1, 'rgba(255, 165, 0, 0)');
+                    
+                    ctx.fillStyle = particleGrad;
+                    ctx.shadowColor = '#FFD700';
+                    ctx.shadowBlur = 15 * particle.life;
+                    
+                    // Multiple layered circles for depth
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Sparkle center
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.shadowBlur = 8;
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size * 0.4, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Star sparkle overlay
+                    if (particle.life > 0.7) {
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.shadowBlur = 10;
+                        ctx.font = `${particle.size * 1.5}px Arial`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('✦', particle.x, particle.y);
+                    }
+                    
+                } else if (particle.color === '#ffffff' || particle.color === '#00ffff') {
+                    // Power-up particles - Electric effect
+                    particleGrad.addColorStop(0, '#FFFFFF');
+                    particleGrad.addColorStop(0.2, '#E0FFFF');
+                    particleGrad.addColorStop(0.4, '#00FFFF');
+                    particleGrad.addColorStop(0.7, '#0080FF');
+                    particleGrad.addColorStop(1, 'rgba(0, 128, 255, 0)');
+                    
+                    ctx.fillStyle = particleGrad;
+                    ctx.shadowColor = '#00FFFF';
+                    ctx.shadowBlur = 20 * particle.life;
+                    
+                    // Electric orb effect
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Electric corona
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+                    ctx.lineWidth = 2;
+                    ctx.shadowBlur = 12;
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size * 1.5, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // Lightning bolts
+                    if (Math.random() < 0.3) {
+                        ctx.strokeStyle = '#FFFFFF';
+                        ctx.lineWidth = 1;
+                        ctx.shadowBlur = 5;
+                        for (let i = 0; i < 4; i++) {
+                            const angle = (Math.PI * 2 / 4) * i + animationTime * 0.1;
+                            const length = particle.size * 2;
+                            const startX = particle.x + Math.cos(angle) * particle.size;
+                            const startY = particle.y + Math.sin(angle) * particle.size;
+                            const endX = particle.x + Math.cos(angle) * length;
+                            const endY = particle.y + Math.sin(angle) * length;
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(startX, startY);
+                            ctx.lineTo(endX, endY);
+                            ctx.stroke();
+                        }
+                    }
+                    
+                } else if (particle.color === '#00ff00') {
+                    // Success/bonus particles - Emerald effect
+                    particleGrad.addColorStop(0, '#F0FFF0');
+                    particleGrad.addColorStop(0.2, '#90EE90');
+                    particleGrad.addColorStop(0.4, '#00FF00');
+                    particleGrad.addColorStop(0.7, '#008000');
+                    particleGrad.addColorStop(1, 'rgba(0, 128, 0, 0)');
+                    
+                    ctx.fillStyle = particleGrad;
+                    ctx.shadowColor = '#00FF00';
+                    ctx.shadowBlur = 12 * particle.life;
+                    
+                    // Emerald crystal effect
+                    ctx.beginPath();
+                    
+                    // Create crystal facets
+                    const sides = 6;
+                    ctx.moveTo(
+                        particle.x + particle.size * Math.cos(0), 
+                        particle.y + particle.size * Math.sin(0)
+                    );
+                    
+                    for (let i = 1; i <= sides; i++) {
+                        const angle = (i * 2 * Math.PI) / sides;
+                        ctx.lineTo(
+                            particle.x + particle.size * Math.cos(angle), 
+                            particle.y + particle.size * Math.sin(angle)
+                        );
+                    }
+                    
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Crystal highlight
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                    ctx.beginPath();
+                    ctx.arc(particle.x - particle.size * 0.3, particle.y - particle.size * 0.3, 
+                           particle.size * 0.3, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                } else {
+                    // Default enhanced particles
+                    particleGrad.addColorStop(0, '#FFFFFF');
+                    particleGrad.addColorStop(0.2, particle.color);
+                    particleGrad.addColorStop(0.8, particle.color);
+                    particleGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    
+                    ctx.fillStyle = particleGrad;
+                    ctx.shadowColor = particle.color;
+                    ctx.shadowBlur = 10 * particle.life;
+                    
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // HD Particle trails
+                if (particle.vx !== undefined && particle.vy !== undefined) {
+                    const trailLength = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy) * 3;
+                    const trailGrad = ctx.createLinearGradient(
+                        particle.x, particle.y,
+                        particle.x - particle.vx * 2, particle.y - particle.vy * 2
+                    );
+                    trailGrad.addColorStop(0, particle.color + '80'); // Semi-transparent
+                    trailGrad.addColorStop(1, particle.color + '00'); // Fully transparent
+                    
+                    ctx.strokeStyle = trailGrad;
+                    ctx.lineWidth = particle.size * 0.5;
+                    ctx.lineCap = 'round';
+                    ctx.shadowBlur = 5;
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(particle.x, particle.y);
+                    ctx.lineTo(particle.x - particle.vx * 2, particle.y - particle.vy * 2);
+                    ctx.stroke();
+                }
+                
                 ctx.restore();
             });
             
-            // Draw Nook with mobile-optimized rendering
+            // ULTRA HD NOOK CHARACTER - Maximum Definition & Detail
             const nookCenterX = nook.x * TILE_SIZE + TILE_SIZE/2;
             const nookCenterY = nook.y * TILE_SIZE + TILE_SIZE/2;
             
             ctx.save();
             
-            // Power mode glow
+            // Advanced animation system for HD
+            nook.walkCycle += 0.15;
+            nook.eyeBlinkFrame += 1;
+            const walkBounce = Math.sin(nook.walkCycle) * 3;
+            const tailSwish = Math.sin(nook.walkCycle * 0.7) * 0.4;
+            const earTwitch = Math.sin(nook.walkCycle * 1.2) * 0.1;
+            
+            // Ultra HD Power mode effects
             if (gameState.powerMode) {
-                ctx.shadowColor = '#00ffff';
-                ctx.shadowBlur = 15;
-            }
-            
-            // Main face
-            ctx.fillStyle = gameState.powerMode ? '#00FFFF' : '#CD853F';
-            ctx.beginPath();
-            ctx.arc(nookCenterX, nookCenterY, nook.size, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Ears
-            ctx.fillStyle = gameState.powerMode ? '#0080FF' : '#2F2F2F';
-            ctx.beginPath();
-            ctx.arc(nookCenterX - 8, nookCenterY - 10, 4, 0, Math.PI * 2);
-            ctx.arc(nookCenterX + 8, nookCenterY - 10, 4, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Pink inner ears
-            ctx.fillStyle = gameState.powerMode ? '#FF00FF' : '#FF69B4';
-            ctx.beginPath();
-            ctx.arc(nookCenterX - 8, nookCenterY - 10, 2, 0, Math.PI * 2);
-            ctx.arc(nookCenterX + 8, nookCenterY - 10, 2, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Eyes mask
-            ctx.fillStyle = gameState.powerMode ? '#004080' : '#8B4513';
-            ctx.beginPath();
-            ctx.ellipse(nookCenterX - 5, nookCenterY - 2, 4, 3, 0, 0, Math.PI * 2);
-            ctx.ellipse(nookCenterX + 5, nookCenterY - 2, 4, 3, 0, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // SLEEPY EYES
-            ctx.fillStyle = 'white';
-            ctx.beginPath();
-            ctx.ellipse(nookCenterX - 5, nookCenterY - 2, 3, 1.5, 0, 0, Math.PI);
-            ctx.ellipse(nookCenterX + 5, nookCenterY - 2, 3, 1.5, 0, 0, Math.PI);
-            ctx.fill();
-            
-            // Pupils
-            ctx.fillStyle = gameState.powerMode ? '#FFFF00' : '#4169E1';
-            ctx.beginPath();
-            ctx.arc(nookCenterX - 5, nookCenterY - 1, 1, 0, Math.PI * 2);
-            ctx.arc(nookCenterX + 5, nookCenterY - 1, 1, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Movement mouth
-            if (nook.direction.x !== 0 || nook.direction.y !== 0) {
-                ctx.fillStyle = '#000';
-                let mouthAngle = Math.atan2(nook.direction.y, nook.direction.x);
-                let mouthSize = nook.mouthOpen ? 0.5 : 0.2;
+                nook.glowIntensity = 0.5 + Math.sin(animationTime * 0.3) * 0.5;
                 
+                // Multiple layered glows for HD effect
+                ctx.shadowColor = '#00FFFF';
+                ctx.shadowBlur = 30 * nook.glowIntensity;
+                
+                // Outer power aura
+                const auraGrad = ctx.createRadialGradient(nookCenterX, nookCenterY, 0, nookCenterX, nookCenterY, nook.size + 20);
+                auraGrad.addColorStop(0, 'rgba(0, 255, 255, 0.4)');
+                auraGrad.addColorStop(0.5, 'rgba(0, 255, 255, 0.2)');
+                auraGrad.addColorStop(0.8, 'rgba(0, 255, 255, 0.1)');
+                auraGrad.addColorStop(1, 'rgba(0, 255, 255, 0)');
+                
+                ctx.fillStyle = auraGrad;
                 ctx.beginPath();
-                ctx.moveTo(nookCenterX, nookCenterY + 2);
-                ctx.arc(nookCenterX, nookCenterY + 2, nook.size - 3, 
-                       mouthAngle - mouthSize, mouthAngle + mouthSize);
-                ctx.closePath();
+                ctx.arc(nookCenterX, nookCenterY + walkBounce, nook.size + 20, 0, Math.PI * 2);
                 ctx.fill();
+                
+                // Electric sparks
+                for (let i = 0; i < 8; i++) {
+                    const sparkAngle = (animationTime * 0.1 + i * (Math.PI * 2 / 8));
+                    const sparkRadius = nook.size + 12 + Math.sin(animationTime * 0.2 + i) * 4;
+                    const sparkX = nookCenterX + Math.cos(sparkAngle) * sparkRadius;
+                    const sparkY = nookCenterY + walkBounce + Math.sin(sparkAngle) * sparkRadius;
+                    
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.shadowColor = '#00FFFF';
+                    ctx.shadowBlur = 10;
+                    ctx.font = 'bold 8px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('⚡', sparkX, sparkY);
+                }
             }
             
-            // Small nose
-            ctx.fillStyle = gameState.powerMode ? '#0060FF' : '#654321';
+            // Ultra HD Tail with realistic motion
+            ctx.save();
+            ctx.translate(nookCenterX - nook.size * 0.9, nookCenterY + walkBounce + 2);
+            ctx.rotate(tailSwish);
+            
+            const tailGrad = ctx.createRadialGradient(-2, -12, 0, 0, 0, 12);
+            tailGrad.addColorStop(0, gameState.powerMode ? '#87CEEB' : '#8B4513');
+            tailGrad.addColorStop(0.3, gameState.powerMode ? '#4682B4' : '#654321');
+            tailGrad.addColorStop(0.7, gameState.powerMode ? '#2F4F4F' : '#2F1B14');
+            tailGrad.addColorStop(1, gameState.powerMode ? '#191970' : '#1a0e0a');
+            
+            ctx.fillStyle = tailGrad;
             ctx.beginPath();
-            ctx.arc(nookCenterX, nookCenterY + 3, 1.5, 0, Math.PI * 2);
+            ctx.ellipse(0, 0, 10, 18, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // HD Tail stripes (raccoon pattern)
+            ctx.strokeStyle = gameState.powerMode ? '#000080' : '#0d0706';
+            ctx.lineWidth = 3;
+            for (let i = 0; i < 6; i++) {
+                ctx.beginPath();
+                ctx.ellipse(0, -15 + i * 5, 8 - i * 0.8, 2, 0, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            
+            // Tail tip with fur detail
+            ctx.fillStyle = gameState.powerMode ? '#B0E0E6' : '#D2B48C';
+            ctx.shadowColor = gameState.powerMode ? '#87CEEB' : '#CD853F';
+            ctx.shadowBlur = 5;
+            ctx.beginPath();
+            ctx.arc(0, -16, 5, 0, Math.PI * 2);
             ctx.fill();
             
             ctx.restore();
             
-            // Draw ghosts (simplified for mobile)
+            // ULTRA HD Main Body with multiple gradients
+            const bodyGrad = ctx.createRadialGradient(nookCenterX - 6, nookCenterY - 6, 0, nookCenterX, nookCenterY, nook.size);
+            bodyGrad.addColorStop(0, gameState.powerMode ? '#E6F3FF' : '#F4E4BC'); // Highlight
+            bodyGrad.addColorStop(0.15, gameState.powerMode ? '#87CEEB' : '#DAA520'); // Golden
+            bodyGrad.addColorStop(0.4, gameState.powerMode ? '#4682B4' : '#CD853F'); // Burlywood
+            bodyGrad.addColorStop(0.7, gameState.powerMode ? '#2F4F4F' : '#8B4513'); // Saddle brown
+            bodyGrad.addColorStop(0.9, gameState.powerMode ? '#191970' : '#654321'); // Dark brown
+            bodyGrad.addColorStop(1, gameState.powerMode ? '#000080' : '#2F1B14');   // Darkest
+            
+            ctx.fillStyle = bodyGrad;
+            ctx.beginPath();
+            ctx.arc(nookCenterX, nookCenterY + walkBounce, nook.size, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // HD Raccoon face stripes
+            ctx.strokeStyle = gameState.powerMode ? '#000080' : '#2F1B14';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 4; i++) {
+                const stripeRadius = nook.size * (0.9 - i * 0.15);
+                ctx.beginPath();
+                ctx.arc(nookCenterX, nookCenterY + walkBounce, stripeRadius, -1.0, 1.0);
+                ctx.stroke();
+            }
+            
+            // Ultra HD Ears with animation
+            ctx.save();
+            
+            // Left ear
+            ctx.save();
+            ctx.translate(nookCenterX - 12, nookCenterY - 15 + walkBounce);
+            ctx.rotate(earTwitch);
+            
+            const leftEarGrad = ctx.createRadialGradient(-2, -3, 0, 0, 0, 6);
+            leftEarGrad.addColorStop(0, gameState.powerMode ? '#87CEEB' : '#8B4513');
+            leftEarGrad.addColorStop(0.6, gameState.powerMode ? '#2F4F4F' : '#654321');
+            leftEarGrad.addColorStop(1, gameState.powerMode ? '#191970' : '#2F1B14');
+            
+            ctx.fillStyle = leftEarGrad;
+            ctx.shadowColor = gameState.powerMode ? '#4682B4' : '#8B4513';
+            ctx.shadowBlur = 3;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 6, 12, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Left ear inside
+            ctx.fillStyle = gameState.powerMode ? '#FFB6C1' : '#FFB6C1';
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 3, 7, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Ear fur tufts
+            ctx.strokeStyle = gameState.powerMode ? '#B0E0E6' : '#D2B48C';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(-4 + i * 2, -10);
+                ctx.lineTo(-3 + i * 2, -15);
+                ctx.stroke();
+            }
+            
+            ctx.restore();
+            
+            // Right ear (mirrored)
+            ctx.save();
+            ctx.translate(nookCenterX + 12, nookCenterY - 15 + walkBounce);
+            ctx.rotate(-earTwitch);
+            
+            ctx.fillStyle = leftEarGrad;
+            ctx.shadowColor = gameState.powerMode ? '#4682B4' : '#8B4513';
+            ctx.shadowBlur = 3;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 6, 12, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = gameState.powerMode ? '#FFB6C1' : '#FFB6C1';
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 3, 7, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            for (let i = 0; i < 3; i++) {
+                ctx.strokeStyle = gameState.powerMode ? '#B0E0E6' : '#D2B48C';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-4 + i * 2, -10);
+                ctx.lineTo(-3 + i * 2, -15);
+                ctx.stroke();
+            }
+            
+            ctx.restore();
+            ctx.restore();
+            
+            // ULTRA HD Eye Mask Area
+            ctx.fillStyle = gameState.powerMode ? '#004080' : '#8B4513';
+            ctx.shadowColor = gameState.powerMode ? '#0060FF' : '#654321';
+            ctx.shadowBlur = 5;
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX - 7, nookCenterY - 3 + walkBounce, 6, 4, 0, 0, Math.PI * 2);
+            ctx.ellipse(nookCenterX + 7, nookCenterY - 3 + walkBounce, 6, 4, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Ultra HD Eyes with realistic blinking
+            const blinkCycle = Math.sin(nook.eyeBlinkFrame * 0.02);
+            const shouldBlink = blinkCycle > 0.95 || nook.eyeBlinkFrame % 400 < 25;
+            const eyeHeight = shouldBlink ? 2 : 6;
+            
+            // Eye whites with shine
+            ctx.fillStyle = '#FFFFFF';
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX - 7, nookCenterY - 3 + walkBounce, 5, eyeHeight, 0, 0, Math.PI * 2);
+            ctx.ellipse(nookCenterX + 7, nookCenterY - 3 + walkBounce, 5, eyeHeight, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            if (!shouldBlink) {
+                ctx.shadowBlur = 0;
+                
+                // Pupils with direction tracking
+                const lookDirection = nook.direction.x * 1.5;
+                const pupilColor = gameState.powerMode ? '#00FFFF' : '#4169E1';
+                
+                // Iris gradient
+                const irisGrad = ctx.createRadialGradient(nookCenterX - 7 + lookDirection, nookCenterY - 3 + walkBounce, 0, 
+                                                        nookCenterX - 7 + lookDirection, nookCenterY - 3 + walkBounce, 3);
+                irisGrad.addColorStop(0, pupilColor);
+                irisGrad.addColorStop(0.6, gameState.powerMode ? '#0080FF' : '#2F4F8F');
+                irisGrad.addColorStop(1, gameState.powerMode ? '#004080' : '#191970');
+                
+                ctx.fillStyle = irisGrad;
+                ctx.beginPath();
+                ctx.arc(nookCenterX - 7 + lookDirection, nookCenterY - 3 + walkBounce, 3, 0, Math.PI * 2);
+                ctx.arc(nookCenterX + 7 + lookDirection, nookCenterY - 3 + walkBounce, 3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Pupils
+                ctx.fillStyle = '#000000';
+                ctx.beginPath();
+                ctx.arc(nookCenterX - 7 + lookDirection, nookCenterY - 3 + walkBounce, 1.5, 0, Math.PI * 2);
+                ctx.arc(nookCenterX + 7 + lookDirection, nookCenterY - 3 + walkBounce, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Eye gleam/sparkle
+                ctx.fillStyle = '#FFFFFF';
+                ctx.shadowColor = '#FFFFFF';
+                ctx.shadowBlur = 3;
+                ctx.beginPath();
+                ctx.arc(nookCenterX - 8 + lookDirection, nookCenterY - 4 + walkBounce, 1.5, 0, Math.PI * 2);
+                ctx.arc(nookCenterX + 6 + lookDirection, nookCenterY - 4 + walkBounce, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Additional eye details
+                ctx.strokeStyle = gameState.powerMode ? '#80E0FF' : '#708090';
+                ctx.lineWidth = 1;
+                ctx.shadowBlur = 0;
+                ctx.beginPath();
+                ctx.arc(nookCenterX - 7 + lookDirection, nookCenterY - 3 + walkBounce, 2.5, 0, Math.PI * 2);
+                ctx.arc(nookCenterX + 7 + lookDirection, nookCenterY - 3 + walkBounce, 2.5, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            
+            // Ultra HD Nose with breathing effect
+            const noseSize = 2.5 + Math.sin(nook.walkCycle * 0.3) * 0.3;
+            const noseGrad = ctx.createRadialGradient(nookCenterX, nookCenterY + 4 + walkBounce, 0, 
+                                                    nookCenterX, nookCenterY + 4 + walkBounce, noseSize);
+            noseGrad.addColorStop(0, '#FFE4E1');
+            noseGrad.addColorStop(0.4, '#FFB6C1');
+            noseGrad.addColorStop(0.8, '#FF69B4');
+            noseGrad.addColorStop(1, '#DC143C');
+            
+            ctx.fillStyle = noseGrad;
+            ctx.shadowColor = '#FF69B4';
+            ctx.shadowBlur = 5;
+            ctx.beginPath();
+            ctx.arc(nookCenterX, nookCenterY + 4 + walkBounce, noseSize, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Nose highlight
+            ctx.fillStyle = '#FFFFFF';
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 0.8, nookCenterY + 3.2 + walkBounce, 1, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Ultra HD Mouth with eating animation
+            if (nook.direction.x !== 0 || nook.direction.y !== 0) {
+                nook.mouthOpen = Math.floor(animationTime * 0.5) % 2 === 0;
+                
+                if (nook.mouthOpen) {
+                    ctx.fillStyle = gameState.powerMode ? '#004080' : '#000000';
+                    ctx.shadowColor = gameState.powerMode ? '#00FFFF' : '#000000';
+                    ctx.shadowBlur = gameState.powerMode ? 8 : 0;
+                    
+                    const mouthAngle = Math.atan2(nook.direction.y, nook.direction.x);
+                    ctx.beginPath();
+                    ctx.arc(nookCenterX, nookCenterY + walkBounce + 2, nook.size - 4, 
+                           mouthAngle - 0.6, mouthAngle + 0.6, false);
+                    ctx.lineTo(nookCenterX, nookCenterY + walkBounce + 2);
+                    ctx.fill();
+                    
+                    // Teeth details for HD effect
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.shadowBlur = 0;
+                    for (let i = 0; i < 4; i++) {
+                        const toothAngle = mouthAngle + (i - 1.5) * 0.15;
+                        const toothX = nookCenterX + Math.cos(toothAngle) * (nook.size - 6);
+                        const toothY = nookCenterY + walkBounce + 2 + Math.sin(toothAngle) * (nook.size - 6);
+                        
+                        ctx.beginPath();
+                        ctx.arc(toothX, toothY, 1, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    
+                    // Tongue detail
+                    ctx.fillStyle = '#FF69B4';
+                    const tongueX = nookCenterX + Math.cos(mouthAngle) * 3;
+                    const tongueY = nookCenterY + walkBounce + 2 + Math.sin(mouthAngle) * 3;
+                    ctx.beginPath();
+                    ctx.ellipse(tongueX, tongueY, 2, 1, mouthAngle, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            
+            // Ultra HD Paws with realistic walking
+            const leftPawBounce = Math.sin(nook.walkCycle + Math.PI) * 5;
+            const rightPawBounce = Math.sin(nook.walkCycle) * 5;
+            
+            const pawGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, 5);
+            pawGrad.addColorStop(0, gameState.powerMode ? '#4682B4' : '#8B4513');
+            pawGrad.addColorStop(0.6, gameState.powerMode ? '#2F4F4F' : '#654321');
+            pawGrad.addColorStop(1, gameState.powerMode ? '#191970' : '#2F1B14');
+            
+            // Left paw
+            ctx.fillStyle = pawGrad;
+            ctx.shadowColor = gameState.powerMode ? '#87CEEB' : '#8B4513';
+            ctx.shadowBlur = 3;
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 8, nookCenterY + nook.size - 2 + leftPawBounce + walkBounce, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Right paw
+            ctx.beginPath();
+            ctx.arc(nookCenterX + 8, nookCenterY + nook.size - 2 + rightPawBounce + walkBounce, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Paw pads with detail
+            ctx.fillStyle = gameState.powerMode ? '#FF1493' : '#FF69B4';
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 8, nookCenterY + nook.size - 2 + leftPawBounce + walkBounce, 2.5, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 8, nookCenterY + nook.size - 2 + rightPawBounce + walkBounce, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Paw pad highlights
+            ctx.fillStyle = '#FFB6C1';
+            ctx.beginPath();
+            ctx.arc(nookCenterX - 8.5, nookCenterY + nook.size - 2.5 + leftPawBounce + walkBounce, 1, 0, Math.PI * 2);
+            ctx.arc(nookCenterX + 7.5, nookCenterY + nook.size - 2.5 + rightPawBounce + walkBounce, 1, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Ultra HD Shadow with multiple layers
+            ctx.save();
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+            ctx.shadowBlur = 12;
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX, nookCenterY + nook.size + 8, nook.size * 1.1, 8, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Inner shadow
+            ctx.shadowBlur = 6;
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+            ctx.beginPath();
+            ctx.ellipse(nookCenterX, nookCenterY + nook.size + 8, nook.size * 0.8, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+            
+            ctx.restore();
+            
+            // ULTRA HD GHOSTS - Premium Quality with Individual Personalities
             ghosts.forEach((ghost, index) => {
                 const ghostCenterX = ghost.x * TILE_SIZE + TILE_SIZE/2;
                 const ghostCenterY = ghost.y * TILE_SIZE + TILE_SIZE/2;
-                const ghostRadius = 9;
+                const ghostRadius = 12; // Bigger for HD
+                const ghostBounce = Math.sin(animationTime * 0.15 + index) * 2;
                 
                 ctx.save();
                 
+                // HD Vulnerable state effects
                 if (ghost.vulnerable) {
-                    const flash = Math.sin(animationTime * 0.3) > 0;
-                    ctx.fillStyle = flash && gameState.powerModeTimer < 50 ? '#ffffff' : '#4169e1';
+                    const flashRate = gameState.powerModeTimer < 60 ? 0.4 : 0.2;
+                    const flash = Math.sin(animationTime * flashRate) > 0;
+                    const isWarning = gameState.powerModeTimer < 60;
+                    
+                    // Ultra HD vulnerable glow
+                    ctx.shadowColor = isWarning ? '#FFFFFF' : '#4169E1';
+                    ctx.shadowBlur = 20;
+                    
+                    // Vulnerability aura
+                    const auraGrad = ctx.createRadialGradient(ghostCenterX, ghostCenterY, 0, ghostCenterX, ghostCenterY, ghostRadius + 10);
+                    auraGrad.addColorStop(0, isWarning ? 'rgba(255, 255, 255, 0.3)' : 'rgba(65, 105, 225, 0.3)');
+                    auraGrad.addColorStop(0.7, isWarning ? 'rgba(255, 255, 255, 0.1)' : 'rgba(65, 105, 225, 0.1)');
+                    auraGrad.addColorStop(1, 'rgba(65, 105, 225, 0)');
+                    
+                    ctx.fillStyle = auraGrad;
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX, ghostCenterY + ghostBounce, ghostRadius + 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Main vulnerable color
+                    if (flash && isWarning) {
+                        // Flashing white warning
+                        const warningGrad = ctx.createRadialGradient(ghostCenterX, ghostCenterY, 0, ghostCenterX, ghostCenterY, ghostRadius);
+                        warningGrad.addColorStop(0, '#FFFFFF');
+                        warningGrad.addColorStop(0.7, '#FFE4E1');
+                        warningGrad.addColorStop(1, '#FFC0CB');
+                        ctx.fillStyle = warningGrad;
+                    } else {
+                        // Blue vulnerable state
+                        const blueGrad = ctx.createRadialGradient(ghostCenterX, ghostCenterY - 3, 0, ghostCenterX, ghostCenterY, ghostRadius);
+                        blueGrad.addColorStop(0, '#87CEEB');
+                        blueGrad.addColorStop(0.4, '#4169E1');
+                        blueGrad.addColorStop(0.8, '#0000CD');
+                        blueGrad.addColorStop(1, '#191970');
+                        ctx.fillStyle = blueGrad;
+                    }
                 } else {
-                    ctx.fillStyle = ghost.color;
+                    // Ultra HD normal ghost colors with gradients
+                    ctx.shadowColor = ghost.color;
+                    ctx.shadowBlur = 15;
+                    
+                    // Individual ghost color gradients
+                    const ghostGrad = ctx.createRadialGradient(ghostCenterX, ghostCenterY - 4, 0, ghostCenterX, ghostCenterY, ghostRadius);
+                    
+                    switch(index) {
+                        case 0: // Red Blinky - Aggressive
+                            ghostGrad.addColorStop(0, '#FFB6C1');
+                            ghostGrad.addColorStop(0.3, '#FF6B6B');
+                            ghostGrad.addColorStop(0.7, '#FF0000');
+                            ghostGrad.addColorStop(1, '#8B0000');
+                            break;
+                        case 1: // Pink Pinky - Ambusher
+                            ghostGrad.addColorStop(0, '#FFE4E1');
+                            ghostGrad.addColorStop(0.3, '#FFB8FF');
+                            ghostGrad.addColorStop(0.7, '#FF69B4');
+                            ghostGrad.addColorStop(1, '#8B008B');
+                            break;
+                        case 2: // Cyan Inky - Patrol
+                            ghostGrad.addColorStop(0, '#E0FFFF');
+                            ghostGrad.addColorStop(0.3, '#87CEEB');
+                            ghostGrad.addColorStop(0.7, '#00FFFF');
+                            ghostGrad.addColorStop(1, '#008B8B');
+                            break;
+                        case 3: // Orange Sue - Mixed behavior
+                            ghostGrad.addColorStop(0, '#FFEFD5');
+                            ghostGrad.addColorStop(0.3, '#FFD700');
+                            ghostGrad.addColorStop(0.7, '#FFA500');
+                            ghostGrad.addColorStop(1, '#FF8C00');
+                            break;
+                    }
+                    
+                    ctx.fillStyle = ghostGrad;
                 }
                 
-                // Simple ghost body
+                // ULTRA HD Ghost Body with 3D effect
                 ctx.beginPath();
-                ctx.arc(ghostCenterX, ghostCenterY - 2, ghostRadius, Math.PI, 0, false);
-                ctx.lineTo(ghostCenterX + ghostRadius, ghostCenterY + ghostRadius - 2);
+                ctx.arc(ghostCenterX, ghostCenterY - 3 + ghostBounce, ghostRadius, Math.PI, 0, false);
+                ctx.lineTo(ghostCenterX + ghostRadius, ghostCenterY + ghostRadius - 3 + ghostBounce);
                 
-                // Simple wave bottom
-                for (let i = 0; i <= 4; i++) {
-                    const waveX = ghostCenterX + ghostRadius - (i * (ghostRadius * 2)) / 4;
-                    const waveY = ghostCenterY + ghostRadius - 2 + Math.sin(animationTime * 0.2 + i + index) * 3;
+                // HD Wavy bottom with more detail
+                const waveCount = 6;
+                for (let i = 0; i <= waveCount; i++) {
+                    const waveX = ghostCenterX + ghostRadius - (i * (ghostRadius * 2)) / waveCount;
+                    const waveOffset = Math.sin(animationTime * 0.25 + i + index * 0.5) * 4;
+                    const waveY = ghostCenterY + ghostRadius - 3 + ghostBounce + waveOffset;
                     ctx.lineTo(waveX, waveY);
                 }
                 
-                ctx.lineTo(ghostCenterX - ghostRadius, ghostCenterY + ghostRadius - 2);
+                ctx.lineTo(ghostCenterX - ghostRadius, ghostCenterY + ghostRadius - 3 + ghostBounce);
                 ctx.closePath();
                 ctx.fill();
                 
-                // Simple eyes
+                // HD Body highlight
+                const highlightGrad = ctx.createLinearGradient(ghostCenterX - ghostRadius, ghostCenterY - ghostRadius, 
+                                                              ghostCenterX + ghostRadius/2, ghostCenterY + ghostRadius/2);
+                highlightGrad.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+                highlightGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.2)');
+                highlightGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                
+                ctx.fillStyle = highlightGrad;
+                ctx.beginPath();
+                ctx.arc(ghostCenterX, ghostCenterY - 3 + ghostBounce, ghostRadius * 0.8, Math.PI, 0, false);
+                ctx.lineTo(ghostCenterX + ghostRadius * 0.8, ghostCenterY + ghostRadius * 0.5 + ghostBounce);
+                ctx.lineTo(ghostCenterX - ghostRadius * 0.8, ghostCenterY + ghostRadius * 0.5 + ghostBounce);
+                ctx.closePath();
+                ctx.fill();
+                
+                // ULTRA HD Eyes System
                 if (!ghost.vulnerable) {
-                    ctx.fillStyle = '#fff';
+                    // Eye whites with 3D effect
+                    const eyeWhiteGrad = ctx.createRadialGradient(ghostCenterX - 4, ghostCenterY - 5, 0, 
+                                                                 ghostCenterX - 4, ghostCenterY - 4, 4);
+                    eyeWhiteGrad.addColorStop(0, '#FFFFFF');
+                    eyeWhiteGrad.addColorStop(0.7, '#F5F5F5');
+                    eyeWhiteGrad.addColorStop(1, '#E0E0E0');
+                    
+                    ctx.fillStyle = eyeWhiteGrad;
+                    ctx.shadowBlur = 0;
                     ctx.beginPath();
-                    ctx.arc(ghostCenterX - 3, ghostCenterY - 3, 2, 0, Math.PI * 2);
-                    ctx.arc(ghostCenterX + 3, ghostCenterY - 3, 2, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX - 5, ghostCenterY - 4 + ghostBounce, 4, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 5, ghostCenterY - 4 + ghostBounce, 4, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    ctx.fillStyle = '#000';
+                    // Eye pupils with direction and personality
+                    const pupilOffsetX = ghost.direction.x * 1.5;
+                    const pupilOffsetY = ghost.direction.y * 1.5;
+                    
+                    // Individual pupil characteristics
+                    let pupilSize = 2;
+                    let pupilColor = '#000000';
+                    
+                    switch(index) {
+                        case 0: // Blinky - Focused stare
+                            pupilSize = 2.5;
+                            pupilColor = '#8B0000';
+                            break;
+                        case 1: // Pinky - Shifty eyes
+                            pupilSize = 2;
+                            pupilColor = '#4B0082';
+                            break;
+                        case 2: // Inky - Wide curious eyes
+                            pupilSize = 1.8;
+                            pupilColor = '#006400';
+                            break;
+                        case 3: // Sue - Alert eyes
+                            pupilSize = 2.2;
+                            pupilColor = '#8B4513';
+                            break;
+                    }
+                    
+                    // Pupil gradient for depth
+                    const pupilGrad = ctx.createRadialGradient(ghostCenterX - 5 + pupilOffsetX, ghostCenterY - 4 + ghostBounce, 0,
+                                                              ghostCenterX - 5 + pupilOffsetX, ghostCenterY - 4 + ghostBounce, pupilSize);
+                    pupilGrad.addColorStop(0, pupilColor);
+                    pupilGrad.addColorStop(0.8, '#000000');
+                    pupilGrad.addColorStop(1, '#333333');
+                    
+                    ctx.fillStyle = pupilGrad;
                     ctx.beginPath();
-                    ctx.arc(ghostCenterX - 3, ghostCenterY - 3, 1, 0, Math.PI * 2);
-                    ctx.arc(ghostCenterX + 3, ghostCenterY - 3, 1, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX - 5 + pupilOffsetX, ghostCenterY - 4 + pupilOffsetY + ghostBounce, pupilSize, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 5 + pupilOffsetX, ghostCenterY - 4 + pupilOffsetY + ghostBounce, pupilSize, 0, Math.PI * 2);
                     ctx.fill();
+                    
+                    // Eye shine/gleam
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX - 6 + pupilOffsetX, ghostCenterY - 5 + pupilOffsetY + ghostBounce, 1, 0, Math.PI * 2);
+                    ctx.arc(ghostCenterX + 4 + pupilOffsetX, ghostCenterY - 5 + pupilOffsetY + ghostBounce, 1, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Eyelid/brow expression
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(ghostCenterX - 5, ghostCenterY - 4 + ghostBounce, 4, -Math.PI * 0.7, -Math.PI * 0.3);
+                    ctx.arc(ghostCenterX + 5, ghostCenterY - 4 + ghostBounce, 4, -Math.PI * 0.7, -Math.PI * 0.3);
+                    ctx.stroke();
+                } else {
+                    // Vulnerable eye state - X eyes or dizzy
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = 3;
+                    
+                    // Left X
+                    ctx.beginPath();
+                    ctx.moveTo(ghostCenterX - 7, ghostCenterY - 6 + ghostBounce);
+                    ctx.lineTo(ghostCenterX - 3, ghostCenterY - 2 + ghostBounce);
+                    ctx.moveTo(ghostCenterX - 7, ghostCenterY - 2 + ghostBounce);
+                    ctx.lineTo(ghostCenterX - 3, ghostCenterY - 6 + ghostBounce);
+                    
+                    // Right X
+                    ctx.moveTo(ghostCenterX + 3, ghostCenterY - 6 + ghostBounce);
+                    ctx.lineTo(ghostCenterX + 7, ghostCenterY - 2 + ghostBounce);
+                    ctx.moveTo(ghostCenterX + 3, ghostCenterY - 2 + ghostBounce);
+                    ctx.lineTo(ghostCenterX + 7, ghostCenterY - 6 + ghostBounce);
+                    
+                    ctx.stroke();
+                }
+                
+                // HD Shadow beneath ghost
+                ctx.save();
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                ctx.shadowBlur = 8;
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.beginPath();
+                ctx.ellipse(ghostCenterX, ghostCenterY + ghostRadius + 4, ghostRadius * 0.8, 4, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+                
+                // Special effects for each ghost type
+                if (!ghost.vulnerable) {
+                    ctx.save();
+                    
+                    switch(index) {
+                        case 0: // Blinky - Aggressive sparks
+                            if (Math.random() < 0.1) {
+                                ctx.fillStyle = '#FF0000';
+                                ctx.shadowColor = '#FF0000';
+                                ctx.shadowBlur = 5;
+                                ctx.font = 'bold 8px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText('💢', ghostCenterX + (Math.random() - 0.5) * 20, 
+                                           ghostCenterY + (Math.random() - 0.5) * 20);
+                            }
+                            break;
+                            
+                        case 1: // Pinky - Hearts
+                            if (Math.random() < 0.05) {
+                                ctx.fillStyle = '#FF69B4';
+                                ctx.shadowColor = '#FF69B4';
+                                ctx.shadowBlur = 5;
+                                ctx.font = 'bold 8px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText('💕', ghostCenterX + (Math.random() - 0.5) * 20, 
+                                           ghostCenterY + (Math.random() - 0.5) * 20);
+                            }
+                            break;
+                            
+                        case 2: // Inky - Question marks
+                            if (Math.random() < 0.05) {
+                                ctx.fillStyle = '#00FFFF';
+                                ctx.shadowColor = '#00FFFF';
+                                ctx.shadowBlur = 5;
+                                ctx.font = 'bold 8px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText('❓', ghostCenterX + (Math.random() - 0.5) * 20, 
+                                           ghostCenterY + (Math.random() - 0.5) * 20);
+                            }
+                            break;
+                            
+                        case 3: // Sue - Speed lines
+                            if (Math.random() < 0.08) {
+                                ctx.strokeStyle = '#FFA500';
+                                ctx.lineWidth = 2;
+                                ctx.beginPath();
+                                ctx.moveTo(ghostCenterX - 15, ghostCenterY);
+                                ctx.lineTo(ghostCenterX - 8, ghostCenterY);
+                                ctx.moveTo(ghostCenterX - 15, ghostCenterY - 3);
+                                ctx.lineTo(ghostCenterX - 10, ghostCenterY - 3);
+                                ctx.stroke();
+                            }
+                            break;
+                    }
+                    
+                    ctx.restore();
                 }
                 
                 ctx.restore();
