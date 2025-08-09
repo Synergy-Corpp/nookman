@@ -391,8 +391,12 @@
                 0 0 60px rgba(255, 0, 255, 0.3);
             position: relative;
             animation: canvasGlow 4s ease-in-out infinite alternate;
-            max-width: 100%;
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 1400px;
             height: auto;
+            max-height: 85vh;
         }
         
         @keyframes canvasGlow {
@@ -810,9 +814,9 @@
         createParticles();
         
         // Game constants - MOBILE OPTIMIZED BIG VERSION
-        const TILE_SIZE = 45; // Much bigger for mobile visibility  
-        const MAZE_WIDTH = Math.floor(1400 / TILE_SIZE);
-        const MAZE_HEIGHT = Math.floor(1050 / TILE_SIZE);
+        const TILE_SIZE = 35; // Optimized for existing maze data  
+        const MAZE_WIDTH = 40; // Fixed to match maze data
+        const MAZE_HEIGHT = 30; // Fixed to match maze data
         
         // Level designs (5 progressive levels) - Same as before but optimized
         const levelMazes = [
@@ -844,7 +848,9 @@
         
         // For now, we'll use the first level design for all levels with minor variations
         function generateLevel(levelNum) {
+            console.log("Generating level", levelNum, "Available levels:", levelMazes.length);
             let baseMaze = JSON.parse(JSON.stringify(levelMazes[0])); // Deep copy
+            console.log("Base maze size:", baseMaze.length, "x", baseMaze[0]?.length);
             
             // Make each level progressively more challenging
             if (levelNum > 1) {
@@ -946,6 +952,14 @@
         // Initialize level
         function initLevel(level) {
             currentMaze = generateLevel(level);
+            
+            // Debug: Verify maze was created
+            if (!currentMaze || currentMaze.length === 0) {
+                console.error("Failed to generate maze for level", level);
+                currentMaze = levelMazes[0]; // Fallback to level 1
+            }
+            console.log("Maze initialized:", currentMaze.length, "x", currentMaze[0]?.length);
+            
             gameState.level = level;
             gameState.bellsCollected = 0;
             gameState.powerMode = false;
@@ -1484,6 +1498,12 @@
         
         // Optimized draw function for mobile
         function draw() {
+            // Debug: Verify canvas and context
+            if (!ctx) {
+                console.error("Canvas context missing!");
+                return;
+            }
+            
             // Clear with simple gradient for better mobile performance
             const bgGradient = ctx.createRadialGradient(
                 canvas.width/2, canvas.height/2, 0,
@@ -1493,6 +1513,18 @@
             bgGradient.addColorStop(1, '#000000');
             ctx.fillStyle = bgGradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Debug: Check if we have a maze to draw
+            if (!currentMaze || currentMaze.length === 0) {
+                console.warn("No maze data available for drawing!");
+                // Draw a test pattern to verify canvas works
+                ctx.fillStyle = '#FF0000';
+                ctx.fillRect(100, 100, 200, 100);
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = '20px Arial';
+                ctx.fillText('MAZE LOADING...', 110, 160);
+                return;
+            }
             
             // Draw maze
             for (let y = 0; y < currentMaze.length; y++) {
@@ -2514,6 +2546,19 @@
         });
         
         // Initialize game
+        console.log("Starting game initialization...");
+        console.log("Canvas:", canvas.width, "x", canvas.height);
+        console.log("Context:", !!ctx);
+        console.log("TILE_SIZE:", TILE_SIZE, "MAZE_WIDTH:", MAZE_WIDTH, "MAZE_HEIGHT:", MAZE_HEIGHT);
+        
+        // Simple direct initialization for testing
+        if (levelMazes.length > 0) {
+            currentMaze = JSON.parse(JSON.stringify(levelMazes[0]));
+            console.log("Direct maze loaded:", currentMaze.length, "x", currentMaze[0]?.length);
+        } else {
+            console.error("No level data available!");
+        }
+        
         resizeCanvas();
         initLevel(1);
         console.log(`🚀 Ultimate Nookman Mobile Ready! Device: ${isMobile ? 'Mobile' : 'Desktop'}`);
