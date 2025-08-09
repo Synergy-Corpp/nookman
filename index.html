@@ -682,7 +682,7 @@
             </div>
         </div>
         
-        <canvas id="gameCanvas" width="1200" height="900"></canvas>
+        <canvas id="gameCanvas" width="1400" height="1050"></canvas>
         
         <div class="instructions">
             🎮 WASD/Arrows on Desktop | Touch controls below on Mobile<br>
@@ -809,10 +809,10 @@
         }
         createParticles();
         
-        // Game constants - HD VERSION
-        const TILE_SIZE = 30; // Increased for HD visibility
-        const MAZE_WIDTH = Math.floor(1200 / TILE_SIZE);
-        const MAZE_HEIGHT = Math.floor(900 / TILE_SIZE);
+        // Game constants - MOBILE OPTIMIZED BIG VERSION
+        const TILE_SIZE = 45; // Much bigger for mobile visibility  
+        const MAZE_WIDTH = Math.floor(1400 / TILE_SIZE);
+        const MAZE_HEIGHT = Math.floor(1050 / TILE_SIZE);
         
         // Level designs (5 progressive levels) - Same as before but optimized
         const levelMazes = [
@@ -876,11 +876,11 @@
             particles: []
         };
         
-        // ULTRA HD NOOK CHARACTER - Crystal Clear
+        // MOBILE OPTIMIZED NOOK CHARACTER - Extra Large
         let nook = {
             x: 20,
             y: 15,
-            size: 20, // Bigger for HD visibility
+            size: 30, // Much bigger for mobile visibility
             direction: { x: 0, y: 0 },
             nextDirection: { x: 0, y: 0 },
             mouthOpen: true,
@@ -934,6 +934,14 @@
         
         let keys = {};
         let animationTime = 0;
+        
+        // MOBILE PERFORMANCE OPTIMIZATION
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                         ('ontouchstart' in window) || window.innerWidth < 768;
+        const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+        const PERFORMANCE_MODE = isMobile || isLowEnd;
+        
+        console.log('Performance Mode:', PERFORMANCE_MODE ? 'ENABLED (Mobile/LowEnd)' : 'DISABLED (Desktop)');
         
         // Initialize level
         function initLevel(level) {
@@ -1099,35 +1107,45 @@
             return currentMaze[y] && currentMaze[y][x] !== 1;
         }
         
-        // Create visual particles
+        // MOBILE OPTIMIZED PARTICLES - Reduced complexity for performance
         function createParticle(x, y, color, count = 3) {
-            for (let i = 0; i < count; i++) {
+            // Reduce particle count on mobile for better performance
+            const particleCount = PERFORMANCE_MODE ? Math.min(count, 2) : count;
+            
+            for (let i = 0; i < particleCount; i++) {
                 gameState.particles.push({
                     x: x * TILE_SIZE + TILE_SIZE/2,
                     y: y * TILE_SIZE + TILE_SIZE/2,
                     vx: (Math.random() - 0.5) * 6,
                     vy: (Math.random() - 0.5) * 6,
                     life: 1,
-                    decay: 0.025,
+                    decay: PERFORMANCE_MODE ? 0.04 : 0.025, // Faster decay on mobile
                     color: color,
-                    size: Math.random() * 3 + 2
+                    size: Math.random() * (PERFORMANCE_MODE ? 4 : 3) + 3 // Bigger particles on mobile
                 });
+            }
+            
+            // Limit total particles on mobile
+            if (PERFORMANCE_MODE && gameState.particles.length > 15) {
+                gameState.particles.splice(0, gameState.particles.length - 15);
             }
         }
         
-        // ULTRA HD BELL GRAPHICS - SUPER VISIBLE
+        // MOBILE OPTIMIZED BELL GRAPHICS - EXTRA LARGE & VISIBLE
         function drawBell(x, y, isPowerBell = false) {
             const centerX = x * TILE_SIZE + TILE_SIZE/2;
             const centerY = y * TILE_SIZE + TILE_SIZE/2;
-            const baseSize = isPowerBell ? 12 : 8; // Bigger for HD
-            const pulse = Math.sin(animationTime * 0.15 + x + y) * 0.4 + 0.8;
+            const baseSize = isPowerBell ? 20 : 15; // Much bigger for mobile visibility
+            const pulse = PERFORMANCE_MODE ? 1.0 : Math.sin(animationTime * 0.15 + x + y) * 0.3 + 0.9;
             const size = baseSize * pulse;
             
             ctx.save();
             
-            // INTENSE GLOW EFFECTS
+            // Mobile-optimized glow effects
             ctx.shadowColor = isPowerBell ? '#FFD700' : '#FFA500';
-            ctx.shadowBlur = isPowerBell ? 25 * pulse : 18 * pulse;
+            ctx.shadowBlur = PERFORMANCE_MODE ? 
+                (isPowerBell ? 15 : 10) : 
+                (isPowerBell ? 25 * pulse : 18 * pulse);
             
             // Outer glow ring
             const outerGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, size + 8);
@@ -1480,13 +1498,27 @@
             for (let y = 0; y < currentMaze.length; y++) {
                 for (let x = 0; x < currentMaze[y].length; x++) {
                     switch (currentMaze[y][x]) {
-                        case 1: // ULTRA HD WALLS - Premium 3D Textured Blocks
+                        case 1: // MOBILE OPTIMIZED WALLS - Performance & Visibility Focused
                             const wallX = x * TILE_SIZE;
                             const wallY = y * TILE_SIZE;
                             
                             ctx.save();
                             
-                            // Ultra HD 3D Wall with multiple gradients
+                            if (PERFORMANCE_MODE) {
+                                // Simple mobile-friendly walls
+                                const simpleGrad = ctx.createLinearGradient(wallX, wallY, wallX + TILE_SIZE, wallY + TILE_SIZE);
+                                simpleGrad.addColorStop(0, '#4A90E2');
+                                simpleGrad.addColorStop(1, '#002266');
+                                
+                                ctx.fillStyle = simpleGrad;
+                                ctx.fillRect(wallX, wallY, TILE_SIZE, TILE_SIZE);
+                                
+                                // Simple border
+                                ctx.strokeStyle = '#00AAFF';
+                                ctx.lineWidth = 2;
+                                ctx.strokeRect(wallX, wallY, TILE_SIZE, TILE_SIZE);
+                            } else {
+                                // Ultra HD 3D Wall with multiple gradients (desktop only)
                             const wallGradient = ctx.createLinearGradient(wallX, wallY, wallX + TILE_SIZE, wallY + TILE_SIZE);
                             wallGradient.addColorStop(0, '#4A90E2'); // Bright top-left
                             wallGradient.addColorStop(0.2, '#0066FF'); // Main blue
@@ -1591,7 +1623,7 @@
                             ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
                             ctx.fillRect(wallX + TILE_SIZE - 2, wallY + TILE_SIZE - 2, 2, 2); // Bottom-right corner
                             
-                            // Animated energy pulse effect (occasional)
+                            // Animated energy pulse effect (occasional) - desktop only
                             if (Math.random() < 0.01) {
                                 const pulseGrad = ctx.createRadialGradient(wallX + TILE_SIZE/2, wallY + TILE_SIZE/2, 0,
                                                                           wallX + TILE_SIZE/2, wallY + TILE_SIZE/2, TILE_SIZE);
@@ -1601,6 +1633,7 @@
                                 
                                 ctx.fillStyle = pulseGrad;
                                 ctx.fillRect(wallX, wallY, TILE_SIZE, TILE_SIZE);
+                            }
                             }
                             
                             ctx.restore();
@@ -1617,20 +1650,32 @@
                 }
             }
             
-            // ULTRA HD PARTICLE SYSTEM - Maximum Visual Impact
+            // MOBILE OPTIMIZED PARTICLE SYSTEM - Performance First
             gameState.particles.forEach((particle, index) => {
                 ctx.save();
                 
-                // Advanced particle alpha with pulsing
-                const basePulse = Math.sin(animationTime * 0.2 + index * 0.5) * 0.1 + 0.9;
-                ctx.globalAlpha = particle.life * basePulse;
+                // Simplified alpha for mobile performance
+                ctx.globalAlpha = particle.life;
                 
-                // Ultra HD particle effects based on type
-                const particleGrad = ctx.createRadialGradient(particle.x, particle.y, 0, 
-                                                            particle.x, particle.y, particle.size * 2.5);
-                
-                // Determine particle type by color and enhance accordingly
-                if (particle.color === '#ffd700') {
+                if (PERFORMANCE_MODE) {
+                    // Simple mobile-friendly particles
+                    ctx.fillStyle = particle.color;
+                    ctx.shadowColor = particle.color;
+                    ctx.shadowBlur = particle.size;
+                    
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    // Full HD particle effects for desktop
+                    const basePulse = Math.sin(animationTime * 0.2 + index * 0.5) * 0.1 + 0.9;
+                    ctx.globalAlpha = particle.life * basePulse;
+                    
+                    const particleGrad = ctx.createRadialGradient(particle.x, particle.y, 0, 
+                                                                particle.x, particle.y, particle.size * 2.5);
+                    
+                    // Determine particle type by color and enhance accordingly
+                    if (particle.color === '#ffd700') {
                     // Gold coin particles - Premium sparkle effect
                     particleGrad.addColorStop(0, '#FFFFFF');
                     particleGrad.addColorStop(0.2, '#FFFF99');
@@ -1763,44 +1808,44 @@
                     ctx.beginPath();
                     ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
                     ctx.fill();
-                }
-                
-                // HD Particle trails
-                if (particle.vx !== undefined && particle.vy !== undefined) {
-                    const trailLength = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy) * 3;
-                    const trailGrad = ctx.createLinearGradient(
-                        particle.x, particle.y,
-                        particle.x - particle.vx * 2, particle.y - particle.vy * 2
-                    );
-                    trailGrad.addColorStop(0, particle.color + '80'); // Semi-transparent
-                    trailGrad.addColorStop(1, particle.color + '00'); // Fully transparent
+                    }
                     
-                    ctx.strokeStyle = trailGrad;
-                    ctx.lineWidth = particle.size * 0.5;
-                    ctx.lineCap = 'round';
-                    ctx.shadowBlur = 5;
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(particle.x, particle.y);
-                    ctx.lineTo(particle.x - particle.vx * 2, particle.y - particle.vy * 2);
-                    ctx.stroke();
+                    // HD Particle trails (desktop only for performance)
+                    if (!PERFORMANCE_MODE && particle.vx !== undefined && particle.vy !== undefined) {
+                        const trailGrad = ctx.createLinearGradient(
+                            particle.x, particle.y,
+                            particle.x - particle.vx * 2, particle.y - particle.vy * 2
+                        );
+                        trailGrad.addColorStop(0, particle.color + '80'); // Semi-transparent
+                        trailGrad.addColorStop(1, particle.color + '00'); // Fully transparent
+                        
+                        ctx.strokeStyle = trailGrad;
+                        ctx.lineWidth = particle.size * 0.5;
+                        ctx.lineCap = 'round';
+                        ctx.shadowBlur = 5;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(particle.x - particle.vx * 2, particle.y - particle.vy * 2);
+                        ctx.stroke();
+                    }
                 }
                 
                 ctx.restore();
             });
             
-            // ULTRA HD NOOK CHARACTER - Maximum Definition & Detail
+            // MOBILE OPTIMIZED NOOK CHARACTER - Performance & Visibility First
             const nookCenterX = nook.x * TILE_SIZE + TILE_SIZE/2;
             const nookCenterY = nook.y * TILE_SIZE + TILE_SIZE/2;
             
             ctx.save();
             
-            // Advanced animation system for HD
+            // Optimized animation system
             nook.walkCycle += 0.15;
             nook.eyeBlinkFrame += 1;
-            const walkBounce = Math.sin(nook.walkCycle) * 3;
-            const tailSwish = Math.sin(nook.walkCycle * 0.7) * 0.4;
-            const earTwitch = Math.sin(nook.walkCycle * 1.2) * 0.1;
+            const walkBounce = PERFORMANCE_MODE ? Math.sin(nook.walkCycle) * 2 : Math.sin(nook.walkCycle) * 3;
+            const tailSwish = PERFORMANCE_MODE ? Math.sin(nook.walkCycle * 0.7) * 0.2 : Math.sin(nook.walkCycle * 0.7) * 0.4;
+            const earTwitch = PERFORMANCE_MODE ? 0 : Math.sin(nook.walkCycle * 1.2) * 0.1;
             
             // Ultra HD Power mode effects
             if (gameState.powerMode) {
@@ -2157,7 +2202,7 @@
             ghosts.forEach((ghost, index) => {
                 const ghostCenterX = ghost.x * TILE_SIZE + TILE_SIZE/2;
                 const ghostCenterY = ghost.y * TILE_SIZE + TILE_SIZE/2;
-                const ghostRadius = 12; // Bigger for HD
+                const ghostRadius = 18; // Much bigger for mobile visibility
                 const ghostBounce = Math.sin(animationTime * 0.15 + index) * 2;
                 
                 ctx.save();
@@ -2440,7 +2485,19 @@
             return isMobile ? Math.max(100, 180 - (gameState.level * 8)) : Math.max(80, 150 - (gameState.level * 10));
         }
         
+        // MOBILE OPTIMIZED GAME LOOP with frame rate control
+        let lastFrameTime = 0;
+        const targetFPS = PERFORMANCE_MODE ? 45 : 60; // Lower FPS on mobile for better performance
+        const frameDelay = 1000 / targetFPS;
+        
         function gameLoop(currentTime) {
+            // Frame rate limiting for mobile performance
+            if (currentTime - lastFrameTime < frameDelay) {
+                requestAnimationFrame(gameLoop);
+                return;
+            }
+            lastFrameTime = currentTime;
+            
             if (!gameState.gameComplete && currentTime - lastTime >= getGameSpeed()) {
                 update();
                 lastTime = currentTime;
