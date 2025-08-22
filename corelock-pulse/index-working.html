@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 CORELOCK PULSE - $LOCK Field Amplifier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@10/dist/framer-motion.umd.js"></script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background: #000000;
+            color: #00ffaa;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+        
+        .glow-text {
+            text-shadow: 
+                0 0 5px rgba(0, 255, 170, 0.8),
+                0 0 10px rgba(0, 255, 170, 0.6),
+                0 0 15px rgba(0, 255, 170, 0.4),
+                0 0 20px rgba(0, 255, 170, 0.2);
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            from {
+                text-shadow: 
+                    0 0 5px rgba(0, 255, 170, 0.8),
+                    0 0 10px rgba(0, 255, 170, 0.6),
+                    0 0 15px rgba(0, 255, 170, 0.4),
+                    0 0 20px rgba(0, 255, 170, 0.2);
+            }
+            to {
+                text-shadow: 
+                    0 0 10px rgba(0, 255, 170, 1),
+                    0 0 20px rgba(0, 255, 170, 0.8),
+                    0 0 30px rgba(0, 255, 170, 0.6),
+                    0 0 40px rgba(0, 255, 170, 0.4);
+            }
+        }
+        
+        .field-container {
+            background: 
+                radial-gradient(ellipse at top, rgba(0, 255, 170, 0.1) 0%, transparent 70%),
+                radial-gradient(ellipse at bottom, rgba(168, 85, 247, 0.1) 0%, transparent 70%),
+                linear-gradient(180deg, #000000 0%, #001122 50%, #000000 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .field-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(45deg, transparent 49%, rgba(0, 255, 170, 0.02) 50%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, rgba(0, 255, 170, 0.02) 50%, transparent 51%);
+            background-size: 20px 20px;
+            animation: fieldGrid 20s linear infinite;
+        }
+        
+        @keyframes fieldGrid {
+            0% { transform: translateX(0) translateY(0); }
+            100% { transform: translateX(20px) translateY(20px); }
+        }
+        
+        .core-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 170, 0.3);
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                0 0 20px rgba(0, 255, 170, 0.1),
+                inset 0 1px 0 rgba(0, 255, 170, 0.1);
+            border-radius: 8px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .core-card:hover {
+            border-color: rgba(0, 255, 170, 0.5);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 170, 0.2),
+                inset 0 1px 0 rgba(0, 255, 170, 0.2);
+        }
+        
+        .neon-border {
+            border: 1px solid rgba(0, 255, 170, 0.5);
+            box-shadow: 
+                0 0 5px rgba(0, 255, 170, 0.3),
+                0 0 10px rgba(0, 255, 170, 0.2),
+                0 0 15px rgba(0, 255, 170, 0.1),
+                inset 0 0 5px rgba(0, 255, 170, 0.1);
+            animation: neonPulse 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes neonPulse {
+            from {
+                box-shadow: 
+                    0 0 5px rgba(0, 255, 170, 0.3),
+                    0 0 10px rgba(0, 255, 170, 0.2),
+                    0 0 15px rgba(0, 255, 170, 0.1),
+                    inset 0 0 5px rgba(0, 255, 170, 0.1);
+            }
+            to {
+                box-shadow: 
+                    0 0 10px rgba(0, 255, 170, 0.6),
+                    0 0 20px rgba(0, 255, 170, 0.4),
+                    0 0 30px rgba(0, 255, 170, 0.2),
+                    inset 0 0 10px rgba(0, 255, 170, 0.2);
+            }
+        }
+        
+        .hologram-text {
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(
+                45deg,
+                #00ffaa,
+                #00ff88,
+                #a855f7,
+                #00ffaa
+            );
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: hologramShift 4s ease-in-out infinite;
+        }
+        
+        @keyframes hologramShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .grid {
+            display: grid;
+            gap: 24px;
+            padding: 24px;
+        }
+        
+        .grid-cols-12 {
+            grid-template-columns: repeat(12, 1fr);
+        }
+        
+        .col-span-12 { grid-column: span 12; }
+        .col-span-4 { grid-column: span 4; }
+        .col-span-8 { grid-column: span 8; }
+        .col-span-6 { grid-column: span 6; }
+        
+        @media (max-width: 1024px) {
+            .col-span-4, .col-span-8, .col-span-6 { grid-column: span 12; }
+        }
+        
+        .metric-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: rgba(0, 255, 136, 0.05);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-item:hover {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.5);
+            transform: scale(1.02);
+        }
+        
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .buy {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+        
+        .sell {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #ff4444;
+        }
+        
+        .holder-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .rank-1 {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+        }
+        
+        .rank-2 {
+            background: rgba(192, 192, 192, 0.1);
+            border: 1px solid rgba(192, 192, 192, 0.3);
+            color: #c0c0c0;
+        }
+        
+        .rank-3 {
+            background: rgba(255, 140, 0, 0.1);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            color: #ff8c00;
+        }
+        
+        .rank-other {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+        }
+        
+        .fold-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(0, 255, 170, 0.5);
+            border-radius: 8px;
+            padding: 16px;
+            z-index: 1000;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        #three-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .text-2xl { font-size: 1.5rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        
+        .font-bold { font-weight: 700; }
+        .font-mono { font-family: 'Courier New', monospace; }
+        
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .space-x-2 > * + * { margin-left: 0.5rem; }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        
+        .opacity-70 { opacity: 0.7; }
+        .uppercase { text-transform: uppercase; }
+        .break-all { word-break: break-all; }
+        
+        .max-h-80 {
+            max-height: 20rem;
+            overflow-y: auto;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 170, 0.3);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="three-container"></div>
+    
+    <div class="field-container">
+        <div class="content">
+            <!-- Header -->
+            <header style="padding: 24px; border-bottom: 1px solid rgba(0, 255, 136, 0.3);">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-2xl font-bold glow-text hologram-text">
+                            🔒 CORELOCK PULSE
+                        </div>
+                        <div class="text-sm opacity-70">
+                            Field Amplifier | $LOCK
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="pulse" style="width: 12px; height: 12px; background: #00ff88; border-radius: 50%;"></div>
+                        <span class="text-sm">FIELD ACTIVE</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-12">
+                <!-- Token Metrics -->
+                <div class="col-span-4">
+                    <div class="core-card">
+                        <div class="text-xl font-bold glow-text mb-6 flex items-center space-x-2">
+                            <span>🔒</span>
+                            <span>$LOCK METRICS</span>
+                        </div>
+                        
+                        <div class="space-y-4" id="metrics-container">
+                            <div class="metric-item">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-2xl">💰</span>
+                                    <div>
+                                        <div class="text-sm opacity-70 uppercase">PRICE</div>
+                                        <div class="text-lg font-bold" id="price">$0.001234</div>
+                                    </div>
+                                </div>
+                                <div class="text-sm font-bold px-2 py-1 rounded buy" id="price-change">+2.34%</div>
+                            </div>
+                            
+                            <div class="metric-item">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-2xl">📊</span>
+                                    <div>
+                                        <div class="text-sm opacity-70 uppercase">MARKET CAP</div>
+                                        <div class="text-lg font-bold">$1.23M</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-item">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-2xl">📈</span>
+                                    <div>
+                                        <div class="text-sm opacity-70 uppercase">VOLUME 24H</div>
+                                        <div class="text-lg font-bold">$456K</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="metric-item">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-2xl">👥</span>
+                                    <div>
+                                        <div class="text-sm opacity-70 uppercase">HOLDERS</div>
+                                        <div class="text-lg font-bold" id="holders">1,234</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 neon-border" style="border-radius: 8px;">
+                            <div class="text-xs opacity-70 uppercase mb-2">Token Address</div>
+                            <div class="text-xs font-mono break-all">GbGXSKagP8Pwak6JV7aZEVoU3TuxX4n89aTvT9oepump</div>
+                        </div>
+                        
+                        <div class="mt-4 flex items-center justify-center space-x-2 pulse">
+                            <div style="width: 8px; height: 8px; background: #00ff88; border-radius: 50%;"></div>
+                            <span class="text-xs uppercase">LIVE DATA STREAM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Chart -->
+                <div class="col-span-8">
+                    <div class="core-card" style="height: 400px;">
+                        <div class="text-xl font-bold glow-text mb-4 flex items-center space-x-2">
+                            <span>📈</span>
+                            <span>PRICE FIELD</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="text-2xl font-bold" id="chart-price">$0.001234</div>
+                            <div class="px-2 py-1 rounded text-sm font-bold buy" id="chart-change">+2.34%</div>
+                        </div>
+                        
+                        <div style="height: 250px; background: rgba(0, 255, 170, 0.05); border: 1px solid rgba(0, 255, 170, 0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <div class="glow-text">📊 LIVE CHART VISUALIZATION</div>
+                        </div>
+                        
+                        <div class="mt-4 flex items-center justify-center space-x-2 pulse">
+                            <div style="width: 8px; height: 8px; background: #00ff88; border-radius: 50%;"></div>
+                            <span class="text-xs uppercase">LIVE PRICE FIELD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction Feed -->
+                <div class="col-span-6">
+                    <div class="core-card">
+                        <div class="text-xl font-bold glow-text mb-4 flex items-center space-x-2">
+                            <span>⚡</span>
+                            <span>LIVE FEED</span>
+                        </div>
+                        
+                        <div class="max-h-80 scrollbar-thin" id="transaction-feed">
+                            <!-- Transactions will be populated here -->
+                        </div>
+                        
+                        <div class="mt-4 flex items-center justify-between text-xs opacity-70">
+                            <span id="tx-count">0 transactions tracked</span>
+                            <span class="flex items-center space-x-2">
+                                <div class="pulse" style="width: 4px; height: 4px; background: #00ff88; border-radius: 50%;"></div>
+                                <span>REAL-TIME</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Holder Leaderboard -->
+                <div class="col-span-6">
+                    <div class="core-card">
+                        <div class="text-xl font-bold glow-text mb-4 flex items-center space-x-2">
+                            <span>🏆</span>
+                            <span>TOP HOLDERS</span>
+                        </div>
+                        
+                        <div class="max-h-80 scrollbar-thin" id="holder-leaderboard">
+                            <!-- Holders will be populated here -->
+                        </div>
+                        
+                        <div class="mt-4 flex items-center justify-between text-xs opacity-70">
+                            <span>Top 10 holders</span>
+                            <span class="flex items-center space-x-2">
+                                <div class="pulse" style="width: 4px; height: 4px; background: #00ff88; border-radius: 50%;"></div>
+                                <span>LIVE RANKINGS</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fold Trigger HUD -->
+    <div class="fold-indicator">
+        <div style="text-align: center;">
+            <div class="text-xs opacity-70 uppercase mb-2 pulse">FOLD NEXUS</div>
+            <div class="flex items-center space-x-4">
+                <div style="text-align: center;">
+                    <div class="text-2xl font-bold" id="event-count">0</div>
+                    <div class="text-xs opacity-70">EVENTS</div>
+                </div>
+                <div style="color: #00ff88;">|</div>
+                <div style="text-align: center;">
+                    <div class="text-lg font-bold" style="color: #a855f7;" id="fold-countdown">23</div>
+                    <div class="text-xs" style="color: #a855f7; opacity: 0.7;">TO FOLD</div>
+                </div>
+            </div>
+            <div class="mt-2 text-xs opacity-50 pulse" id="folds-completed">0 FOLDS COMPLETED</div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        
+        // Three.js Field Visualizer
+        function FieldVisualizer() {
+            const mountRef = useRef();
+            
+            useEffect(() => {
+                if (!mountRef.current) return;
+                
+                const scene = new THREE.Scene();
+                scene.background = new THREE.Color(0x000000);
+                
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.z = 15;
+                
+                const renderer = new THREE.WebGLRenderer({ alpha: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(window.devicePixelRatio);
+                
+                mountRef.current.appendChild(renderer.domElement);
+                
+                // Create particle system
+                const geometry = new THREE.BufferGeometry();
+                const vertices = [];
+                const colors = [];
+                
+                for (let i = 0; i < 3000; i++) {
+                    const x = (Math.random() - 0.5) * 20;
+                    const y = (Math.random() - 0.5) * 20;
+                    const z = (Math.random() - 0.5) * 20;
+                    
+                    const scale = Math.sin(i * 0.1) * Math.cos(i * 0.05);
+                    vertices.push(x + scale, y + scale, z + scale);
+                    
+                    const intensity = Math.random();
+                    colors.push(0, intensity * 0.8 + 0.2, intensity * 0.3);
+                }
+                
+                geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+                
+                const material = new THREE.PointsMaterial({
+                    size: 0.05,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.8,
+                    blending: THREE.AdditiveBlending
+                });
+                
+                const particles = new THREE.Points(geometry, material);
+                scene.add(particles);
+                
+                // Add ambient lighting
+                const ambientLight = new THREE.AmbientLight(0x00ff88, 0.3);
+                scene.add(ambientLight);
+                
+                // Animation loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    
+                    particles.rotation.x += 0.001;
+                    particles.rotation.y += 0.002;
+                    
+                    const time = Date.now() * 0.001;
+                    const scale = 1 + Math.sin(time * 2) * 0.1;
+                    particles.scale.setScalar(scale);
+                    
+                    camera.position.x = Math.cos(time * 0.0005) * 20;
+                    camera.position.z = Math.sin(time * 0.0005) * 20;
+                    camera.lookAt(0, 0, 0);
+                    
+                    renderer.render(scene, camera);
+                }
+                
+                animate();
+                
+                const handleResize = () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                };
+                
+                window.addEventListener('resize', handleResize);
+                
+                return () => {
+                    window.removeEventListener('resize', handleResize);
+                    if (mountRef.current && renderer.domElement) {
+                        mountRef.current.removeChild(renderer.domElement);
+                    }
+                    renderer.dispose();
+                };
+            }, []);
+            
+            return React.createElement('div', { ref: mountRef, id: 'three-container' });
+        }
+        
+        // Main App
+        function CoreLockApp() {
+            const [eventCount, setEventCount] = useState(0);
+            const [price, setPrice] = useState(0.001234);
+            const [holders, setHolders] = useState(1234);
+            const [transactions, setTransactions] = useState([]);
+            const [topHolders, setTopHolders] = useState([]);
+            
+            // Initialize mock data
+            useEffect(() => {
+                // Generate mock transactions
+                const generateTransaction = () => {
+                    const type = Math.random() > 0.5 ? 'buy' : 'sell';
+                    return {
+                        id: Date.now() + Math.random(),
+                        type,
+                        amount: Math.random() * 100000,
+                        price: price * (0.98 + Math.random() * 0.04),
+                        wallet: `${type === 'buy' ? 'Bull' : 'Bear'}${Math.random().toString(36).substr(2, 4)}...`,
+                        timestamp: Date.now()
+                    };
+                };
+                
+                // Generate mock holders
+                const generateHolders = () => {
+                    const holders = [];
+                    const prefixes = ['Core', 'Lock', 'Pulse', 'Field', 'Vault', 'Node', 'Sync', 'Wave'];
+                    
+                    for (let i = 0; i < 10; i++) {
+                        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+                        holders.push({
+                            rank: i + 1,
+                            address: `${prefix}${Math.random().toString(36).substr(2, 6)}...`,
+                            balance: Math.random() * 1000000,
+                            percentage: Math.random() * 10
+                        });
+                    }
+                    
+                    return holders.sort((a, b) => b.balance - a.balance);
+                };
+                
+                setTopHolders(generateHolders());
+                
+                // Add transactions periodically
+                const interval = setInterval(() => {
+                    const newTx = generateTransaction();
+                    setTransactions(prev => [newTx, ...prev.slice(0, 19)]);
+                    setEventCount(prev => prev + 1);
+                    
+                    // Update price slightly
+                    setPrice(prev => prev * (0.999 + Math.random() * 0.002));
+                    
+                    // Update holders occasionally
+                    if (Math.random() < 0.1) {
+                        setHolders(prev => prev + Math.floor(Math.random() * 10 - 5));
+                    }
+                }, 3000);
+                
+                return () => clearInterval(interval);
+            }, [price]);
+            
+            // Update DOM elements
+            useEffect(() => {
+                document.getElementById('price').textContent = `$${price.toFixed(6)}`;
+                document.getElementById('chart-price').textContent = `$${price.toFixed(6)}`;
+                document.getElementById('holders').textContent = holders.toLocaleString();
+                document.getElementById('event-count').textContent = eventCount;
+                document.getElementById('fold-countdown').textContent = 23 - (eventCount % 23);
+                document.getElementById('folds-completed').textContent = `${Math.floor(eventCount / 23)} FOLDS COMPLETED`;
+                document.getElementById('tx-count').textContent = `${transactions.length} transactions tracked`;
+            }, [price, holders, eventCount, transactions.length]);
+            
+            // Render transactions
+            useEffect(() => {
+                const container = document.getElementById('transaction-feed');
+                container.innerHTML = transactions.map(tx => `
+                    <div class="transaction-item ${tx.type}">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-2xl">${tx.type === 'buy' ? '🚀' : '📉'}</span>
+                            <div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm font-bold uppercase">${tx.type}</span>
+                                    <span class="text-xs opacity-70">${Math.floor(tx.amount).toLocaleString()} $LOCK</span>
+                                </div>
+                                <div class="text-xs opacity-50 font-mono">${tx.wallet}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold">$${tx.price.toFixed(6)}</div>
+                            <div class="text-xs opacity-50">now</div>
+                        </div>
+                    </div>
+                `).join('');
+            }, [transactions]);
+            
+            // Render holders
+            useEffect(() => {
+                const container = document.getElementById('holder-leaderboard');
+                container.innerHTML = topHolders.map(holder => {
+                    const rankClass = holder.rank === 1 ? 'rank-1' : 
+                                     holder.rank === 2 ? 'rank-2' : 
+                                     holder.rank === 3 ? 'rank-3' : 'rank-other';
+                    const emoji = holder.rank === 1 ? '👑' : 
+                                 holder.rank === 2 ? '🥈' : 
+                                 holder.rank === 3 ? '🥉' : '💎';
+                    
+                    return `
+                        <div class="holder-item ${rankClass}">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xl">${emoji}</span>
+                                    <span class="text-sm font-bold">#${holder.rank}</span>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-mono font-bold">${holder.address}</div>
+                                    <div class="text-xs opacity-70">${holder.percentage.toFixed(2)}% of supply</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-sm font-bold">${Math.floor(holder.balance).toLocaleString()} $LOCK</div>
+                                <div class="text-xs opacity-70">$${Math.floor(holder.balance * price).toLocaleString()}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }, [topHolders, price]);
+            
+            return React.createElement(React.Fragment, null,
+                React.createElement(FieldVisualizer)
+            );
+        }
+        
+        // Render the app
+        ReactDOM.render(
+            React.createElement(CoreLockApp),
+            document.getElementById('three-container')
+        );
+    </script>
+</body>
+</html>

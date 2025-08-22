@@ -1,0 +1,14 @@
+127.0.0.1 - - [22/Aug/2025 23:03:37] "GET /index-working.html HTTP/1.1" 200 -
+127.0.0.1 - - [22/Aug/2025 23:03:46] code 404, message File not found
+127.0.0.1 - - [22/Aug/2025 23:03:46] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [22/Aug/2025 23:24:40] "GET /index-working.html HTTP/1.1" 304 -
+127.0.0.1 - - [22/Aug/2025 23:25:12] "GET /corelock-amplified.html HTTP/1.1" 200 -
+127.0.0.1 - - [22/Aug/2025 23:25:12] "GET /corelock.jpeg HTTP/1.1" 200 -
+127.0.0.1 - - [22/Aug/2025 23:29:17] "GET /corelock-amplified.html HTTP/1.1" 200 -
+127.0.0.1 - - [22/Aug/2025 23:29:17] "GET /corelock.jpeg HTTP/1.1" 200 -
+127.0.0.1 - - [23/Aug/2025 00:09:13] "GET /corelock-ultimate.html HTTP/1.1" 200 -
+127.0.0.1 - - [23/Aug/2025 00:09:13] "GET /corelock.jpeg HTTP/1.1" 304 -
+127.0.0.1 - - [23/Aug/2025 00:21:43] "GET /corelock-ultimate.html HTTP/1.1" 304 -
+127.0.0.1 - - [23/Aug/2025 00:21:44] "GET /corelock.jpeg HTTP/1.1" 200 -
+127.0.0.1 - - [23/Aug/2025 00:21:44] code 404, message File not found
+127.0.0.1 - - [23/Aug/2025 00:21:44] "GET /favicon.ico HTTP/1.1" 404 -
