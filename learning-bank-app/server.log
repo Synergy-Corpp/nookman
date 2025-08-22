@@ -1,0 +1,6 @@
+🏦 Learning Bank Server running on http://localhost:3000
+📊 Database: SQLite (in-memory)
+🔐 JWT Secret: Make sure to set JWT_SECRET in production
+🚀 Ready to accept requests!
+Connected to SQLite database
+Database tables created successfully

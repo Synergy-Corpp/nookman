@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Bank - Digital Banking Made Simple</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>Learning Bank</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#personal">Personal</a></li>
+                <li><a href="#business">Business</a></li>
+                <li><a href="loans.html" class="loans-link">💰 Get Loan</a></li>
+                <li><a href="#support">Support</a></li>
+                <li><a href="#" id="loginBtn" class="login-btn">Online Banking</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Digital Banking Made Simple</h1>
+                <p>Experience secure, fast, and reliable banking with real-time transfers and competitive exchange rates.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" id="signupBtn">Get Started</button>
+                    <button class="btn btn-secondary" id="learnMoreBtn">Learn More</button>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3>2.5M+</h3>
+                    <p>Active Users</p>
+                </div>
+                <div class="stat">
+                    <h3>$50B+</h3>
+                    <p>Transferred</p>
+                </div>
+                <div class="stat">
+                    <h3>150+</h3>
+                    <p>Countries</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Currency Section -->
+        <section class="currency-section">
+            <div class="container">
+                <h2>Live Exchange Rates</h2>
+                <div class="currency-converter">
+                    <div class="converter-form">
+                        <div class="input-group">
+                            <input type="number" id="amount" placeholder="1000" value="1000">
+                            <select id="fromCurrency">
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="GBP">GBP</option>
+                                <option value="CAD">CAD</option>
+                            </select>
+                        </div>
+                        <div class="swap-btn">⇄</div>
+                        <div class="input-group">
+                            <input type="number" id="convertedAmount" readonly>
+                            <select id="toCurrency">
+                                <option value="EUR">EUR</option>
+                                <option value="USD">USD</option>
+                                <option value="GBP">GBP</option>
+                                <option value="CAD">CAD</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="convertBtn">Convert</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services">
+            <div class="container">
+                <h2>Our Services</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">💳</div>
+                        <h3>Digital Accounts</h3>
+                        <p>Multi-currency accounts with real-time balance tracking</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🌍</div>
+                        <h3>International Transfers</h3>
+                        <p>Send money globally with competitive exchange rates</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">📱</div>
+                        <h3>Mobile Banking</h3>
+                        <p>Full banking functionality on your mobile device</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🔒</div>
+                        <h3>Bank-Level Security</h3>
+                        <p>Advanced encryption and fraud protection</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Online Banking Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="form-footer">
+                    Don't have an account? <a href="#" id="showSignup">Sign up here</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content signup-modal">
+            <span class="close">&times;</span>
+            <div class="signup-header">
+                <h2>Join Learning Bank</h2>
+                <p>Start your digital banking journey today</p>
+            </div>
+            <form id="signupForm" class="enhanced-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required placeholder="Enter your first name">
+                        <div class="input-icon">👤</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required placeholder="Enter your last name">
+                        <div class="input-icon">👤</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" name="email" required placeholder="your.email@example.com">
+                    <div class="input-icon">📧</div>
+                    <div id="emailValidation" class="validation-message"></div>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" name="password" required placeholder="Create a strong password">
+                    <div class="input-icon">🔒</div>
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill"></div>
+                        </div>
+                        <div class="strength-text">Password strength</div>
+                    </div>
+                    <div class="password-requirements">
+                        <div class="requirement" data-requirement="length">
+                            <span class="check">✓</span> At least 6 characters
+                        </div>
+                        <div class="requirement" data-requirement="number">
+                            <span class="check">✓</span> Contains a number
+                        </div>
+                        <div class="requirement" data-requirement="letter">
+                            <span class="check">✓</span> Contains a letter
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                    <div class="input-icon">🔒</div>
+                    <div id="passwordMatch" class="validation-message"></div>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <span class="checkmark"></span>
+                        I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="receiveUpdates">
+                        <span class="checkmark"></span>
+                        I want to receive updates about new features and offers
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary enhanced-submit-btn">
+                    <span class="btn-text">Create My Account</span>
+                    <span class="btn-loader" style="display: none;">Creating Account...</span>
+                </button>
+                <div class="signup-benefits">
+                    <h4>What you get with Learning Bank:</h4>
+                    <ul>
+                        <li>✅ $1,000 starting balance</li>
+                        <li>✅ Free international transfers</li>
+                        <li>✅ Real-time currency conversion</li>
+                        <li>✅ Bank-level security</li>
+                        <li>✅ 24/7 customer support</li>
+                    </ul>
+                </div>
+                <p class="form-footer">
+                    Already have an account? <a href="#" id="showLogin" class="login-link">Sign in here</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

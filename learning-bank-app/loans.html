@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Loans - Quick Online Loan Application</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="loans.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>💰 Learning Loans</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Banking</a></li>
+                <li><a href="#home">Loans</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#rates">Rates</a></li>
+                <li><a href="admin.html" class="admin-link">Loan Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="loan-hero">
+            <div class="hero-content">
+                <h1>APPLY FOR A QUICK LOAN ONLINE NOW</h1>
+                <div class="loan-benefits">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">✅</div>
+                        <span>No Credit Score Check</span>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🇺🇸</div>
+                        <span>At least 18 years old U.S. citizen with valid SSN</span>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🏦</div>
+                        <span>Must have valid Local Bank or Credit Union</span>
+                    </div>
+                </div>
+                
+                <div class="loan-intro">
+                    <p>At our <strong>Learning Loans</strong> center, we offer personal loans for all levels of credit score (Good or worst credit score). Apply now to get funded as soon as tomorrow!</p>
+                    
+                    <div class="cta-section">
+                        <h2>Do you want to apply?</h2>
+                        <div class="cta-buttons">
+                            <button class="btn btn-primary loan-apply-btn" onclick="startApplication()">
+                                YES! Apply Now
+                            </button>
+                            <button class="btn btn-secondary" onclick="learnMore()">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loan Application Form -->
+        <section id="loan-application" class="loan-application-section" style="display: none;">
+            <div class="container">
+                <div class="application-header">
+                    <h2>Loan Application Form</h2>
+                    <p>Fill out the following information to complete your loan application</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">Step <span id="currentStep">1</span> of 4</div>
+                </div>
+
+                <form id="loanApplicationForm" class="loan-form">
+                    <!-- Step 1: Loan Details -->
+                    <div class="form-step active" data-step="1">
+                        <h3>📋 Loan Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="loanAmount">Desired Loan Amount ($)</label>
+                                <input type="number" id="loanAmount" name="loanAmount" required min="500" max="50000" placeholder="5000">
+                            </div>
+                            <div class="form-group">
+                                <label for="annualIncome">Annual Income ($)</label>
+                                <input type="number" id="annualIncome" name="annualIncome" required min="10000" placeholder="45000">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loanPurpose">Loan will be used for:</label>
+                            <select id="loanPurpose" name="loanPurpose" required>
+                                <option value="">Select purpose...</option>
+                                <option value="debt-consolidation">Debt Consolidation</option>
+                                <option value="home-improvement">Home Improvement</option>
+                                <option value="medical-expenses">Medical Expenses</option>
+                                <option value="auto-repair">Auto Repair</option>
+                                <option value="vacation">Vacation</option>
+                                <option value="wedding">Wedding</option>
+                                <option value="business">Business</option>
+                                <option value="education">Education</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Personal Information -->
+                    <div class="form-step" data-step="2">
+                        <h3>👤 Personal Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName" required placeholder="John">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" required placeholder="Doe">
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="ssn">Social Security Number</label>
+                                <input type="text" id="ssn" name="ssn" required pattern="[0-9]{3}-[0-9]{2}-[0-9]{4}" placeholder="123-45-6789">
+                            </div>
+                            <div class="form-group">
+                                <label for="birthDate">Birth Date</label>
+                                <input type="date" id="birthDate" name="birthDate" required>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required placeholder="john.doe@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Complete Address</label>
+                            <textarea id="address" name="address" required placeholder="123 Main St, City, State, ZIP Code" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Employment & Financial Info -->
+                    <div class="form-step" data-step="3">
+                        <h3>💼 Employment & Financial Information</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="employer">Present Employer</label>
+                                <input type="text" id="employer" name="employer" required placeholder="Company Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="occupation">Occupation</label>
+                                <input type="text" id="occupation" name="occupation" required placeholder="Software Developer">
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="workExperience">Years of Experience</label>
+                                <input type="number" id="workExperience" name="workExperience" required min="0" max="50" placeholder="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="monthlyIncome">Gross Monthly Income ($)</label>
+                                <input type="number" id="monthlyIncome" name="monthlyIncome" required min="1000" placeholder="4500">
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="monthlyRent">Monthly Rent/Mortgage ($)</label>
+                                <input type="number" id="monthlyRent" name="monthlyRent" required min="0" placeholder="1200">
+                            </div>
+                            <div class="form-group">
+                                <label for="hasCreditCard">Do you have a Credit Card?</label>
+                                <select id="hasCreditCard" name="hasCreditCard" required>
+                                    <option value="">Select...</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Bank Information & Documents -->
+                    <div class="form-step" data-step="4">
+                        <h3>🏦 Bank References & Documents</h3>
+                        <div class="form-group">
+                            <label for="bankName">Bank Institution Name</label>
+                            <input type="text" id="bankName" name="bankName" required placeholder="Bank of America">
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="accountNumber">Account Number</label>
+                                <input type="text" id="accountNumber" name="accountNumber" required placeholder="1234567890">
+                            </div>
+                            <div class="form-group">
+                                <label for="routingNumber">Routing Number</label>
+                                <input type="text" id="routingNumber" name="routingNumber" required pattern="[0-9]{9}" placeholder="123456789">
+                            </div>
+                        </div>
+
+                        <!-- Document Upload Section -->
+                        <div class="documents-section">
+                            <h4>📄 Required Documents</h4>
+                            <div class="upload-grid">
+                                <div class="upload-item">
+                                    <label for="idFront">Front of Driver's License or State ID</label>
+                                    <input type="file" id="idFront" name="idFront" accept="image/*" required>
+                                    <div class="upload-preview" id="idFrontPreview"></div>
+                                </div>
+                                <div class="upload-item">
+                                    <label for="idBack">Back of Driver's License or State ID</label>
+                                    <input type="file" id="idBack" name="idBack" accept="image/*" required>
+                                    <div class="upload-preview" id="idBackPreview"></div>
+                                </div>
+                                <div class="upload-item">
+                                    <label for="selfieWithId">Selfie with ID held to your face</label>
+                                    <input type="file" id="selfieWithId" name="selfieWithId" accept="image/*" required>
+                                    <div class="upload-preview" id="selfieWithIdPreview"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="terms-section">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="agreeToTerms" name="agreeToTerms" required>
+                                <span class="checkmark"></span>
+                                I agree to the <a href="#" class="terms-link">Loan Terms & Conditions</a> and authorize Learning Loans to process my application and verify the provided information.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;">
+                            ← Previous
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+                            Next →
+                        </button>
+                        <button type="submit" class="btn btn-primary submit-btn" id="submitBtn" style="display: none;">
+                            Submit Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Application Success -->
+        <section id="application-success" class="success-section" style="display: none;">
+            <div class="container">
+                <div class="success-content">
+                    <div class="success-icon">✅</div>
+                    <h2>Application Submitted Successfully!</h2>
+                    <p>Thank you for applying with Learning Loans. Your application is being processed.</p>
+                    <div class="success-details">
+                        <p><strong>Application ID:</strong> <span id="applicationId"></span></p>
+                        <p><strong>Status:</strong> Under Review</p>
+                        <p><strong>Expected Response:</strong> Within 24-48 hours</p>
+                    </div>
+                    <div class="success-actions">
+                        <button class="btn btn-primary" onclick="trackApplication()">
+                            Track Application
+                        </button>
+                        <button class="btn btn-secondary" onclick="newApplication()">
+                            Apply for Another Loan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <h2>How Learning Loans Works</h2>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Apply Online</h3>
+                        <p>Fill out our simple application form in just a few minutes</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Get Approved</h3>
+                        <p>Receive approval decision within 24-48 hours</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Receive Funds</h3>
+                        <p>Get your money deposited directly to your bank account</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rates Section -->
+        <section id="rates" class="rates-section">
+            <div class="container">
+                <h2>Loan Options & Rates</h2>
+                <div class="rates-grid">
+                    <div class="rate-card">
+                        <h3>Personal Loan</h3>
+                        <div class="rate">5.99% - 24.99% APR</div>
+                        <ul>
+                            <li>$500 - $50,000</li>
+                            <li>2-7 year terms</li>
+                            <li>No collateral required</li>
+                            <li>Fast funding</li>
+                        </ul>
+                    </div>
+                    <div class="rate-card featured">
+                        <div class="featured-badge">Most Popular</div>
+                        <h3>Quick Cash</h3>
+                        <div class="rate">8.99% - 29.99% APR</div>
+                        <ul>
+                            <li>$500 - $10,000</li>
+                            <li>1-3 year terms</li>
+                            <li>Same day approval</li>
+                            <li>No credit check</li>
+                        </ul>
+                    </div>
+                    <div class="rate-card">
+                        <h3>Business Loan</h3>
+                        <div class="rate">7.99% - 19.99% APR</div>
+                        <ul>
+                            <li>$5,000 - $100,000</li>
+                            <li>1-5 year terms</li>
+                            <li>Business use only</li>
+                            <li>Flexible payments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="loan-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Learning Loans</h4>
+                    <p>Your trusted partner for quick, reliable personal loans with competitive rates and excellent service.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Apply Now</a></li>
+                        <li><a href="#rates">Loan Rates</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="index.html">Banking Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>📞 1-800-LEARNING</p>
+                    <p>📧 loans@learningbank.com</p>
+                    <p>🏢 123 Finance Street, Money City, MC 12345</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Learning Loans. All rights reserved. | Equal Housing Opportunity</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="loans.js"></script>
+</body>
+</html>

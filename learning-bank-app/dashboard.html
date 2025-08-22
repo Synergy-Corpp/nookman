@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Learning Bank</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>Learning Bank</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#transfers">Transfers</a></li>
+                <li><a href="#history">History</a></li>
+                <li><a href="#" id="logoutBtn" class="logout-btn">Logout</a></li>
+            </ul>
+            <div class="user-info">
+                <span id="welcomeUser">Welcome!</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <div class="container">
+            <!-- Account Overview -->
+            <section id="overview" class="dashboard-section">
+                <h2>Account Overview</h2>
+                <div class="overview-grid">
+                    <div class="balance-card">
+                        <div class="card-header">
+                            <h3>Current Balance</h3>
+                            <div class="balance-icon">💰</div>
+                        </div>
+                        <div class="balance-amount">
+                            $<span id="currentBalance">0.00</span>
+                        </div>
+                        <div class="balance-note">Available balance</div>
+                    </div>
+
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon">📤</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalSent">$0.00</span>
+                                <span class="stat-label">Total Sent</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">📥</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalReceived">$0.00</span>
+                                <span class="stat-label">Total Received</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon">🔄</div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalTransactions">0</span>
+                                <span class="stat-label">Transactions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" id="sendMoneyBtn">
+                        <div class="action-icon">💸</div>
+                        <span>Send Money</span>
+                    </button>
+                    <button class="action-btn" id="currencyBtn">
+                        <div class="action-icon">🔄</div>
+                        <span>Currency Exchange</span>
+                    </button>
+                    <button class="action-btn" id="viewHistoryBtn">
+                        <div class="action-icon">📊</div>
+                        <span>View History</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Money Transfer Section -->
+            <section id="transfers" class="dashboard-section transfer-section">
+                <h2>Send Money</h2>
+                <div class="transfer-form-container">
+                    <form id="transferForm" class="transfer-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="recipientEmail">Recipient Email</label>
+                                <input type="email" id="recipientEmail" name="recipientEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="transferAmount">Amount ($)</label>
+                                <input type="number" id="transferAmount" name="amount" min="0.01" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="transferDescription">Description (Optional)</label>
+                            <input type="text" id="transferDescription" name="description" placeholder="What's this for?">
+                        </div>
+                        <button type="submit" class="btn btn-primary transfer-btn">
+                            <span class="btn-text">Send Money</span>
+                            <span class="btn-loader" style="display: none;">Sending...</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Transaction History -->
+            <section id="history" class="dashboard-section history-section">
+                <h2>Transaction History</h2>
+                <div class="history-container">
+                    <div class="history-header">
+                        <span>Recent Transactions</span>
+                        <button id="refreshHistory" class="refresh-btn">🔄 Refresh</button>
+                    </div>
+                    <div id="transactionsList" class="transactions-list">
+                        <div class="loading-state">Loading transactions...</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Send Money Modal -->
+    <div id="transferModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Transfer Confirmation</h2>
+            <div class="transfer-summary">
+                <p>You are about to send:</p>
+                <div class="summary-amount">$<span id="summaryAmount">0.00</span></div>
+                <div class="summary-details">
+                    <p>To: <span id="summaryRecipient"></span></p>
+                    <p>Description: <span id="summaryDescription">-</span></p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelTransfer">Cancel</button>
+                <button class="btn btn-primary" id="confirmTransfer">Confirm Transfer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

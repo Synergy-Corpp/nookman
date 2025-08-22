@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Learning Bank</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Admin Login Screen -->
+    <div id="adminLogin" class="admin-login-screen">
+        <div class="admin-login-container">
+            <div class="admin-header">
+                <h1>🏦 Learning Bank</h1>
+                <h2>Admin Control Panel</h2>
+            </div>
+            <form id="adminLoginForm" class="admin-login-form">
+                <div class="form-group">
+                    <label for="adminUsername">Admin Username</label>
+                    <input type="text" id="adminUsername" name="username" required placeholder="Enter admin username">
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Admin Password</label>
+                    <input type="password" id="adminPassword" name="password" required placeholder="Enter admin password">
+                </div>
+                <button type="submit" class="btn btn-primary admin-login-btn">
+                    <span class="login-text">Access Admin Panel</span>
+                    <span class="login-loader" style="display: none;">Authenticating...</span>
+                </button>
+                <div class="admin-demo-credentials">
+                    <p>Demo Credentials:</p>
+                    <small>Username: <strong>admin</strong> | Password: <strong>admin123</strong></small>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-dashboard" style="display: none;">
+        <!-- Top Navigation -->
+        <nav class="admin-navbar">
+            <div class="admin-nav-container">
+                <div class="admin-logo">
+                    <h2>🏦 Learning Bank Admin</h2>
+                </div>
+                <div class="admin-nav-items">
+                    <span id="adminWelcome">Welcome, Admin</span>
+                    <button id="adminLogout" class="btn btn-secondary">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <ul class="admin-menu">
+                <li class="menu-item active" data-section="dashboard">
+                    <span class="menu-icon">📊</span>
+                    <span class="menu-text">Dashboard</span>
+                </li>
+                <li class="menu-item" data-section="users">
+                    <span class="menu-icon">👥</span>
+                    <span class="menu-text">User Management</span>
+                </li>
+                <li class="menu-item" data-section="transactions">
+                    <span class="menu-icon">💸</span>
+                    <span class="menu-text">Transactions</span>
+                </li>
+                <li class="menu-item" data-section="loans">
+                    <span class="menu-icon">💰</span>
+                    <span class="menu-text">Loan Applications</span>
+                </li>
+                <li class="menu-item" data-section="analytics">
+                    <span class="menu-icon">📈</span>
+                    <span class="menu-text">Analytics</span>
+                </li>
+                <li class="menu-item" data-section="settings">
+                    <span class="menu-icon">⚙️</span>
+                    <span class="menu-text">Settings</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-main">
+            <!-- Dashboard Section -->
+            <div id="dashboardSection" class="admin-section active">
+                <div class="section-header">
+                    <h2>System Overview</h2>
+                    <button id="refreshData" class="btn btn-primary">🔄 Refresh Data</button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-info">
+                            <h3 id="totalUsers">0</h3>
+                            <p>Total Users</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <h3 id="totalBalance">$0</h3>
+                            <p>Total Balance</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💸</div>
+                        <div class="stat-info">
+                            <h3 id="totalTransactions">0</h3>
+                            <p>Total Transactions</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-info">
+                            <h3 id="dailyVolume">$0</h3>
+                            <p>Today's Volume</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="admin-card">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivity" class="activity-list">
+                        <div class="loading-spinner">Loading recent activity...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Management Section -->
+            <div id="usersSection" class="admin-section">
+                <div class="section-header">
+                    <h2>User Management</h2>
+                    <div class="section-actions">
+                        <button id="addUserBtn" class="btn btn-primary">➕ Add User</button>
+                        <button id="exportUsersBtn" class="btn btn-secondary">📥 Export Users</button>
+                    </div>
+                </div>
+
+                <!-- User Search and Filters -->
+                <div class="admin-card">
+                    <div class="search-filters">
+                        <input type="text" id="userSearch" placeholder="Search users by name or email...">
+                        <select id="userStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="suspended">Suspended</option>
+                        </select>
+                        <button id="searchUsers" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="admin-card">
+                    <div class="table-container">
+                        <table id="usersTable" class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Balance</th>
+                                    <th>Created</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr>
+                                    <td colspan="7">Loading users...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Section -->
+            <div id="transactionsSection" class="admin-section">
+                <div class="section-header">
+                    <h2>Transaction Monitoring</h2>
+                    <div class="section-actions">
+                        <button id="exportTransactionsBtn" class="btn btn-secondary">📥 Export</button>
+                    </div>
+                </div>
+
+                <!-- Transaction Filters -->
+                <div class="admin-card">
+                    <div class="search-filters">
+                        <input type="date" id="dateFrom" placeholder="From Date">
+                        <input type="date" id="dateTo" placeholder="To Date">
+                        <select id="transactionTypeFilter">
+                            <option value="">All Types</option>
+                            <option value="transfer_in">Received</option>
+                            <option value="transfer_out">Sent</option>
+                        </select>
+                        <button id="filterTransactions" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+
+                <!-- Transactions Table -->
+                <div class="admin-card">
+                    <div class="table-container">
+                        <table id="transactionsTable" class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTableBody">
+                                <tr>
+                                    <td colspan="7">Loading transactions...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loan Applications Section -->
+            <div id="loansSection" class="admin-section">
+                <div class="section-header">
+                    <h2>Loan Applications Management</h2>
+                    <div class="section-actions">
+                        <button id="refreshLoansBtn" class="btn btn-primary">🔄 Refresh</button>
+                        <button id="exportLoansBtn" class="btn btn-secondary">📥 Export</button>
+                    </div>
+                </div>
+
+                <!-- Loan Stats -->
+                <div class="loan-stats-grid">
+                    <div class="stat-card loan-stat">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-info">
+                            <h3 id="totalLoanApplications">0</h3>
+                            <p>Total Applications</p>
+                        </div>
+                    </div>
+                    <div class="stat-card loan-stat">
+                        <div class="stat-icon">⏳</div>
+                        <div class="stat-info">
+                            <h3 id="pendingLoans">0</h3>
+                            <p>Pending Review</p>
+                        </div>
+                    </div>
+                    <div class="stat-card loan-stat">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <h3 id="approvedLoans">0</h3>
+                            <p>Approved</p>
+                        </div>
+                    </div>
+                    <div class="stat-card loan-stat">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-info">
+                            <h3 id="totalLoanAmount">$0</h3>
+                            <p>Total Requested</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loan Filters -->
+                <div class="admin-card">
+                    <div class="search-filters">
+                        <input type="text" id="loanSearch" placeholder="Search by name, email, or application ID...">
+                        <select id="loanStatusFilter">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="under_review">Under Review</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="funded">Funded</option>
+                        </select>
+                        <select id="loanAmountFilter">
+                            <option value="">All Amounts</option>
+                            <option value="0-5000">$0 - $5,000</option>
+                            <option value="5000-15000">$5,000 - $15,000</option>
+                            <option value="15000-30000">$15,000 - $30,000</option>
+                            <option value="30000+">$30,000+</option>
+                        </select>
+                        <button id="filterLoans" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+
+                <!-- Loan Applications Table -->
+                <div class="admin-card">
+                    <div class="table-container">
+                        <table id="loansTable" class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Application ID</th>
+                                    <th>Applicant</th>
+                                    <th>Email</th>
+                                    <th>Loan Amount</th>
+                                    <th>Purpose</th>
+                                    <th>Annual Income</th>
+                                    <th>Status</th>
+                                    <th>Submitted</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loansTableBody">
+                                <tr>
+                                    <td colspan="9">Loading loan applications...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div id="analyticsSection" class="admin-section">
+                <div class="section-header">
+                    <h2>System Analytics</h2>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="admin-card">
+                        <h3>User Growth</h3>
+                        <canvas id="userGrowthChart" width="400" height="200"></canvas>
+                    </div>
+                    <div class="admin-card">
+                        <h3>Transaction Volume</h3>
+                        <canvas id="transactionChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settingsSection" class="admin-section">
+                <div class="section-header">
+                    <h2>System Settings</h2>
+                </div>
+
+                <div class="admin-card">
+                    <h3>Exchange Rates</h3>
+                    <div id="exchangeRatesSettings">
+                        <div class="rate-setting">
+                            <label>USD to EUR:</label>
+                            <input type="number" step="0.01" value="0.85" data-from="USD" data-to="EUR">
+                        </div>
+                        <div class="rate-setting">
+                            <label>USD to GBP:</label>
+                            <input type="number" step="0.01" value="0.73" data-from="USD" data-to="GBP">
+                        </div>
+                        <div class="rate-setting">
+                            <label>USD to CAD:</label>
+                            <input type="number" step="0.01" value="1.25" data-from="USD" data-to="CAD">
+                        </div>
+                    </div>
+                    <button id="saveRates" class="btn btn-primary">Save Exchange Rates</button>
+                </div>
+
+                <div class="admin-card">
+                    <h3>System Configuration</h3>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label>Default Starting Balance:</label>
+                            <input type="number" id="defaultBalance" value="1000" step="100">
+                        </div>
+                        <div class="setting-item">
+                            <label>Maximum Transfer Amount:</label>
+                            <input type="number" id="maxTransfer" value="10000" step="100">
+                        </div>
+                        <div class="setting-item">
+                            <label>Minimum Transfer Amount:</label>
+                            <input type="number" id="minTransfer" value="1" step="0.01">
+                        </div>
+                    </div>
+                    <button id="saveSettings" class="btn btn-primary">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New User</h2>
+            <form id="addUserForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="newFirstName">First Name</label>
+                        <input type="text" id="newFirstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newLastName">Last Name</label>
+                        <input type="text" id="newLastName" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newEmail">Email Address</label>
+                    <input type="email" id="newEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Initial Password</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newBalance">Starting Balance</label>
+                    <input type="number" id="newBalance" value="1000" step="0.01">
+                </div>
+                <button type="submit" class="btn btn-primary">Create User</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loan Detail Modal -->
+    <div id="loanDetailModal" class="modal">
+        <div class="modal-content loan-detail-modal">
+            <span class="close">&times;</span>
+            <h2>Loan Application Details</h2>
+            <div id="loanDetailContent">
+                <!-- Loan details will be populated here -->
+            </div>
+            <div class="loan-actions">
+                <select id="loanStatusSelect">
+                    <option value="pending">Pending</option>
+                    <option value="under_review">Under Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="funded">Funded</option>
+                </select>
+                <textarea id="loanNotes" placeholder="Add notes about this application..."></textarea>
+                <div class="action-buttons">
+                    <button id="updateLoanStatus" class="btn btn-primary">Update Application</button>
+                    <button id="closeLoanDetail" class="btn btn-secondary">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
